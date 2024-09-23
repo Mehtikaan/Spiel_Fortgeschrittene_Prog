@@ -1,1 +1,2 @@
-int = 5
+abdoul = 5
+print(abdoul)
