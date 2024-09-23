@@ -4,6 +4,6 @@ print(abdoul+10)
 hello = 'hussein'
 print(hello)
 
-print('Abdoul is the king'
+print('Abdoul is gay')
 
-      z7gt6f6t
+     
