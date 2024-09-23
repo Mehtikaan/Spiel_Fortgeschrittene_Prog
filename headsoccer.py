@@ -1,2 +1,2 @@
 abdoul = 5
-print(abdoul)
+print(abdoul+10)
