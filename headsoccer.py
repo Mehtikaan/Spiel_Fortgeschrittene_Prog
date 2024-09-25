@@ -4,7 +4,7 @@ print(abdoul+10)
 hello = 'hussein'
 print(hello)
 
-print('Abdoul is gay')
+print('Abdoul is am durchziehen')
 
      
 Sahand ist der Beste
