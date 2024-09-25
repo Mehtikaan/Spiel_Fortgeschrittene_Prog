@@ -7,4 +7,4 @@ print(hello)
 print('Abdoul is am durchziehen')
 
      
-print('Sahand ist der Beste')
+print('Sahand ist der Schwulste Kurde aus dem Orient')
