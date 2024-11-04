@@ -1,10 +1,11 @@
-abdoul = 5
-print(abdoul+10)
+import pygame
+import random
+import os
+import math
 
-hello = 'hussein'
-print(hello)
 
-print('Abdoul is am durchziehen')
+pygame.init()
+pygame.mixer()
+pygame.display.set_caption("exam.ension() Run")
 
-     
-print('Sahand ist der Schwulste Kurde aus dem Orient')
+
