@@ -1,14 +1,15 @@
 import configparser as cp
-import config_einstellungen as bib  # Sicherstellen, dass config_einstellungen existiert und die Funktion erstelle_config_datei hat
 import pygame
 import os
-import random
+import animationen as am  # Importiere die Animationsbibliothek, die die update-Funktion enthält
+import config_einstellungen as bib
+
 
 # Konfiguration laden oder erstellen
 config = cp.ConfigParser()
 if not config.read("config_game.ini"):
     print("Erstelle Konfigurationsdatei...")
-    bib.erstelle_config_datei()  # Erstellt Konfigurationsdatei, falls sie nicht vorhanden ist
+    bib.erstelle_config_datei()  # Stelle sicher, dass die Funktion existiert
 
 config.read("config_game.ini")  # Konfigurationsdatei lesen
 
@@ -46,72 +47,79 @@ except Exception as e:
     pygame.quit()
     exit()
 
-class Ball:
-    def __init__(self, x, y, sx, sy):
-        self.x = x
-        self.y = y
-        self.sx = sx
-        self.sy = sy
-        self.image = sprite_charakter["charakter_run1"]
-        self.imageRect = self.image.get_rect()
+# Klasse für den Charakter
+class Charakter:
+    def __init__(self, x_pos, y_pos, sprite_charakter, fps):
+        """
+        Initialisiert den Charakter.
+        
+        :param x_pos: Die x-Position des Charakters.
+        :param y_pos: Die y-Position des Charakters.
+        :param sprite_charakter: Das Dictionary der Charakterbilder.
+        :param fps: Die Frames per Second des Spiels.
+        """
+        self.x_pos = x_pos  # Positionierung links
+        self.y_pos = y_pos  # Etwas höher positioniert
+        self.sprite_charakter = sprite_charakter  # Sprite-Bilder für den Charakter
+        self.fps = fps
+        self.image = self.sprite_charakter["charakter_run1"]  # Initiales Bild
+        self.imageRect = self.image.get_rect(topleft=(self.x_pos, self.y_pos))
+        
+        # Animationseinstellungen
         self.timer = 0
         self.anim_frames = 8
         self.act_frame = 1
-        self.max_ticks_anim = 0.6 * FPS / self.anim_frames
+        self.max_ticks_anim = 0.6 * self.fps / self.anim_frames
 
     def update(self):
-        # Animationsframe aktualisieren
-        self.timer += 1
-        if self.timer >= self.max_ticks_anim:
-            self.timer = 0
-            self.act_frame = (self.act_frame % self.anim_frames) + 1
-            self.image = sprite_charakter[f"charakter_run{self.act_frame}"]
-
-        # Position aktualisieren
-        self.x += self.sx
-        self.y += self.sy
-        self.imageRect.topleft = (self.x, self.y)
-
-        # Randkollision behandeln
-        if self.imageRect.right >= WIDTH or self.imageRect.left <= 0:
-            self.sx *= -1
-        if self.imageRect.bottom >= HEIGHT or self.imageRect.top <= 0:
-            self.sy *= -1
+        """
+        Aktualisiert die Animation des Charakters. Da der Charakter feststeht, wird nur die Animation aktualisiert.
+        """
+        # Update der Geh-Animation (die Timer- und Frame-Logik wird durch die externe Funktion gehandhabt)
+        self.image, self.timer, self.act_frame = am.animation_update(
+            self.timer, self.max_ticks_anim, self.act_frame, self.anim_frames, self.sprite_charakter, "charakter_run"
+        )
+        
+        # Der Charakter bewegt sich nicht, daher bleibt die Position konstant.
+        self.imageRect.topleft = (self.x_pos, self.y_pos)  # Bildrechteck bleibt an der festgelegten Position
 
     def draw(self, surface):
-        # Sprite auf dem Bildschirm zeichnen
+        """
+        Zeichnet das Charakterbild auf dem Bildschirm.
+        
+        :param surface: Das Pygame Bildschirmobjekt.
+        """
         surface.blit(self.image, self.imageRect)
 
-# Liste der Ball-Sprites erstellen
-sprites = [
-    Ball(
-        random.randint(64, WIDTH - 64),
-        random.randint(64, HEIGHT - 64),
-        random.choice([-3, -2, -1, 1, 2, 3]),
-        random.choice([-3, -2, -1, 1, 2, 3])
-    )
-]
+# Beispiel für die Verwendung der Klassen
+pygame.init()
 
-# Hauptschleife
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Beispielhafter Charakter
+# Startet relativ links und etwas höher als die untere Kante
+charakter = Charakter(x_pos=100, y_pos=HEIGHT - 250, sprite_charakter=sprite_charakter, fps=FPS)  # Startet an der unteren linken Ecke, aber etwas höher
+
+# Spiel Schleife
 running = True
 while running:
-    # Ereignisverarbeitung
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    # Alle Sprites aktualisieren
-    for sprite in sprites:
-        sprite.update()
-
-    # Alles zeichnen
+    # Bildschirm leeren
     screen.fill((255, 255, 255))  # Bildschirm mit weißem Hintergrund leeren
-    for sprite in sprites:
-        sprite.draw(screen)
 
-    pygame.display.flip()  # Display aktualisieren
-    clock.tick(FPS)  # Bildrate steuern
+    # Charakter aktualisieren (Animation)
+    charakter.update()
 
-# Pygame beenden
+    # Charakter zeichnen
+    charakter.draw(screen)
+
+    # Bildschirm aktualisieren
+    pygame.display.flip()
+
+    # Framerate (FPS) einstellen
+    clock.tick(60)
+
 pygame.quit()
-hus="a"
