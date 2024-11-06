@@ -35,7 +35,8 @@ clock = pygame.time.Clock()
 # Sprites laden
 game_folder = os.path.dirname(__file__)
 
-background = pygame.image.load(os.path.join(game_folder, '_image', "hintergrund_winter.png"))
+background = pygame.image.load(os.path.join(game_folder, '_image', "hintergrund_winter.png")).convert_alpha()
+background= pygame.transform.scale(background,(WIDTH,HEIGHT))
 pygame.display.update()
 sprite_charakter = {}
 try:
