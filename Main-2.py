@@ -114,3 +114,4 @@ while running:
 
 # Pygame beenden
 pygame.quit()
+hus="a"
