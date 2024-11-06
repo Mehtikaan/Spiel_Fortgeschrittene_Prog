@@ -63,7 +63,7 @@ class Charakter:
         self.sprite_charakter = sprite_charakter  # Sprite-Bilder für den Charakter
         self.fps = fps
         self.image = self.sprite_charakter["charakter_run1"]  # Initiales Bild
-        self.imageRect = self.image.get_rect(topleft=(self.x_pos, self.y_pos))
+        self.imageRect = self.image.get_rect(center=(self.x_pos, self.y_pos))   # Dies war ein Verbessernugnsvorschlag von ChatGPT
         
         # Animationseinstellungen
         self.timer = 0
@@ -77,7 +77,12 @@ class Charakter:
         """
         # Update der Geh-Animation (die Timer- und Frame-Logik wird durch die externe Funktion gehandhabt)
         self.image, self.timer, self.act_frame = am.animation_update(
-            self.timer, self.max_ticks_anim, self.act_frame, self.anim_frames, self.sprite_charakter, "charakter_run"
+            timer=self.timer,
+            max_ticks=self.max_ticks_anim,
+            act_frame=self.act_frame,
+            anim_frames=self.anim_frames, 
+            sprite_images=self.sprite_charakter,
+            name="charakter_run"
         )
         
         # Der Charakter bewegt sich nicht, daher bleibt die Position konstant.
