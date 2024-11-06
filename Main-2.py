@@ -36,6 +36,7 @@ clock = pygame.time.Clock()
 game_folder = os.path.dirname(__file__)
 
 background = pygame.image.load(os.path.join(game_folder, '_image', "hintergrund_winter.png"))
+pygame.display.update()
 sprite_charakter = {}
 try:
     for i in range(1, 9):
@@ -115,7 +116,7 @@ while running:
             running = False
 
     # Bildschirm leeren
-    screen.fill((255, 255, 255))  # Bildschirm mit weißem Hintergrund leeren
+    screen.blit(background, (0, 0))
 
     # Charakter aktualisieren (Animation)
     charakter.update()
