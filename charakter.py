@@ -1,6 +1,7 @@
 import configparser as cp
 import pygame 
 import animationen as am
+
 # ConfigParser verwenden, um die Datei zu lesen
 config=cp.ConfigParser()
 config.read("config_game.ini")
@@ -24,11 +25,16 @@ class Charakter:
         self.act_frame = 1
         self.max_ticks_anim = 0.6 * FPS / self.anim_frames
     
+    #Aus der Bibleothek  animation importiert zum Updaten
     def animation_update(self):
-        am.animation_gehen(timer=self.timer,
+        am.animation_update(timer=self.timer,
                            max_timer=self.max_ticks_anim,
                            act_frame=self.act_frame,
                            anim_frames=self.anim_frames,
                            sprite_images=None,
                            name="charakter"
                            )
+    def geh_animation(self):
+        pass
+    
+    

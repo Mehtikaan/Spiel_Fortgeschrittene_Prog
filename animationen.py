@@ -8,4 +8,8 @@ def animation_update(timer,max_ticks, act_frame,anim_frames, sprite_images,name:
     if act_frame>=anim_frames:
         act_frame=1
     return sprite_images[name+str(act_frame)], timer, act_frame
+
+def animation_gehen():
+    
+    pass
     
