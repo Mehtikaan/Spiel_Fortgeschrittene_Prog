@@ -1,5 +1,5 @@
 import configparser as cp
-import bibspiel as bib
+import config_einstellungen as bib
 import pygame
 import os
 
@@ -12,6 +12,8 @@ config.read("config_game.ini")
 # Werte aus der Konfigurationsdatei lesen
 HEIGHT = config.get("Fenster", "height")
 WIDTH = config.get("Fenster", "width")
+HEIGHT=int(HEIGHT)
+WIDTH=int(WIDTH)
 
 pygame.init()  # Pygame-Initialisierung
 pygame.mixer.init()  # Sound-Ausgabe-Initialisierung
