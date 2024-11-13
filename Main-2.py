@@ -4,7 +4,7 @@ import os
 import animationen as am  # Importiere die Animationsbibliothek, die die update-Funktion enthält
 import config_einstellungen as bib
 
-
+#
 # Konfiguration laden oder erstellen
 config = cp.ConfigParser()
 if not config.read("config_game.ini"):
