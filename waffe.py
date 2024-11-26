@@ -12,7 +12,7 @@ bullet_img = pygame.image.load(" ").convert_alpha()
 
 
 class Bullet(pygame.sprite.Sprite):
-
+a
   def __init__(self, x_pos, y_pos, direction):
     
     pygame.sprite.Sprite__init__(self)
@@ -22,17 +22,27 @@ class Bullet(pygame.sprite.Sprite):
     self.rect.center = (x_pos , y_pos)
     self.direction = direction 
 
+  def update(self):
+    # move bullet 
+    self.rect.x += (self.direction * self.speed)
+    # check if bullet has gone of screen 
+    if self.rect.right < 0 or self.rect.left > SCREEN_WIDTH
+    
 
+
+# add to when player alive 
+if player.alive: 
+  bullet = Bullet(player.rect.centerx, player.rect.centery, player.direction)
 
 # add to connections
 
-if event.key == pygame.K_SPACE:
+if event.key == pygame.K_ENTER:
   shoot = True
 
 
 # add to when keyboard button released 
 if event.type == pygame.KEYUP:
-  if event.key == pygame.K_SPACE:
+  if event.key == pygame.K_ENTER:
     shoot = False 
 
   
