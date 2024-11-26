@@ -55,7 +55,7 @@ except Exception as e:
 # Beispiel für die Verwendung der Klassen
 pygame.init()
 x_pos=0
-main_charakter = Charakter(x_pos=x_pos, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,shoot=None,health_points=4,score_points=0)  # Startet an der unteren linken Ecke, aber etwas höher
+main_charakter = Charakter(x_pos=x_pos,tempo_x=2.5, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,shoot=None,health_points=4,score_points=0)  # Startet an der unteren linken Ecke, aber etwas höher
 
 # Spiel Schleife
 running = True
@@ -63,15 +63,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
     # Bildschirm leeren
     screen1.blit(background,(0,0))
 
     # Charakter aktualisieren (Animation)
     main_charakter.animation_update_laufen()
-    if x_pos==100:
-        x_pos=100
-
     # Charakter zeichnen
     main_charakter.zeichnen(surface=screen1)
 

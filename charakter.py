@@ -13,9 +13,10 @@ FPS = int(config.get("FPS", "fps"))
 
 #Klasse des Hauptcharakters
 class Charakter:
-    def __init__(self,x_pos,y_pos,shoot,health_points, score_points,sprite_charakter,fps):
+    def __init__(self,x_pos,y_pos,shoot,health_points, score_points,sprite_charakter,fps,tempo_x):
         self.x_pos=x_pos
         self.y_pos= y_pos
+        self.tempo_x=tempo_x
         self.health_points=int
         self.score_points = int
         self.image=sprite_charakter["charakter_run1"]
@@ -27,8 +28,7 @@ class Charakter:
         self.sprite_charakter=sprite_charakter
 
     #Aus der Bibleothek  animation importiert zum Updaten
-    def animation_update_laufen(self):   
-        self.x_pos+=3                             
+    def animation_update_laufen(self):                               
         self.image,self.timer,self.act_frame=am.animation_update(timer=self.timer,  #Unser Code hatte self.image,self.timer,self.act_frame= drinnen,also nur aufruf der Funktion am.animation_update,
                            max_ticks=self.max_ticks_anim,                           #deshalb hat sich das Bild nicht geupdatet, daher debug mit chatgpt
                            act_frame=self.act_frame,                                
@@ -36,10 +36,11 @@ class Charakter:
                            sprite_images=self.sprite_charakter,
                            name="charakter_run"
                            )
+        while self.x_pos<=175:
+            self.x_pos=self.x_pos+self.tempo_x
+            break
         self.imageRect.topleft=(self.x_pos,self.y_pos)
-
         
-
     def zeichnen(self,surface):
         surface.blit(self.image,self.imageRect)
     
