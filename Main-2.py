@@ -3,6 +3,7 @@ import pygame
 import os
 import animationen as am  # Importiere die Animationsbibliothek, die die update-Funktion enthält
 import config_einstellungen as bib
+from charakter import Charakter
 
 
 # Konfiguration laden oder erstellen
@@ -28,7 +29,7 @@ pygame.init()
 pygame.mixer.init()
 
 # Display initialisieren und Titel setzen
-screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SCALED)
+screen1 = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SCALED)
 pygame.display.set_caption("exam.ension() Run")
 clock = pygame.time.Clock()
 
@@ -51,63 +52,10 @@ except Exception as e:
     pygame.quit()
     exit()
 
-# Klasse für den Charakter
-class Charakter:
-    def __init__(self, x_pos, y_pos, sprite_charakter, fps):
-        """
-        Initialisiert den Charakter.
-        
-        :param x_pos: Die x-Position des Charakters.
-        :param y_pos: Die y-Position des Charakters.
-        :param sprite_charakter: Das Dictionary der Charakterbilder.
-        :param fps: Die Frames per Second des Spiels.
-        """
-        self.x_pos = x_pos  # Positionierung links
-        self.y_pos = y_pos  # Etwas höher positioniert
-        self.sprite_charakter = sprite_charakter  # Sprite-Bilder für den Charakter
-        self.fps = fps
-        self.image = self.sprite_charakter["charakter_run1"]  # Initiales Bild
-        self.imageRect = self.image.get_rect(center=(self.x_pos, self.y_pos))   # Dies war ein Verbessernugnsvorschlag von ChatGPT
-        
-        # Animationseinstellungen
-        self.timer = 0
-        self.anim_frames = 8
-        self.act_frame = 1
-        self.max_ticks_anim = 0.6 * self.fps / self.anim_frames
-
-    def update(self):
-        """
-        Aktualisiert die Animation des Charakters. Da der Charakter feststeht, wird nur die Animation aktualisiert.
-        """
-        # Update der Geh-Animation (die Timer- und Frame-Logik wird durch die externe Funktion gehandhabt)
-        self.image, self.timer, self.act_frame = am.animation_update(
-            timer=self.timer,
-            max_ticks=self.max_ticks_anim,
-            act_frame=self.act_frame,
-            anim_frames=self.anim_frames, 
-            sprite_images=self.sprite_charakter,
-            name="charakter_run"
-        )
-        
-        # Der Charakter bewegt sich nicht, daher bleibt die Position konstant.
-        self.imageRect.topleft = (self.x_pos, self.y_pos)  # Bildrechteck bleibt an der festgelegten Position
-
-    def draw(self, surface):
-        """
-        Zeichnet das Charakterbild auf dem Bildschirm.
-        
-        :param surface: Das Pygame Bildschirmobjekt.
-        """
-        surface.blit(self.image, self.imageRect)
-
 # Beispiel für die Verwendung der Klassen
 pygame.init()
-
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-
-# Beispielhafter Charakter
-# Startet relativ links und etwas höher als die untere Kante
-charakter = Charakter(x_pos=100, y_pos=HEIGHT - 250, sprite_charakter=sprite_charakter, fps=FPS)  # Startet an der unteren linken Ecke, aber etwas höher
+x_pos=0
+main_charakter = Charakter(x_pos=x_pos, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,shoot=None,health_points=4,score_points=0)  # Startet an der unteren linken Ecke, aber etwas höher
 
 # Spiel Schleife
 running = True
@@ -117,13 +65,16 @@ while running:
             running = False
 
     # Bildschirm leeren
-    screen.blit(background, (0, 0))
+    screen1.blit(background,(0,0))
 
     # Charakter aktualisieren (Animation)
-    charakter.update()
+    main_charakter.animation_update_laufen()
+    if x_pos==100:
+        x_pos=100
 
     # Charakter zeichnen
-    charakter.draw(screen)
+    main_charakter.zeichnen(surface=screen1)
+
 
     # Bildschirm aktualisieren
     pygame.display.flip()
