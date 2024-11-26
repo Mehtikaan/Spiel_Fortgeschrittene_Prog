@@ -12,7 +12,7 @@ bullet_img = pygame.image.load(" ").convert_alpha()
 
 
 class Bullet(pygame.sprite.Sprite):
-a
+
   def __init__(self, x_pos, y_pos, direction):
     
     pygame.sprite.Sprite__init__(self)
