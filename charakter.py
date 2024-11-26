@@ -13,10 +13,11 @@ FPS = int(config.get("FPS", "fps"))
 
 #Klasse des Hauptcharakters
 class Charakter:
-    def __init__(self,x_pos,y_pos,shoot,health_points, score_points,sprite_charakter,fps,tempo_x):
+    def __init__(self,x_pos,y_pos,shoot,health_points, score_points,sprite_charakter,fps,tempo_x,scale_tempo_x):
         self.x_pos=x_pos
         self.y_pos= y_pos
         self.tempo_x=tempo_x
+        self.scale_tempo_x=scale_tempo_x
         self.health_points=int
         self.score_points = int
         self.image=sprite_charakter["charakter_run1"]
@@ -36,7 +37,9 @@ class Charakter:
                            sprite_images=self.sprite_charakter,
                            name="charakter_run"
                            )
-        while self.x_pos<=175:
+        while self.x_pos<=250:
+            self.scale_tempo_xscale_tempo_x=self.scale_tempo_x+1
+            self.tempo_x=self.tempo_x*self.scale_tempo_x
             self.x_pos=self.x_pos+self.tempo_x
             break
         self.imageRect.topleft=(self.x_pos,self.y_pos)
