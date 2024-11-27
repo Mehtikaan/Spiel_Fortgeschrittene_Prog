@@ -36,17 +36,19 @@ clock = pygame.time.Clock()
 # Sprites laden
 game_folder = os.path.dirname(__file__)
 
-background = pygame.image.load(os.path.join(game_folder, '_image', "Schnee_Hintergrund.png")).convert_alpha()
+background = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.png")).convert_alpha()
 background= pygame.transform.scale(background,(WIDTH,HEIGHT))
 pygame.display.update()
+original_charakter = {}
 sprite_charakter = {}
 try:
     for i in range(1, 9):
         # Jedes Bild des Laufcharakters laden und in einem Dictionary speichern
-        sprite_path = os.path.join(game_folder, '_image', f'charakter_run{i}.png')
+        sprite_path = os.path.join(game_folder, '_image', f'ninja_run{i}.png')
         if not os.path.exists(sprite_path):
             raise FileNotFoundError(f"Bilddatei nicht gefunden: {sprite_path}")
-        sprite_charakter[f"charakter_run{i}"] = pygame.image.load(sprite_path).convert_alpha()
+        original_charakter[f"ninja_run{i}"] = pygame.image.load(sprite_path).convert_alpha()
+        sprite_charakter[f"ninja_run{i}"] = pygame.transform.scale(original_charakter[f"ninja_run{i}"], (75, 75))   # <-- Größe anpassen (Breite, Höhe in Pixel) (chatgpt)
 except Exception as e:
     print("Fehler beim Laden der Sprite-Bilder:", e)
     pygame.quit()

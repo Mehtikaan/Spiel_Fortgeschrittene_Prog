@@ -20,7 +20,7 @@ class Charakter:
         self.scale_tempo_x=scale_tempo_x
         self.health_points=int
         self.score_points = int
-        self.image=sprite_charakter["charakter_run1"]
+        self.image=sprite_charakter["ninja_run1"]
         self.imageRect= self.image.get_rect()
         self.timer = 0
         self.anim_frames = 8
@@ -35,7 +35,7 @@ class Charakter:
                            act_frame=self.act_frame,                                
                            anim_frames=self.anim_frames,
                            sprite_images=self.sprite_charakter,
-                           name="charakter_run"
+                           name="ninja_run"
                            )
         while self.x_pos<=250:
             self.scale_tempo_xscale_tempo_x=self.scale_tempo_x+1
