@@ -26,7 +26,8 @@ class Bullet(pygame.sprite.Sprite):
     # move bullet 
     self.rect.x += (self.direction * self.speed)
     # check if bullet has gone of screen 
-    if self.rect.right < 0 or self.rect.left > SCREEN_WIDTH
+    if self.rect.right < 0 or self.rect.left > SCREEN_WIDTH:
+      self.kill
     
 
 
