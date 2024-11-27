@@ -34,7 +34,7 @@ class Bullet(pygame.sprite.Sprite):
 if player.alive: 
   bullet = Bullet(player.rect.centerx, player.rect.centery, player.direction)
 
-# add to connections
+# add to actions
 
 if event.key == pygame.K_ENTER:
   shoot = True
