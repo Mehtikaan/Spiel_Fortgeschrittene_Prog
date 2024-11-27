@@ -57,7 +57,12 @@ except Exception as e:
 # Beispiel für die Verwendung der Klassen
 pygame.init()
 x_pos=0
-main_charakter = Charakter(x_pos=x_pos,tempo_x=4, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,shoot=None,health_points=4,score_points=0,scale_tempo_x=1.03)  # Startet an der unteren linken Ecke, aber etwas höher
+main_charakter = Charakter(x_pos=x_pos,tempo_x=4, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,shoot=None,health_points=4,score_points=0,scale_tempo_x=1.05)  # Startet an der unteren linken Ecke, aber etwas höher
+
+y_velocity = 0
+gravity = 1
+jumping_height = 18
+jumping = False
 
 # Spiel Schleife
 running = True
@@ -65,19 +70,37 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    # Bildschirm leeren
-    screen1.blit(background,(0,0))
+        
 
-    # Charakter aktualisieren (Animation)
-    main_charakter.animation_update_laufen()
-    # Charakter zeichnen
-    main_charakter.zeichnen(surface=screen1)
+    keys_pressed = pygame.key.get_pressed()
+    if keys_pressed[pygame.K_SPACE] and not jumping:
+        jumping = True
+        y_velocity = jumping_height
+
+    if jumping:
+        main_charakter.y_pos -= y_velocity
+        y_velocity -= gravity
+ 
+        if main_charakter.y_pos >= HEIGHT - 200: #Bodenpostion
+            main_charakter.y_pos = HEIGHT - 200
+            jumping = False
+
+    screen1.blit(background, (0, 0))
+
+    if jumping:
+        JUMPING_SURFACE = sprite_charakter.get("ninja_jump", sprite_charakter["ninja_run1"])
+        screen1.blit(JUMPING_SURFACE, (main_charakter.x_pos, main_charakter.y_pos))
+
+    
+    else:
+        main_charakter.animation_update_laufen()
+        main_charakter.zeichnen(surface=screen1)
 
 
     # Bildschirm aktualisieren
     pygame.display.flip()
 
     # Framerate (FPS) einstellen
-    clock.tick(60)
+    clock.tick(FPS)
 
 pygame.quit()
