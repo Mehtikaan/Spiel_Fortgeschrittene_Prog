@@ -61,7 +61,7 @@ main_charakter = Charakter(x_pos=x_pos,tempo_x=4, y_pos=HEIGHT - 200, sprite_cha
 
 y_velocity = 0
 gravity = 1
-jumping_height = 18
+jumping_height = 20
 jumping = False
 
 # Spiel Schleife
