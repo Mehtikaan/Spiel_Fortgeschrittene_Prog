@@ -12,4 +12,4 @@ def animation_update(timer,max_ticks, act_frame,anim_frames, sprite_images,name:
 def animation_gehen():
     
     pass
-    
+
