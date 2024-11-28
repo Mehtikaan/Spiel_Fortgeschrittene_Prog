@@ -1,7 +1,6 @@
 
 import os
 import pygame
-
 def animation_update(timer,max_ticks, act_frame,anim_frames, sprite_images,name:str):
     timer+=1
     if timer >=max_ticks:
@@ -14,7 +13,6 @@ def animation_update(timer,max_ticks, act_frame,anim_frames, sprite_images,name:
 def animation_gehen():
     
     pass
-
 def sprite_image_loader(game_folder:str, folder_name:str, image_max_num:int, image_name:str, original_name:dict, sprite_dict_name:dict): 
     try:
         for i in range(1, image_max_num):
