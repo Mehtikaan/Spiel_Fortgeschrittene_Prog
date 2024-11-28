@@ -1,6 +1,7 @@
 import configparser as cp
 import pygame
 import os
+import math
 import animationen as am  # Importiere die Animationsbibliothek, die die update-Funktion enthält
 import config_einstellungen as bib
 from charakter import Charakter
@@ -29,15 +30,26 @@ pygame.init()
 pygame.mixer.init()
 
 # Display initialisieren und Titel setzen
-screen1 = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SCALED)
+screen1 = pygame.display.set_mode((WIDTH, HEIGHT)) #pygame.SCALED
 pygame.display.set_caption("exam.ension() Run")
 clock = pygame.time.Clock()
 
 # Sprites laden
 game_folder = os.path.dirname(__file__)
 
-background = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.png")).convert_alpha()
-background= pygame.transform.scale(background,(WIDTH,HEIGHT))
+# Hintergrund
+background = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.png")).convert()
+background = pygame.transform.scale(background, (WIDTH, HEIGHT))
+background_width = background.get_width()
+
+start_background = pygame.image.load(os.path.join(game_folder, '_image', "6.png")).convert()
+start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
+
+#game variablen definieren
+tiles = math.ceil(WIDTH / background_width) + 1
+scroll = 0
+
+
 pygame.display.update()
 original_charakter = {}
 sprite_charakter = {}
@@ -64,9 +76,39 @@ gravity = 1
 jumping_height = 15
 jumping = False
 
+
+show_start_screen = True
+
+while show_start_screen:
+    screen1.blit(start_background, (0, 0))
+    pygame.display.flip()
+
+    for event in pygame.event.get():              #80-92 chat
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+        if event.type == pygame.KEYDOWN:
+            show_start_screen = False
+
+
 # Spiel Schleife
 running = True
 while running:
+
+    clock.tick(FPS)
+
+    for i in range(0, tiles):
+        screen1.blit(background, (i* background_width + scroll, 0))
+
+    #background scrollen
+    scroll -= 5
+
+    #reset scroll
+    if abs(scroll) > background_width:
+        scroll = 0
+
+
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -85,7 +127,7 @@ while running:
             main_charakter.y_pos = HEIGHT - 200
             jumping = False
 
-    screen1.blit(background, (0, 0))
+    #screen1.blit(background, (0, 0))
 
     if jumping:
         JUMPING_SURFACE = sprite_charakter.get("ninja_jump", sprite_charakter["ninja_run1"])
@@ -101,6 +143,6 @@ while running:
     pygame.display.flip()
 
     # Framerate (FPS) einstellen
-    clock.tick(FPS)
+    # clock.tick(FPS)
 
 pygame.quit()
