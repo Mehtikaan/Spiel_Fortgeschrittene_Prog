@@ -41,20 +41,28 @@ background= pygame.transform.scale(background,(WIDTH,HEIGHT))
 pygame.display.update()
 original_charakter = {}
 sprite_charakter = {}
-
-am.sprite_image_loader(
-    game_folder=game_folder,
-    folder_name="_image",
-    image_max_num=9,
-    image_name="ninja_run", 
-    original_name=original_charakter,
-    sprite_dict_name=sprite_charakter, 
-)
+try:
+    for i in range(1, 9):
+        # Jedes Bild des Laufcharakters laden und in einem Dictionary speichern
+        sprite_path = os.path.join(game_folder, '_image', f'ninja_run{i}.png')
+        if not os.path.exists(sprite_path):
+            raise FileNotFoundError(f"Bilddatei nicht gefunden: {sprite_path}")
+        original_charakter[f"ninja_run{i}"] = pygame.image.load(sprite_path).convert_alpha()
+        sprite_charakter[f"ninja_run{i}"] = pygame.transform.scale(original_charakter[f"ninja_run{i}"], (75, 75))   # <-- Größe anpassen (Breite, Höhe in Pixel) (chatgpt)
+except Exception as e:
+    print("Fehler beim Laden der Sprite-Bilder:", e)
+    pygame.quit()
+    exit()
 
 # Beispiel für die Verwendung der Klassen
 pygame.init()
 x_pos=0
-main_charakter = Charakter(x_pos=x_pos,tempo_x=3  , y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,shoot=None,health_points=4,score_points=0,scale_tempo_x=1.03)  # Startet an der unteren linken Ecke, aber etwas höher
+main_charakter = Charakter(x_pos=x_pos,tempo_x=4, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,shoot=None,health_points=4,score_points=0,scale_tempo_x=1.01)  # Startet an der unteren linken Ecke, aber etwas höher
+
+y_velocity = 0
+gravity = 1
+jumping_height = 15
+jumping = False
 
 # Spiel Schleife
 running = True
@@ -62,19 +70,37 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    # Bildschirm leeren
-    screen1.blit(background,(0,0))
+        
 
-    # Charakter aktualisieren (Animation)
-    main_charakter.animation_update_laufen()
-    # Charakter zeichnen
-    main_charakter.zeichnen(surface=screen1)
+    keys_pressed = pygame.key.get_pressed()
+    if keys_pressed[pygame.K_SPACE] and not jumping:
+        jumping = True
+        y_velocity = jumping_height
+
+    if jumping:
+        main_charakter.y_pos -= y_velocity
+        y_velocity -= gravity
+ 
+        if main_charakter.y_pos >= HEIGHT - 200: #Bodenpostion
+            main_charakter.y_pos = HEIGHT - 200
+            jumping = False
+
+    screen1.blit(background, (0, 0))
+
+    if jumping:
+        JUMPING_SURFACE = sprite_charakter.get("ninja_jump", sprite_charakter["ninja_run1"])
+        screen1.blit(JUMPING_SURFACE, (main_charakter.x_pos, main_charakter.y_pos))
+
+    
+    else:
+        main_charakter.animation_update_laufen()
+        main_charakter.zeichnen(surface=screen1)
 
 
     # Bildschirm aktualisieren
     pygame.display.flip()
 
     # Framerate (FPS) einstellen
-    clock.tick(60)
+    clock.tick(FPS)
 
 pygame.quit()
