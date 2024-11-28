@@ -42,6 +42,9 @@ background = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.p
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
 
+start_background = pygame.image.load(os.path.join(game_folder, '_image', "6.png")).convert()
+start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
+
 #game variablen definieren
 tiles = math.ceil(WIDTH / background_width) + 1
 scroll = 0
@@ -72,6 +75,21 @@ y_velocity = 0
 gravity = 1
 jumping_height = 20
 jumping = False
+
+
+show_start_screen = True
+
+while show_start_screen:
+    screen1.blit(start_background, (0, 0))
+    pygame.display.flip()
+
+    for event in pygame.event.get():              #80-92 chat
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+        if event.type == pygame.KEYDOWN:
+            show_start_screen = False
+
 
 # Spiel Schleife
 running = True
