@@ -9,7 +9,7 @@ def erstelle_config_datei():
     config['Fenster'] = {
         'height': '600',
         'width': '800',
-        'position':'320'
+        'position':'310'
     }
     config["FPS"] = {
         "fps":"60",

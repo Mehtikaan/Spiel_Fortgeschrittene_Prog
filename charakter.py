@@ -44,23 +44,37 @@ class Charakter:
         self.jumping_height = 20
         self.jumping = False
 
-    # Aus der Bibliothek animation importiert zum Updaten
-    def animation_update_laufen(self):                               
+    # Animation für Laufen
+    def animation_update_laufen(self):
         self.image, self.timer, self.act_frame = am.animation_update(
             timer=self.timer,  # Unser Code hatte self.image, self.timer, self.act_frame drin, also nur Aufruf der Funktion am.animation_update
-            max_ticks=self.max_ticks_anim,                           
-            act_frame=self.act_frame,                                
+            max_ticks=self.max_ticks_anim,
+            act_frame=self.act_frame,
             anim_frames=self.anim_frames,
             sprite_images=self.sprite_charakter,
             name="ninja_run"
         )
-        while self.x_pos <= 320:
-            self.scale_tempo_x = self.scale_tempo_x 
+        if self.x_pos <= 320:
+            self.scale_tempo_x = self.scale_tempo_x
             self.tempo_x = self.tempo_x * self.scale_tempo_x
             self.x_pos = self.x_pos + self.tempo_x
-            break
-            
+
         self.imageRect.topleft = (self.x_pos, self.y_pos)
 
+    # Zeichnen auf der Oberfläche
     def zeichnen(self, surface):
         surface.blit(self.image, self.imageRect)
+
+    # Funktion für das Springen
+    def springen(self):
+        if self.jumping:
+            self.y_pos -= self.y_velocity
+            self.y_velocity -= self.gravity
+            if self.y_pos >= HEIGHT - 200:  # Bodenposition
+                self.y_pos = HEIGHT - 200
+                self.jumping = False
+            # Blit das Sprungbild
+            self.image = self.sprite_charakter.get("ninja_jump", self.sprite_charakter["ninja_run1"])
+        else:
+            self.image = self.sprite_charakter["ninja_run1"]
+            self.animation_update_laufen()  # Update die Lauf-Animation

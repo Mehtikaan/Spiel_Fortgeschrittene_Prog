@@ -73,17 +73,15 @@ show_start_screen = True
 # Spiel Schleife
 running = True
 while running:
-    main_charakter.animation_update_laufen()
-    main_charakter.zeichnen(surface=screen1)
-    pygame.display.update()
-    pygame.display.flip()
 
     clock.tick(FPS)
 
     if main_charakter.x_pos<POSITION:
-        
         screen1.blit(background, (0, 0))
+        main_charakter.animation_update_laufen()
+        main_charakter.zeichnen(surface=screen1)
         pygame.display.flip()
+
     else:
         
         pygame.display.flip()
@@ -116,21 +114,22 @@ while running:
             if main_charakter.y_pos >= HEIGHT - 200: #Bodenpostion
                 main_charakter.y_pos = HEIGHT - 200
                 jumping = False
+        
 
         #screen1.blit(background, (0, 0))
 
         if jumping:
+            # Setze die Sprung-Animation, wenn der Charakter springt
             JUMPING_SURFACE = sprite_charakter.get("ninja_jump", sprite_charakter["ninja_run1"])
             screen1.blit(JUMPING_SURFACE, (main_charakter.x_pos, main_charakter.y_pos))
-
-        
         else:
+            # Wenn der Charakter nicht springt, führe die Lauf-Animation aus
             main_charakter.animation_update_laufen()
             main_charakter.zeichnen(surface=screen1)
 
-
+        pygame.display.flip()
     # Bildschirm aktualisieren
-    pygame.display.flip()
+
 
     # Framerate (FPS) einstellen
     # clock.tick(FPS)
