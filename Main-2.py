@@ -68,64 +68,65 @@ jumping = False
 
 show_start_screen = True
 
-while show_start_screen:
-    screen1.blit(start_background, (0, 0))
-    pygame.display.flip()
-
-    for event in pygame.event.get():              #80-92 chat
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
-        if event.type == pygame.KEYDOWN:
-            show_start_screen = False
 
 
 # Spiel Schleife
 running = True
 while running:
+    main_charakter.animation_update_laufen()
+    main_charakter.zeichnen(surface=screen1)
+    pygame.display.update()
+    pygame.display.flip()
 
     clock.tick(FPS)
 
-    for i in range(0, tiles):
-        screen1.blit(background, (i* background_width + scroll, 0))
-
-    #background scrollen
-    scroll -= 5
-
-    #reset scroll
-    if abs(scroll) > background_width:
-        scroll = 0
-
-
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    if main_charakter.x_pos<POSITION:
         
-
-    keys_pressed = pygame.key.get_pressed()
-    if keys_pressed[pygame.K_SPACE] and not jumping:
-        jumping = True
-        y_velocity = jumping_height
-
-    if jumping:
-        main_charakter.y_pos -= y_velocity
-        y_velocity -= gravity
- 
-        if main_charakter.y_pos >= HEIGHT - 200: #Bodenpostion
-            main_charakter.y_pos = HEIGHT - 200
-            jumping = False
-
-    #screen1.blit(background, (0, 0))
-
-    if jumping:
-        JUMPING_SURFACE = sprite_charakter.get("ninja_jump", sprite_charakter["ninja_run1"])
-        screen1.blit(JUMPING_SURFACE, (main_charakter.x_pos, main_charakter.y_pos))
-
-    
+        screen1.blit(background, (0, 0))
+        pygame.display.flip()
     else:
-        main_charakter.animation_update_laufen()
-        main_charakter.zeichnen(surface=screen1)
+        
+        pygame.display.flip()
+        for i in range(0, tiles):
+            screen1.blit(background, (i* background_width + scroll, 0))
+
+        #background scrollen
+        scroll -= 5
+
+        #reset scroll
+        if abs(scroll) > background_width:
+            scroll = 0
+
+
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            
+
+        keys_pressed = pygame.key.get_pressed()
+        if keys_pressed[pygame.K_SPACE] and not jumping:
+            jumping = True
+            y_velocity = jumping_height
+
+        if jumping:
+            main_charakter.y_pos -= y_velocity
+            y_velocity -= gravity
+    
+            if main_charakter.y_pos >= HEIGHT - 200: #Bodenpostion
+                main_charakter.y_pos = HEIGHT - 200
+                jumping = False
+
+        #screen1.blit(background, (0, 0))
+
+        if jumping:
+            JUMPING_SURFACE = sprite_charakter.get("ninja_jump", sprite_charakter["ninja_run1"])
+            screen1.blit(JUMPING_SURFACE, (main_charakter.x_pos, main_charakter.y_pos))
+
+        
+        else:
+            main_charakter.animation_update_laufen()
+            main_charakter.zeichnen(surface=screen1)
 
 
     # Bildschirm aktualisieren
