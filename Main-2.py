@@ -58,17 +58,9 @@ am.sprite_image_loader(game_folder=game_folder,folder_name="_image", image_max_n
 # Beispiel für die Verwendung der Klassen
 pygame.init()
 x_pos=0
-main_charakter = Charakter(x_pos=x_pos,tempo_x=4, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,shoot=None,health_points=4,score_points=0,scale_tempo_x=1.01)  # Startet an der unteren linken Ecke, aber etwas höher
-
-y_velocity = 0
-gravity = 1
-jumping_height = 15
-jumping = False
-
+main_charakter = Charakter(x_pos=x_pos,tempo_x=1, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,shoot=None,health_points=4,score_points=0,scale_tempo_x=1.01)  # Startet an der unteren linken Ecke, aber etwas höher
 
 show_start_screen = True
-
-
 
 # Spiel Schleife
 running = True
@@ -101,31 +93,10 @@ while running:
             if event.type == pygame.QUIT:
                 running = False
             
-
-        keys_pressed = pygame.key.get_pressed()
-        if keys_pressed[pygame.K_SPACE] and not jumping:
-            jumping = True
-            y_velocity = jumping_height
-
-        if jumping:
-            main_charakter.y_pos -= y_velocity
-            y_velocity -= gravity
-    
-            if main_charakter.y_pos >= HEIGHT - 200: #Bodenpostion
-                main_charakter.y_pos = HEIGHT - 200
-                jumping = False
-        
-
+        main_charakter.springen(surface=screen1)
         #screen1.blit(background, (0, 0))
 
-        if jumping:
-            # Setze die Sprung-Animation, wenn der Charakter springt
-            JUMPING_SURFACE = sprite_charakter.get("ninja_jump", sprite_charakter["ninja_run1"])
-            screen1.blit(JUMPING_SURFACE, (main_charakter.x_pos, main_charakter.y_pos))
-        else:
-            # Wenn der Charakter nicht springt, führe die Lauf-Animation aus
-            main_charakter.animation_update_laufen()
-            main_charakter.zeichnen(surface=screen1)
+        
 
         pygame.display.flip()
     # Bildschirm aktualisieren

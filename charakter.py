@@ -17,6 +17,7 @@ try:
     HEIGHT = int(config.get("Fenster", "height"))
     WIDTH = int(config.get("Fenster", "width"))
     FPS = int(config.get("FPS", "fps"))
+    POSITION= int(config.get("Fenster", "position"))
 except Exception as e:
     print("Fehler beim Laden der Konfigurationswerte:", e)
     pygame.quit()
@@ -41,7 +42,7 @@ class Charakter:
         # Sprungvariablen
         self.y_velocity = 0
         self.gravity = 1
-        self.jumping_height = 20
+        self.jumping_height = 15
         self.jumping = False
 
     # Animation für Laufen
@@ -54,27 +55,53 @@ class Charakter:
             sprite_images=self.sprite_charakter,
             name="ninja_run"
         )
-        if self.x_pos <= 320:
-            self.scale_tempo_x = self.scale_tempo_x
-            self.tempo_x = self.tempo_x * self.scale_tempo_x
-            self.x_pos = self.x_pos + self.tempo_x
+# Berechnung der Beschleunigung
+        if self.x_pos <= POSITION:
+            # Wenn der Charakter sich innerhalb eines bestimmten Bereichs bewegt, beschleunige ihn
+            if self.x_pos < POSITION / 8:
+                # Anfangs langsam - Steigere die Geschwindigkeit allmählich
+                self.tempo_x += 0.05  # Kleine Erhöhung der Geschwindigkeit am Anfang
+
+            elif self.x_pos < POSITION / 6:
+                # Mittelbereich, erhöhe die Geschwindigkeit mehr
+                self.tempo_x += 0.07
+
+            else:
+                # Später beschleunigen
+                self.tempo_x += 0.045
+
+            # Bewegung des Charakters unter Berücksichtigung der Beschleunigung
+            self.x_pos += self.tempo_x
+
+            # Beschleunigung durch Skalierung
+            self.x_pos += self.tempo_x * self.scale_tempo_x
 
         self.imageRect.topleft = (self.x_pos, self.y_pos)
 
     # Zeichnen auf der Oberfläche
     def zeichnen(self, surface):
         surface.blit(self.image, self.imageRect)
+        return surface
 
     # Funktion für das Springen
-    def springen(self):
+    def springen(self,surface):
+        keys_pressed = pygame.key.get_pressed()
+        if keys_pressed[pygame.K_SPACE] and not self.jumping:
+            self.jumping = True
+            self.y_velocity = self.jumping_height
+
         if self.jumping:
             self.y_pos -= self.y_velocity
             self.y_velocity -= self.gravity
-            if self.y_pos >= HEIGHT - 200:  # Bodenposition
+    
+            if self.y_pos >= HEIGHT - 200: #Bodenpostion
                 self.y_pos = HEIGHT - 200
                 self.jumping = False
-            # Blit das Sprungbild
-            self.image = self.sprite_charakter.get("ninja_jump", self.sprite_charakter["ninja_run1"])
+        if self.jumping:
+            # Setze die Sprung-Animation, wenn der Charakter springt
+            JUMPING_SURFACE = self.sprite_charakter.get("ninja_jump", self.sprite_charakter["ninja_run1"])
+            surface.blit(JUMPING_SURFACE, (self.x_pos, self.y_pos))
         else:
-            self.image = self.sprite_charakter["ninja_run1"]
-            self.animation_update_laufen()  # Update die Lauf-Animation
+            # Wenn der Charakter nicht springt, führe die Lauf-Animation aus
+            self.animation_update_laufen()
+            self.zeichnen(surface=surface)
