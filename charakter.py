@@ -54,7 +54,7 @@ class Charakter:
             sprite_images=self.sprite_charakter,
             name="ninja_run"
         )
-        while self.x_pos <= 220:
+        while self.x_pos <= 320:
             self.scale_tempo_x = self.scale_tempo_x 
             self.tempo_x = self.tempo_x * self.scale_tempo_x
             self.x_pos = self.x_pos + self.tempo_x

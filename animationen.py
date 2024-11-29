@@ -27,7 +27,7 @@ def sprite_image_loader(game_folder:str, folder_name:str, image_max_num:int, ima
             original_name[f"{image_name}{i}"] = pygame.image.load(sprite_path).convert_alpha()
             
             # Skaliere das Bild und speichere es im sprite_dict_name Dictionary
-            sprite_dict_name[f"{image_name}{i}"] = pygame.transform.scale(original_name[f"{image_name}{i}"], (75, 75))  # Bildgröße anpassen
+            sprite_dict_name[f"{image_name}{i}"] = pygame.transform.scale(original_name[f"{image_name}{i}"], (75, 75))  # Bildgröße anpassen wurde mit Chatgpt gemacht
 
     except Exception as e:
         print("Fehler beim Laden der Sprite-Bilder:", e)
