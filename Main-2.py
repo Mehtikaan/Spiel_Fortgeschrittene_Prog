@@ -68,6 +68,16 @@ while running:
 
     clock.tick(FPS)
 
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Tasteneingaben
+    keys_pressed = pygame.key.get_pressed()
+    if keys_pressed[pygame.K_RETURN]:  # Drücke Enter, um zu schießen
+        main_charakter.shoot()
+
+
     if main_charakter.x_pos<POSITION:
         screen1.blit(background, (0, 0))
         main_charakter.animation_update_laufen()
@@ -95,6 +105,8 @@ while running:
             
         main_charakter.springen(surface=screen1)
         #screen1.blit(background, (0, 0))
+        main_charakter.bullets.draw(surface=screen1)
+        main_charakter.update()
 
         
 
