@@ -4,8 +4,8 @@ import configparser as cp
 import config_einstellungen as bib
 # Werte aus der Konfiguration laden und konvertieren
 try:
-    HEIGHT = int(config.get("Fenster", "height"))
-    WIDTH = int(config.get("Fenster", "width"))
+    HEIGHT = int(cp.config.get("Fenster", "height"))
+    WIDTH = int(cp.config.get("Fenster", "width"))
 
 except Exception as e:
     print("Fehler beim Laden der Konfigurationswerte:", e)
