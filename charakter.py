@@ -2,6 +2,7 @@ import pygame
 import animationen as am
 import configparser as cp
 import config_einstellungen as bib
+from waffe import Bullet
 
 
 # Konfiguration laden oder erstellen
@@ -38,12 +39,22 @@ class Charakter:
         self.act_frame = 1
         self.max_ticks_anim = 0.6 * fps / self.anim_frames
         self.sprite_charakter = sprite_charakter
+        self.bullets = pygame.sprite.Group()  
+        self.shoot_cooldown = 0  
 
         # Sprungvariablen
         self.y_velocity = 0
         self.gravity = 1
         self.jumping_height = 15
         self.jumping = False
+
+    def shoot(self):
+            """Feuert eine Kugel ab, wenn der Cooldown abgelaufen ist."""
+            if self.shoot_cooldown == 0:  # Schießen nur, wenn Cooldown abgelaufen ist
+                bullet = Bullet(self.x_pos + self.imageRect.width, self.y_pos + self.imageRect.height // 2)
+                self.bullets.add(bullet)
+                self.shoot_cooldown = 20  # Setze den Cooldown auf 20 Frames
+
 
     # Animation für Laufen
     def animation_update_laufen(self):
@@ -78,9 +89,19 @@ class Charakter:
 
         self.imageRect.topleft = (self.x_pos, self.y_pos)
 
+    def update(self):
+        """Aktualisiert den Zustand des Charakters und der Kugeln."""
+        # Aktualisiere Kugeln
+        self.bullets.update()
+
+        # Reduziere den Cooldown, wenn er größer als 0 ist
+        if self.shoot_cooldown > 0:
+            self.shoot_cooldown -= 1
+
     # Zeichnen auf der Oberfläche
     def zeichnen(self, surface):
         surface.blit(self.image, self.imageRect)
+        self.bullets.draw(surface)
         return surface
 
     # Funktion für das Springen
