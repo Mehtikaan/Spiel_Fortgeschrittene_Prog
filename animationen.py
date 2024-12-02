@@ -57,14 +57,13 @@ def sprite_image_loader(game_folder:str, folder_name:str, image_max_num:int, ima
 
 import pygame
 import os
+def show_start_screen(screen1, start_background, clock, game_folder, name):
+    # Button-Position und Größe
+    button_rect = pygame.Rect(WIDTH // 2 - 75, HEIGHT-500 , 150, 50)  
+    # Laden des Button-Bildes
+    button_image = pygame.image.load(os.path.join(game_folder, "_image", f"{name}.png")).convert_alpha()
+    button_image = pygame.transform.scale(button_image, (150, 50))  # Skalieren, um der Größe des Rects zu entsprechen
 
-# Initialisiere Pygame
-pygame.init()
-
-def show_start_screen(screen1,start_background,clock):
-    button_rect = pygame.Rect(WIDTH // 2 - 75, HEIGHT // 2 - 25, 150, 50)  # Button-Position und Größe
-    font = pygame.font.Font(None, 50)
-    button_text = font.render("Start", True, (255, 255, 255))  # Weißer Text
     running = True
     while running:
         for event in pygame.event.get():
@@ -78,15 +77,17 @@ def show_start_screen(screen1,start_background,clock):
         # Hintergrund des Startbildschirms zeichnen
         screen1.blit(start_background, (0, 0))
 
-        # Button zeichnen
-        pygame.draw.rect(screen1, (0, 128, 255), button_rect)  # Blau
-        screen1.blit(button_text, (button_rect.x + 40, button_rect.y + 5))  # Text auf den Button
-
         # Hover-Effekt
         mouse_pos = pygame.mouse.get_pos()
-        if button_rect.collidepoint(mouse_pos):
-            pygame.draw.rect(screen1, (0, 100, 200), button_rect)  # Dunkleres Blau
-            screen1.blit(button_text, (button_rect.x + 40, button_rect.y + 5))
+        if button_rect.collidepoint(mouse_pos):  # Maus über dem Button
+            # Optional: Ändere das Bild oder füge einen Hover-Effekt hinzu
+            # Zum Beispiel könnte das Bild eine leichte Transparenz erhalten oder es könnte sich farblich ändern
+            button_image.set_alpha(200)  # Mache den Button etwas transparenter beim Hover
+        else:
+            button_image.set_alpha(255)  # Normaler Zustand (volle Opazität)
+
+        # Button-Bild zeichnen
+        screen1.blit(button_image, button_rect.topleft)
 
         pygame.display.flip()
         clock.tick(FPS)

@@ -57,7 +57,7 @@ start_background = pygame.image.load(os.path.join(game_folder, '_image', "classr
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
 # Startbildschirm anzeigen
-am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background)
+am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play_button",game_folder=game_folder)
 
 # Zombie-Gruppe erstellen
 all_zombies = pygame.sprite.Group()
