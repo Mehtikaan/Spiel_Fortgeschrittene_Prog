@@ -8,7 +8,8 @@ def erstelle_config_datei():
     # Hinzufügen von Sektionen und Werten
     config['Fenster'] = {
         'height': '600',
-        'width': '800'
+        'width': '800',
+        'position':'250'
     }
     config["FPS"] = {
         "fps":"60",
@@ -25,3 +26,4 @@ def erstelle_config_datei():
    except:
        HEIGHT=600
        WIDTH=800
+       POSITION=320
