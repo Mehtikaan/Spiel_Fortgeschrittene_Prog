@@ -23,106 +23,122 @@ except Exception as e:
     print("Fehler beim Laden der Konfigurationswerte:", e)
     pygame.quit()
     exit()
-# Klasse des Hauptcharakters
+import pygame
+import animationen as am
+from waffe import Bullet
+
+
 class Charakter:
-    def __init__(self, x_pos, y_pos, shoot, health_points, score_points, sprite_charakter, fps, tempo_x, scale_tempo_x):
-        self.x_pos = x_pos
-        self.y_pos = y_pos
-        self.tempo_x = tempo_x
-        self.scale_tempo_x = scale_tempo_x
+    def __init__(self, x_pos, y_pos, sprite_charakter, fps, tempo_x, scale_tempo_x, health_points, score_points, surface):
+        # Initialisieren der Unterklassen
+        self.bewegung = Bewegung(x_pos, tempo_x, scale_tempo_x, sprite_charakter, fps)
+        self.schiessen = Schießen(sprite_charakter)
+        self.springen = Springen(y_pos, sprite_charakter, surface)
         self.health_points = health_points
         self.score_points = score_points
-        self.image = sprite_charakter["ninja_run1"]
-        self.imageRect = self.image.get_rect()
+        self.surface = surface
+
+    def update(self):
+        """Aktualisiert den Charakter: Bewegung, Animation, Schüsse und Springen"""
+        self.bewegung.update()
+        self.schiessen.update()
+        jumping_sprite, self.springen.y_pos = self.springen.update(self.bewegung.x_pos)
+        if jumping_sprite:
+            self.bewegung.image = jumping_sprite
+
+    def zeichnen(self):
+        """Zeichnet den Charakter auf dem Bildschirm"""
+        self.bewegung.zeichnen(self.surface, self.springen.y_pos)
+        self.schiessen.bullets.draw(self.surface)
+
+
+class Bewegung:
+    def __init__(self, x_pos, tempo_x, scale_tempo_x, sprite_charakter, fps):
+        self.x_pos = x_pos
+        self.tempo_x = tempo_x
+        self.scale_tempo_x = scale_tempo_x
+        self.sprite_charakter = sprite_charakter
+        self.fps = fps
         self.timer = 0
         self.anim_frames = 8
         self.act_frame = 1
-        self.max_ticks_anim = 0.6 * fps / self.anim_frames
-        self.sprite_charakter = sprite_charakter
-        self.bullets = pygame.sprite.Group()  
-        self.shoot_cooldown = 0  
+        self.max_ticks_anim = 0.6 * self.fps / self.anim_frames
+        self.image = self.sprite_charakter["ninja_run1"]
+        self.has_reached_position = False  # Status, ob Zielposition erreicht wurde
 
-        # Sprungvariablen
-        self.y_velocity = 0
-        self.gravity = 1
-        self.jumping_height = 15
-        self.jumping = False
+    def update(self):
+        """Aktualisiert die Bewegung und die Animation des Charakters"""
+        self.animation_update_laufen()
 
-    def shoot(self):
-            """Feuert eine Kugel ab, wenn der Cooldown abgelaufen ist."""
-            if self.shoot_cooldown == 0:  # Schießen nur, wenn Cooldown abgelaufen ist
-                bullet = Bullet(self.x_pos + self.imageRect.width, self.y_pos + self.imageRect.height // 2)
-                self.bullets.add(bullet)
-                self.shoot_cooldown = 20  # Setze den Cooldown auf 20 Frames
-
-
-    # Animation für Laufen
     def animation_update_laufen(self):
+        """Aktualisiert die Lauf-Animation und die Bewegung des Charakters"""
+        # Aktualisiere die Lauf-Animation unabhängig von der Bewegung
         self.image, self.timer, self.act_frame = am.animation_update(
-            timer=self.timer,  # Unser Code hatte self.image, self.timer, self.act_frame drin, also nur Aufruf der Funktion am.animation_update
+            timer=self.timer,
             max_ticks=self.max_ticks_anim,
             act_frame=self.act_frame,
             anim_frames=self.anim_frames,
             sprite_images=self.sprite_charakter,
             name="ninja_run"
         )
-# Berechnung der Beschleunigung
-        if self.x_pos <= POSITION:
-            # Wenn der Charakter sich innerhalb eines bestimmten Bereichs bewegt, beschleunige ihn
-            if self.x_pos < POSITION / 8:
-                # Anfangs langsam - Steigere die Geschwindigkeit allmählich
-                self.tempo_x += 0.05  # Kleine Erhöhung der Geschwindigkeit am Anfang
 
-            elif self.x_pos < POSITION / 6:
-                # Mittelbereich, erhöhe die Geschwindigkeit mehr
-                self.tempo_x += 0.07
-
+        if not self.has_reached_position:  # Bewege den Charakter nur, wenn Ziel nicht erreicht ist
+            if self.x_pos < POSITION:
+                self.tempo_x += 0.05 if self.x_pos < POSITION / 4 else 0.03
+                self.x_pos += self.tempo_x
             else:
-                # Später beschleunigen
-                self.tempo_x += 0.045
+                self.x_pos = POSITION  # Zielposition fixieren
+                self.tempo_x = 0  # Geschwindigkeit stoppen
+                self.has_reached_position = True
 
-            # Bewegung des Charakters unter Berücksichtigung der Beschleunigung
-            self.x_pos += self.tempo_x
+    def zeichnen(self, surface, y_pos):
+        """Zeichnet den Charakter an der aktuellen Position"""
+        surface.blit(self.image, (self.x_pos, y_pos))
 
-            # Beschleunigung durch Skalierung
-            self.x_pos += self.tempo_x * self.scale_tempo_x
+class Schießen:
+    def __init__(self, sprite_charakter):
+        self.sprite_charakter = sprite_charakter
+        self.shoot_cooldown = 0
+        self.bullets = pygame.sprite.Group()
 
-        self.imageRect.topleft = (self.x_pos, self.y_pos)
+    def shoot(self, x_pos, y_pos):
+        """Feuert eine Kugel ab, wenn der Cooldown abgelaufen ist"""
+        if self.shoot_cooldown == 0:
+            bullet = Bullet(x_pos + self.sprite_charakter["ninja_run1"].get_width(), y_pos + 20)
+            self.bullets.add(bullet)
+            self.shoot_cooldown = 20
 
     def update(self):
-        """Aktualisiert den Zustand des Charakters und der Kugeln."""
-        # Aktualisiere Kugeln
+        """Aktualisiert die Kugeln und den Cooldown"""
         self.bullets.update()
-
-        # Reduziere den Cooldown, wenn er größer als 0 ist
         if self.shoot_cooldown > 0:
             self.shoot_cooldown -= 1
 
-    # Zeichnen auf der Oberfläche
-    def zeichnen(self, surface):
-        surface.blit(self.image, self.imageRect)
-        self.bullets.draw(surface)
-        return surface
 
-    # Funktion für das Springen
-    def springen(self,surface):
-        keys_pressed = pygame.key.get_pressed()
-        if keys_pressed[pygame.K_SPACE] and not self.jumping:
+class Springen:
+    def __init__(self, y_pos, sprite_charakter, surface):
+        self.y_pos = y_pos
+        self.sprite_charakter = sprite_charakter
+        self.surface = surface
+        self.y_velocity = 0
+        self.gravity = 1
+        self.jumping_height = 15
+        self.jumping = False
+
+    def start_sprung(self):
+        """Startet das Springen"""
+        if not self.jumping:
             self.jumping = True
             self.y_velocity = self.jumping_height
 
+    def update(self, x_pos):
+        """Verarbeitet das Springen und aktualisiert die Y-Position des Charakters"""
         if self.jumping:
             self.y_pos -= self.y_velocity
             self.y_velocity -= self.gravity
-    
-            if self.y_pos >= HEIGHT - 200: #Bodenpostion
-                self.y_pos = HEIGHT - 200
+            if self.y_pos >= self.surface.get_height() - 200:
+                self.y_pos = self.surface.get_height() - 200
                 self.jumping = False
         if self.jumping:
-            # Setze die Sprung-Animation, wenn der Charakter springt
-            JUMPING_SURFACE = self.sprite_charakter.get("ninja_jump", self.sprite_charakter["ninja_run1"])
-            surface.blit(JUMPING_SURFACE, (self.x_pos, self.y_pos))
-        else:
-            # Wenn der Charakter nicht springt, führe die Lauf-Animation aus
-            self.animation_update_laufen()
-            self.zeichnen(surface=surface)
+            return self.sprite_charakter.get("ninja_jump", self.sprite_charakter["ninja_run1"]), self.y_pos
+        return None, self.y_pos
