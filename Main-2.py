@@ -68,7 +68,7 @@ def create_zombie():
     all_zombies.add(zombie)
 
 # Zombies am Anfang erzeugen
-for _ in range(3):  # Erstelle 3 Zombies zu Beginn
+for _ in range(1):  # Erstelle 3 Zombies zu Beginn
     create_zombie()
 last_spawn_time = pygame.time.get_ticks()
 running = True
