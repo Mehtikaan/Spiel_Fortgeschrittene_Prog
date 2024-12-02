@@ -50,6 +50,43 @@ main_charakter = Charakter(
     tempo_x=2, scale_tempo_x=1.01, health_points=4, score_points=0, surface=screen1
 )
 
+
+# Startbildschirm mit Start-Button anzeigen
+def show_start_screen():
+    button_rect = pygame.Rect(WIDTH // 2 - 75, HEIGHT // 2 - 25, 150, 50)  # Button-Position und Größe
+    font = pygame.font.Font(None, 50)
+    button_text = font.render("Start", True, (255, 255, 255))  # Weißer Text
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if button_rect.collidepoint(event.pos):  # Klick auf den Start-Button
+                    running = False  # Beende den Startbildschirm
+
+        # Hintergrund des Startbildschirms zeichnen
+        screen1.blit(start_background, (0, 0))
+
+        # Button zeichnen
+        pygame.draw.rect(screen1, (0, 128, 255), button_rect)  # Blau
+        screen1.blit(button_text, (button_rect.x + 40, button_rect.y + 5))  # Text auf den Button
+
+        # Hover-Effekt
+        mouse_pos = pygame.mouse.get_pos()
+        if button_rect.collidepoint(mouse_pos):
+            pygame.draw.rect(screen1, (0, 100, 200), button_rect)  # Dunkleres Blau
+            screen1.blit(button_text, (button_rect.x + 40, button_rect.y + 5))
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+# Startbildschirm anzeigen, bevor das Spiel beginnt
+show_start_screen()
+
+
 running = True
 while running:
     for event in pygame.event.get():
