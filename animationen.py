@@ -32,7 +32,7 @@ def animation_gehen():
     pass
 def sprite_image_loader(game_folder:str, folder_name:str, image_max_num:int, image_name:str, original_name:dict, sprite_dict_name:dict): 
     try:
-        for i in range(1, image_max_num):
+        for i in range(1, image_max_num+1):
             # Jedes Bild des Laufcharakters laden und in einem Dictionary speichern
             sprite_path = os.path.join(game_folder, folder_name, f'{image_name}{i}.png')
             

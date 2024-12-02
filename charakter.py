@@ -23,10 +23,6 @@ except Exception as e:
     print("Fehler beim Laden der Konfigurationswerte:", e)
     pygame.quit()
     exit()
-import pygame
-import animationen as am
-from waffe import Bullet
-
 
 class Charakter:
     def __init__(self, x_pos, y_pos, sprite_charakter, fps, tempo_x, scale_tempo_x, health_points, score_points, surface):
@@ -122,7 +118,7 @@ class Springen:
         self.surface = surface
         self.y_velocity = 0
         self.gravity = 1
-        self.jumping_height = 15
+        self.jumping_height = 20
         self.jumping = False
 
     def start_sprung(self):
@@ -134,7 +130,7 @@ class Springen:
     def update(self, x_pos):
         """Verarbeitet das Springen und aktualisiert die Y-Position des Charakters"""
         if self.jumping:
-            self.y_pos -= self.y_velocity
+            self.y_pos -= self.y_velocity*0.8
             self.y_velocity -= self.gravity
             if self.y_pos >= self.surface.get_height() - 200:
                 self.y_pos = self.surface.get_height() - 200
