@@ -107,14 +107,7 @@ while running:
     for i in range(tiles):
         screen1.blit(background, (scroll + i * background_width, 0))
 
-     # Update Bullets
-    main_charakter.bullets.update()
-
-    # Bullets und Charakter zeichnen
-    for bullet in main_charakter.bullets:
-        bullet.draw(screen1)
-
-    main_charakter.bullets.draw(surface=screen1)
+  
     # Charakter-Update und -Zeichnung
     main_charakter.update()
     main_charakter.zeichnen()
