@@ -61,57 +61,7 @@ import os
 # Initialisiere Pygame
 pygame.init()
 
-# Funktion zum Abspielen eines "Videos" aus Bildern
-def play_video(image_folder, width=WIDTH, height=HEIGHT, fps=FPS ):
-    """
-    Spielt ein Video ab, das aus einer Serie von Bildern besteht.
-
-    :param image_folder: Der Ordner, der die Bilder enthält.
-    :param width: Die Breite des Fenster (Standard: 800).
-    :param height: Die Höhe des Fensters (Standard: 600).
-    :param fps: Die Frames pro Sekunde (Standard: 30).
-    """
-    # Fenster erstellen
-    screen = pygame.display.set_mode((width, height))
-    pygame.display.set_caption("Video in Pygame")
-
-    # Liste der Bilddateien (Frames des "Videos")
-    frame_files = sorted(os.listdir(image_folder))  # Alle Dateien im Ordner sortieren
-
-    # Bilder laden
-    frames = []
-    for frame_file in frame_files:
-        if frame_file.endswith(".png") or frame_file.endswith(".jpg"):  # Nur Bilddateien einbeziehen
-            image_path = os.path.join(image_folder, frame_file)
-            image = pygame.image.load(image_path)
-            image = pygame.transform.scale(image, (width, height))  # Bildgröße anpassen
-            frames.append(image)
-
-    # Spiel-Schleife
-    clock = pygame.time.Clock()
-    running = True
-    frame_index = 0
-
-    while running:
-        # Ereignisse behandeln
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-        # Nächstes Bild anzeigen
-        screen.fill((0, 0, 0))  # Bildschirm löschen
-        screen.blit(frames[frame_index], (0, 0))  # Aktuelles Bild anzeigen
-        pygame.display.update()
-
-        # Warten, um die Bildrate zu kontrollieren (z.B. 30 FPS)
-        frame_index += 1
-        if frame_index >= len(frames):
-            frame_index = 0  # Wenn das Ende erreicht ist, wieder von vorne starten
-
-        clock.tick(fps)  # Die Bildrate steuern
-
-    # Pygame beenden
-    pygame.quit()
-
-# Beispielaufruf der Funktion:
-# play_video("_video_frames", width=800, height=600, fps=30)
+def show_start_screen():
+    button_rect = pygame.Rect(WIDTH // 2 - 75, HEIGHT // 2 - 25, 150, 50)  # Button-Position und Größe
+    font = pygame.font.Font(None, 50)
+    button_text = font.render("Start", True, (255, 255, 255))  # Weißer Text

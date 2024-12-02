@@ -50,7 +50,8 @@ main_charakter = Charakter(
     tempo_x=2, scale_tempo_x=1.01, health_points=4, score_points=0, surface=screen1
 )
 
-
+start_background=pygame.image.load(os.path.join(game_folder, '_image', "classroom.png")).convert()
+start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 # Startbildschirm mit Start-Button anzeigen
 def show_start_screen():
     button_rect = pygame.Rect(WIDTH // 2 - 75, HEIGHT // 2 - 25, 150, 50)  # Button-Position und Größe
