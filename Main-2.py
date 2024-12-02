@@ -62,7 +62,7 @@ while running:
                 main_charakter.schiessen.shoot(main_charakter.bewegung.x_pos, main_charakter.springen.y_pos)
 
     # Hintergrund scrollen
-    scroll -= 2
+    scroll -= 4
     if abs(scroll) > background_width:
         scroll = 0
 
