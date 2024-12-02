@@ -82,7 +82,7 @@ class Bewegung:
             name="ninja_run"
         )
 
-        if not self.has_reached_position:  # Bewege den Charakter nur, wenn Ziel nicht erreicht ist
+        if not self.has_reached_position:  # Bewege den Charakter nur, wenn Ziel nicht erreicht ist. Debug mit chatgpt
             if self.x_pos < POSITION:
                 self.tempo_x += 0.05 if self.x_pos < POSITION / 4 else 0.03
                 self.x_pos += self.tempo_x
