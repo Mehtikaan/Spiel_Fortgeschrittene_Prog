@@ -1,3 +1,6 @@
+import pygame 
+
+
 def show_intro_sequence(screen, clock):
     intro_text = [
         "Es war ein langer Tag, und der Code scheint endlos.",
