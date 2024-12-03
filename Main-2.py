@@ -27,6 +27,12 @@ except Exception as e:
 pygame.init()
 pygame.mixer.init()
 
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (240, 0, 0)
+GREEN = (0, 240, 0)
+
+
 screen1 = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("exam.ension() Run")
 clock = pygame.time.Clock()
@@ -36,6 +42,18 @@ game_folder = os.path.dirname(__file__)
 background = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.png")).convert()
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
+
+#health bar erstellen
+def red_rect():
+    pygame.draw.rect(screen1, RED, (600, 80, 100, 15))
+    return
+def green_rect():
+    pygame.draw.rect(screen1, GREEN, (600, 80, main_charakter.health_points, 15))
+    return
+def black_rect():
+    pygame.draw.rect(screen1, BLACK, (600, 80, 101, 15), 1)
+    return
+
 scroll = 0
 tiles = math.ceil(WIDTH / background_width) + 1
 
@@ -49,7 +67,7 @@ am.sprite_image_loader(game_folder=game_folder, folder_name="_image", image_max_
 print(sprite_charakter)
 main_charakter = Charakter(
     x_pos=0, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,
-    tempo_x=2, scale_tempo_x=1.01, health_points=4, score_points=0, surface=screen1
+    tempo_x=2, scale_tempo_x=1.01, health_points=100, score_points=0, surface=screen1
 )
 
 # Startbildschirm anzeigen, bevor das Spiel beginnt
@@ -81,6 +99,11 @@ while running:
                 main_charakter.springen.start_sprung()
             if event.key == pygame.K_f:  # Schießen
                 main_charakter.schiessen.shoot(main_charakter.bewegung.x_pos, main_charakter.springen.y_pos)
+            if event.key == pygame.K_l:             #test ob healt bar funktioniert
+                main_charakter.health_points -= 10
+        if main_charakter.health_points <= 0:
+            pygame.QUIT()
+
 
     # Hintergrund scrollen
     scroll -= 6
@@ -90,9 +113,13 @@ while running:
     for i in range(tiles):
         screen1.blit(background, (scroll + i * background_width, 0))
 
+
     # Zombies und Charakter aktualisieren
     all_zombies.update()  # Alle Zombies aktualisieren
     main_charakter.update()
+
+
+
     main_charakter.zeichnen()
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
@@ -103,7 +130,13 @@ while running:
 
         # Alle Zombies zeichnen
     all_zombies.draw(screen1)
-    pygame.display.update()
     clock.tick(FPS)
+    
+    red_rect() #healthbar
+    green_rect() #healthbar
+    black_rect() ##healthbar
+
+    pygame.display.update()
+
 
 pygame.quit()
