@@ -6,6 +6,7 @@ import config_einstellungen as bib
 from charakter import Charakter
 import animationen as am
 from enmy import Enmy  # Importiere die Enmy-Klasse
+import pygame.font
 
 # Konfiguration laden oder erstellen
 config = cp.ConfigParser()
@@ -31,6 +32,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (240, 0, 0)
 GREEN = (0, 240, 0)
+GOLD = (255, 215, 0) 
 
 
 screen1 = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -56,6 +58,12 @@ def black_rect():
 
 scroll = 0
 tiles = math.ceil(WIDTH / background_width) + 1
+
+# Score initialisieren
+score = 0
+
+# Schriftart für den Score
+font = pygame.font.Font(None, 56)  # Standard-Schriftart, Größe 56
 
 # Sprites laden
 original_charakter = {}
@@ -113,7 +121,14 @@ while running:
     for i in range(tiles):
         screen1.blit(background, (scroll + i * background_width, 0))
 
+     # Score aktualisieren
+    score += 1  # Score um 1 pro Frame erhöhen
 
+    # Score rendern und anzeigen
+    score_text = font.render(f"{score:05d} m ", True, GOLD)
+    text_rect = score_text.get_rect(topright=(WIDTH - 10, 10))  # Oben rechts mit 10px Abstand
+    screen1.blit(score_text, text_rect)
+    
     # Zombies und Charakter aktualisieren
     all_zombies.update()  # Alle Zombies aktualisieren
     main_charakter.update()
