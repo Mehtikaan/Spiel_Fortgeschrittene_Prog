@@ -3,6 +3,7 @@ import os
 import pygame
 import config_einstellungen as bib
 import configparser as cp
+
 config = cp.ConfigParser()
 if not config.read("config_game.ini"):
     print("Erstelle Konfigurationsdatei...")
@@ -91,3 +92,24 @@ def show_start_screen(screen1, start_background, clock, game_folder, name):
 
         pygame.display.flip()
         clock.tick(FPS)
+
+def hitbox_check_enmy(wer, mitwem, surface):
+    # Erstelle die Hitbox 
+    hitbox = pygame.Rect(mitwem.rect.x+20, mitwem.rect.y+20, 50, 50)
+    
+    # Erstelle die Hitbox für 'wer' 
+    playerhitbox = pygame.Rect(wer.bewegung.x_pos, wer.springen.y_pos, 75, 75)
+    
+    # Überprüfe, ob die Hitboxen kollidieren
+    if playerhitbox.colliderect(hitbox):
+        # Wenn eine Kollision stattfindet, führe einen Schuss aus
+        wer.schiessen.shoot(wer.bewegung.x_pos, wer.springen.y_pos)
+    else:
+        # Wenn keine Kollision vorliegt, aktualisiere die Bewegung des Spielers
+        wer.bewegung.update()
+    pygame.draw.rect(surface, (255, 0, 0), playerhitbox, 2)  # Zeichnet die Hitbox des Spielers
+    pygame.draw.rect(surface, (0, 0, 255), hitbox, 2)        # Zeichnet die Hitbox des Gegners
+
+        
+
+    

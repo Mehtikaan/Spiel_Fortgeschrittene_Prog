@@ -60,6 +60,7 @@ start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play_button",game_folder=game_folder)
 
 # Zombie-Gruppe erstellen
+# Zombie-Gruppe erstellen
 all_zombies = pygame.sprite.Group()
 
 # Funktion zum Erstellen von Zombies
@@ -67,9 +68,9 @@ def create_zombie():
     zombie = Enmy(x=WIDTH + 100, y=HEIGHT - 200, surface=screen1, sprite_charakter=sprite_charakter)
     all_zombies.add(zombie)
 
-# Zombies am Anfang erzeugen
-for _ in range(1):  # Erstelle 3 Zombies zu Beginn
-    create_zombie()
+# Neuen Zombie beim Start des Spiels erstellen
+create_zombie()
+
 last_spawn_time = pygame.time.get_ticks()
 running = True
 while running:
@@ -94,16 +95,23 @@ while running:
     all_zombies.update()  # Alle Zombies aktualisieren
     main_charakter.update()
     main_charakter.zeichnen()
+
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
     spawn_interval = max(1000, 5000 - (elapsed_time * 100))  # Intervall wird alle 10 Sekunden kürzer
     if pygame.time.get_ticks() - last_spawn_time > spawn_interval:
-        create_zombie()
+        create_zombie()  # Zombie nur hier erzeugen
         last_spawn_time = pygame.time.get_ticks()
 
-        # Alle Zombies zeichnen
+    # Alle Zombies zeichnen
     all_zombies.draw(screen1)
+
+    # Kollisionserkennung mit den Zombies
+    for zombie in all_zombies:
+        am.hitbox_check_enmy(wer=main_charakter, mitwem=zombie, surface=screen1)
+
     pygame.display.update()
     clock.tick(FPS)
 
 pygame.quit()
+

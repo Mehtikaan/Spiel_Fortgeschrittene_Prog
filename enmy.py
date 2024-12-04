@@ -40,7 +40,7 @@ class Enmy(pygame.sprite.Sprite):
         self.max_ticks_anim = 0.6 * self.fps / self.anim_frames
         self.image = self.sprite_charakter["zombie_walk1"]  # Startbild
         self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
+        self.rect.midtop = (x, y)
         self.speed = 4  # Die Geschwindigkeit des Zombies nach links
 
     def update(self):
@@ -53,9 +53,6 @@ class Enmy(pygame.sprite.Sprite):
             sprite_images=self.sprite_charakter,
             name="zombie_walk"
         )
-
-        # Bild auf der Oberfläche zeichnen
-        self.surface.blit(self.image, self.rect.topleft)
 
         # Zombie nach links bewegen
         self.rect.x -= self.speed

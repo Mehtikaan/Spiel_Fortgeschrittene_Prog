@@ -118,7 +118,7 @@ class Springen:
         self.surface = surface
         self.y_velocity = 0
         self.gravity = 1
-        self.jumping_height = 20
+        self.jumping_height = 23
         self.jumping = False
 
     def start_sprung(self):
@@ -130,7 +130,7 @@ class Springen:
     def update(self, x_pos):
         """Verarbeitet das Springen und aktualisiert die Y-Position des Charakters"""
         if self.jumping:
-            self.y_pos -= self.y_velocity*0.8
+            self.y_pos -= self.y_velocity*0.5
             self.y_velocity -= self.gravity
             if self.y_pos >= self.surface.get_height() - 200:
                 self.y_pos = self.surface.get_height() - 200
