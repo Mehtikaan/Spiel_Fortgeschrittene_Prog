@@ -45,17 +45,6 @@ background = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.p
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
 
-#health bar erstellen
-def red_rect():
-    pygame.draw.rect(screen1, RED, (600, 80, 100, 15))
-    return
-def green_rect():
-    pygame.draw.rect(screen1, GREEN, (600, 80, main_charakter.health_points, 15))
-    return
-def black_rect():
-    pygame.draw.rect(screen1, BLACK, (600, 80, 101, 15), 1)
-    return
-
 scroll = 0
 tiles = math.ceil(WIDTH / background_width) + 1
 
@@ -108,10 +97,7 @@ while running:
                 main_charakter.springen.start_sprung()
             if event.key == pygame.K_f:  # Schießen
                 main_charakter.schiessen.shoot(main_charakter.bewegung.x_pos, main_charakter.springen.y_pos)
-            if event.key == pygame.K_l:             #test ob healt bar funktioniert
-                main_charakter.health_points -= 10
-        if main_charakter.health_points <= 0:
-            pygame.QUIT()
+        
 
 
     # Hintergrund scrollen
@@ -156,10 +142,7 @@ while running:
     pygame.display.update()
 
     clock.tick(FPS)
-    
-    red_rect() #healthbar
-    green_rect() #healthbar
-    black_rect() ##healthbar
+
 
     pygame.display.update()
 

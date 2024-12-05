@@ -30,7 +30,7 @@ class Charakter:
         self.bewegung = Bewegung(x_pos, tempo_x, scale_tempo_x, sprite_charakter, fps)
         self.schiessen = Schießen(sprite_charakter)
         self.springen = Springen(y_pos, sprite_charakter, surface)
-        self.health_points = health_points
+        self.health_points = Health_points(healthpoints=4, surface=surface)
         self.score_points = score_points
         self.surface = surface
 
@@ -41,7 +41,7 @@ class Charakter:
         jumping_sprite, self.springen.y_pos = self.springen.update(self.bewegung.x_pos)
         if jumping_sprite:
             self.bewegung.image = jumping_sprite
-
+        self.health_points.update()
     def zeichnen(self):
         """Zeichnet den Charakter auf dem Bildschirm"""
         self.bewegung.zeichnen(self.surface, self.springen.y_pos)
@@ -138,3 +138,20 @@ class Springen:
         if self.jumping:
             return self.sprite_charakter.get("ninja_jump", self.sprite_charakter["ninja_run1"]), self.y_pos
         return None, self.y_pos
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (240, 0, 0)
+GREEN = (0, 240, 0)
+GOLD = (255, 215, 0) 
+
+class Health_points:
+    def __init__(self,healthpoints,surface):
+        self.healthpoints=healthpoints
+        self.surface=surface
+    def red_rect(self):
+        pygame.draw.rect(self.surface, RED, (600, 80, 100, 15))
+        pygame.draw.rect(self.surface, GREEN, (600, 80, self.healthpoints, 15))
+        pygame.draw.rect(self.surface, BLACK, (600, 80, 101, 15), 2)
+        return
+    def update(self):
+        self.red_rect()
