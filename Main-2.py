@@ -139,7 +139,7 @@ while running:
     for zombie in all_zombies:
         am.hitbox_check_enmy(wer=main_charakter, mitwem=zombie, surface=screen1)
 
-    pygame.display.update()
+    
 
     clock.tick(FPS)
 
