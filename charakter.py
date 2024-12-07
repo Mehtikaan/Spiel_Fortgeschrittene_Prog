@@ -30,7 +30,7 @@ class Charakter:
         self.bewegung = Bewegung(x_pos, tempo_x, scale_tempo_x, sprite_charakter, fps)
         self.schiessen = Schießen(sprite_charakter)
         self.springen = Springen(y_pos, sprite_charakter, surface)
-        self.health_points = Health_points(healthpoints=4, surface=surface)
+        self.health_points = Health_points(healthpoints=100, surface=surface)
         self.score_points = score_points
         self.surface = surface
 
@@ -144,14 +144,17 @@ RED = (240, 0, 0)
 GREEN = (0, 240, 0)
 GOLD = (255, 215, 0) 
 
+
+#Health Bar
+
 class Health_points:
     def __init__(self,healthpoints,surface):
         self.healthpoints=healthpoints
         self.surface=surface
     def red_rect(self):
-        pygame.draw.rect(self.surface, RED, (600, 80, 100, 15))
-        pygame.draw.rect(self.surface, GREEN, (600, 80, self.healthpoints, 15))
-        pygame.draw.rect(self.surface, BLACK, (600, 80, 101, 15), 2)
+        pygame.draw.rect(self.surface, RED, (660, 60, 100, 15))
+        pygame.draw.rect(self.surface, GREEN, (660, 60, self.healthpoints, 15))
+        pygame.draw.rect(self.surface, BLACK, (660, 60, 101, 15), 2)
         return
     def update(self):
         self.red_rect()

@@ -42,7 +42,7 @@ clock = pygame.time.Clock()
 
 # Hintergrund laden
 game_folder = os.path.dirname(__file__)
-background = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.png")).convert()
+background = pygame.image.load(os.path.join(game_folder, '_image', "City2_pale.png")).convert()
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
 
@@ -91,6 +91,9 @@ create_zombie()
 #plattfrom
 platform = pygame.Rect( 0, HEIGHT-127 ,800, 150)           #y, x, width, height
 
+#ground_platform = pygame.image.load(os.path.join(game_folder, '_image', "classroom.png")).convert()
+
+
 
 last_spawn_time = pygame.time.get_ticks()
 running = True
@@ -128,8 +131,9 @@ while running:
     all_zombies.update()  # Alle Zombies aktualisieren
     main_charakter.update()
 
-    #Boden
-    pygame.draw.rect(screen1, color, platform)
+    #Boden zeichnen 
+    platfrom = pygame.draw.rect(screen1, color, platform)
+
 
     main_charakter.zeichnen()
 
