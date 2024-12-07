@@ -33,6 +33,7 @@ BLACK = (0, 0, 0)
 RED = (240, 0, 0)
 GREEN = (0, 240, 0)
 GOLD = (255, 215, 0) 
+color = (0, 150, 30)
 
 
 screen1 = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -86,6 +87,11 @@ def create_zombie():
 # Neuen Zombie beim Start des Spiels erstellen
 create_zombie()
 
+
+#plattfrom
+platform = pygame.Rect( 0, HEIGHT-127 ,800, 150)           #y, x, width, height
+
+
 last_spawn_time = pygame.time.get_ticks()
 running = True
 while running:
@@ -99,7 +105,8 @@ while running:
                 main_charakter.schiessen.shoot(main_charakter.bewegung.x_pos, main_charakter.springen.y_pos)
         
 
-
+# Müssen Haupt While Schleife Ordnung reinbringen
+                
     # Hintergrund scrollen
     scroll -= 6
     if abs(scroll) > background_width:
@@ -112,15 +119,17 @@ while running:
     score += 1  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
-    score_text = font.render(f"{score:05d} m ", True, GOLD)
-    text_rect = score_text.get_rect(topright=(WIDTH - 10, 10))  # Oben rechts mit 10px Abstand
+    score_text = font.render(f"{score:05d} m ", True, WHITE)
+    font = pygame.font.Font(None, 40)
+    text_rect = score_text.get_rect(topright=(WIDTH - 20, 20))  # Oben rechts mit 1px Abstand
     screen1.blit(score_text, text_rect)
     
     # Zombies und Charakter aktualisieren
     all_zombies.update()  # Alle Zombies aktualisieren
     main_charakter.update()
 
-
+    #Boden
+    pygame.draw.rect(screen1, color, platform)
 
     main_charakter.zeichnen()
 

@@ -7,8 +7,8 @@ class Bullet(pygame.sprite.Sprite):
 
         game_folder = os.path.dirname(__file__)
         # Kunai-Bild laden und skalieren
-        self.image = pygame.image.load(os.path.join(game_folder, '_image', "kanonenkugel.png")).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (30, 10))  # Größe anpassen
+        self.image = pygame.image.load(os.path.join(game_folder, '_image', "key.png")).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (60, 40))  # Größe anpassen
 
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
