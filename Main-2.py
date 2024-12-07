@@ -33,7 +33,7 @@ BLACK = (0, 0, 0)
 RED = (240, 0, 0)
 GREEN = (0, 240, 0)
 GOLD = (255, 215, 0) 
-color = (0, 150, 30)
+color = (60, 100, 45)
 
 
 screen1 = pygame.display.set_mode((WIDTH, HEIGHT))
