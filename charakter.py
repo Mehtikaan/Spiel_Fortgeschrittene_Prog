@@ -31,7 +31,7 @@ class Charakter:
         self.schiessen = Schießen(sprite_charakter)
         self.springen = Springen(y_pos, sprite_charakter, surface)
         self.waffe = Waffe(self.bewegung, sprite_charakter)  # Neue Waffenklasse
-        self.health_points = Health_points(healthpoints=4, surface=surface)
+        self.health_points = Health_points(healthpoints=100, surface=surface)
         self.score_points = score_points
         self.surface = surface
 
@@ -174,9 +174,9 @@ class Health_points:
         self.surface = surface
 
     def red_rect(self):
-        pygame.draw.rect(self.surface, RED, (600, 80, 100, 15))
-        pygame.draw.rect(self.surface, GREEN, (600, 80, self.healthpoints, 15))
-        pygame.draw.rect(self.surface, BLACK, (600, 80, 101, 15), 2)
+        pygame.draw.rect(self.surface, RED, (660, 65, 100, 15))
+        pygame.draw.rect(self.surface, GREEN, (660, 65, self.healthpoints, 15))
+        pygame.draw.rect(self.surface, BLACK, (660, 65, 101, 15), 2)
         return
 
     def update(self):
