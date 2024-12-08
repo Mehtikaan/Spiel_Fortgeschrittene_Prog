@@ -3,7 +3,12 @@ import os
 import pygame
 import config_einstellungen as bib
 import configparser as cp
+import charakter as ck
+
 config = cp.ConfigParser()
+
+
+
 if not config.read("config_game.ini"):
     print("Erstelle Konfigurationsdatei...")
     bib.erstelle_config_datei()

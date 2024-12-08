@@ -33,7 +33,7 @@ BLACK = (0, 0, 0)
 RED = (240, 0, 0)
 GREEN = (0, 240, 0)
 GOLD = (255, 215, 0) 
-color = (60, 100, 45)
+KHAKI = (60, 100, 45)
 
 
 screen1 = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -69,7 +69,7 @@ main_charakter = Charakter(
 )
 
 # Startbildschirm anzeigen, bevor das Spiel beginnt
-start_background = pygame.image.load(os.path.join(game_folder, '_image', "classroom.png")).convert()
+start_background = pygame.image.load(os.path.join(game_folder, '_image', "24.png")).convert()
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
 # Startbildschirm anzeigen
@@ -89,7 +89,7 @@ create_zombie()
 
 
 #plattfrom
-platform = pygame.Rect( 0, HEIGHT-127 ,800, 150)           #y, x, width, height
+platform = pygame.Rect( 0, HEIGHT-127 ,1400, 150)           #y, x, width, height
 
 #ground_platform = pygame.image.load(os.path.join(game_folder, '_image', "classroom.png")).convert()
 
@@ -132,7 +132,7 @@ while running:
     main_charakter.update()
 
     #Boden zeichnen 
-    platfrom = pygame.draw.rect(screen1, color, platform)
+    platfrom = pygame.draw.rect(screen1, KHAKI, platform)
 
 
     main_charakter.zeichnen()

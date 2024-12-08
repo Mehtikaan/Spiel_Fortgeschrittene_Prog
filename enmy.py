@@ -2,7 +2,7 @@ import pygame
 import animationen as am
 import configparser as cp
 import config_einstellungen as bib
-from waffe import Bullet
+#from waffe import Bullet
 
 
 # Konfiguration laden oder erstellen

@@ -2,7 +2,7 @@ import pygame
 import animationen as am
 import configparser as cp
 import config_einstellungen as bib
-from waffe import Bullet
+#from waffe import Bullet
 import os
 
 # Konfiguration laden oder erstellen
@@ -108,7 +108,7 @@ class Waffe:
         """Aktualisiert die Position der Waffe basierend auf der Bewegung des Charakters"""
         self.rect.center = (
             self.bewegung.x_pos + self.sprite_charakter["ninja_run1"].get_width(),
-            y_pos + 20
+            y_pos + 45
         )
 
     def zeichnen(self, surface):
@@ -174,9 +174,9 @@ class Health_points:
         self.surface = surface
 
     def red_rect(self):
-        pygame.draw.rect(self.surface, RED, (660, 65, 100, 15))
-        pygame.draw.rect(self.surface, GREEN, (660, 65, self.healthpoints, 15))
-        pygame.draw.rect(self.surface, BLACK, (660, 65, 101, 15), 2)
+        pygame.draw.rect(self.surface, RED, (1240, 65, 100, 15))
+        pygame.draw.rect(self.surface, GREEN, (1240, 65, self.healthpoints, 15))
+        pygame.draw.rect(self.surface, BLACK, (1240, 65, 102, 15), 3)
         return
 
     def update(self):

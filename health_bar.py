@@ -11,11 +11,11 @@
 
 
 # def red_rect():
-#     pygame.draw.rect(screen1, RED, (600, 80, 100, 15))
+#     pygame.draw.rect(screen1, RED, (1200, 80, 100, 15))
 #     return
 # def green_rect():
-#     pygame.draw.rect(screen1, GREEN, (600, 80, main_charakter.health_points, 15))
+#     pygame.draw.rect(screen1, GREEN, (1200, 80, main_charakter.health_points, 15))
 #     return
 # def black_rect():
-#     pygame.draw.rect(screen1, BLACK, (600, 80, 101, 15), 2)
+#     pygame.draw.rect(screen1, BLACK, (1200, 80, 101, 15), 2)
 #     return
