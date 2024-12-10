@@ -3,7 +3,7 @@ import os
 import math
 import configparser as cp
 import config_einstellungen as bib
-from charakter import Charakter, Waffe
+from charakter import Charakter, Waffe,Bullet
 import animationen as am
 from enmy import Enmy  # Importiere die Enmy-Klasse
 import pygame.font
@@ -135,9 +135,16 @@ while running:
     # Kugeln aktualisieren und zeichnen
     waffe.schiessen.update()  # Aktualisiere Kugeln
     waffe.schiessen.draw(screen1)  # Zeichne Kugeln
-    # Kollisionserkennung mit den Zombies
     for zombie in all_zombies:
+        # Kollision mit dem Spieler (wer) und Zombie (mitwem)
         am.hitbox_check_enmy(wer=main_charakter, mitwem=zombie, surface=screen1)
+
+    # Kollision zwischen Kugeln und Zombies überprüfen
+    for bullet in waffe.schiessen.bullets:
+        for zombie in all_zombies:
+            if am.hitbox_check_enmy_bullet(wer=bullet, mitwem=zombie, surface=screen1):
+                bullet.kill()
+                zombie.kill()
 
     pygame.display.update()
 

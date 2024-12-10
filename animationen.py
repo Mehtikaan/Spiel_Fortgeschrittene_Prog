@@ -98,21 +98,44 @@ def show_start_screen(screen1, start_background, clock, game_folder, name):
         clock.tick(FPS)
 
 def hitbox_check_enmy(wer, mitwem, surface):
-    # Erstelle die Hitbox 
-    hitbox = pygame.Rect(mitwem.rect.x+20, mitwem.rect.y+20, 50, 50)
+    # Erstelle die Hitbox des Gegners (Zombie oder Objekt)
+    hitbox = pygame.Rect(mitwem.rect.x + 20, mitwem.rect.y + 20, 50, 50)
     
-    # Erstelle die Hitbox für 'wer' 
-    playerhitbox = pygame.Rect(wer.bewegung.x_pos, wer.springen.y_pos, 75, 75)
+    # Erstelle die Hitbox für 'wer' (Charakter)
+    playerhitbox = pygame.Rect(wer.bewegung.x_pos, wer.springen.y_pos, 75, 75)  # Zugriff auf die Position des Charakters
     
     # Überprüfe, ob die Hitboxen kollidieren
     if playerhitbox.colliderect(hitbox):
+        # Hier kannst du die Kollision behandeln
         pass
     else:
         # Wenn keine Kollision vorliegt, aktualisiere die Bewegung des Spielers
-        wer.bewegung.update()
-    pygame.draw.rect(surface, (255, 0, 0), playerhitbox, 2)  # Zeichnet die Hitbox des Spielers
-    pygame.draw.rect(surface, (0, 0, 255), hitbox, 2)        # Zeichnet die Hitbox des Gegners
+        pass
+    
+    # Zeichne die Hitboxen zur Visualisierung
+    pygame.draw.rect(surface, (255, 0, 0), playerhitbox, 2)  # Zeichnet die Hitbox des Spielers (rot)
+    pygame.draw.rect(surface, (0, 0, 255), hitbox, 2)       # Zeichnet die Hitbox des Gegners (blau)
 
+
+def hitbox_check_enmy_bullet(wer, mitwem, surface):
+    # Prüfe, ob der 'wer' (z.B. Spieler oder Kugel) und der 'mitwem' (z.B. Zombie) kollidieren
+
+    # Erstelle eine Hitbox für 'wer'
+    playerhitbox = pygame.Rect(wer.rect.x, wer.rect.y, wer.rect.width, wer.rect.height)
+
+    # Erstelle eine Hitbox für 'mitwem' (z.B. der Zombie)
+    enemyhitbox = pygame.Rect(mitwem.rect.x, mitwem.rect.y, mitwem.rect.width, mitwem.rect.height)
+
+    # Überprüfe, ob die Hitboxen kollidieren
+    if playerhitbox.colliderect(enemyhitbox):
+        
+        print("Kollision zwischen", wer, "und", mitwem)
+        # Hier kannst du die Kollision behandeln (z.B. Schaden zufügen, Gegner zerstören)
+        return True
+
+    # Zeichne die Hitboxen zur Visualisierung
+    pygame.draw.rect(surface, (255, 0, 0), playerhitbox, 2)  # Spielerhitbox (rot)
+    pygame.draw.rect(surface, (0, 0, 255), enemyhitbox, 2)   # Gegnerhitbox (blau)
         
 
     
