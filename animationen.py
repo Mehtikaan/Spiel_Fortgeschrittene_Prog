@@ -106,8 +106,7 @@ def hitbox_check_enmy(wer, mitwem, surface):
     
     # Überprüfe, ob die Hitboxen kollidieren
     if playerhitbox.colliderect(hitbox):
-        # Wenn eine Kollision stattfindet, führe einen Schuss aus
-        wer.schiessen.shoot(wer.bewegung.x_pos, wer.springen.y_pos)
+        pass
     else:
         # Wenn keine Kollision vorliegt, aktualisiere die Bewegung des Spielers
         wer.bewegung.update()

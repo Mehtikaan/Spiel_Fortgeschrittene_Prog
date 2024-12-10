@@ -3,10 +3,11 @@ import os
 import math
 import configparser as cp
 import config_einstellungen as bib
-from charakter import Charakter
+from charakter import Charakter, Waffe
 import animationen as am
 from enmy import Enmy  # Importiere die Enmy-Klasse
 import pygame.font
+
 
 # Konfiguration laden oder erstellen
 config = cp.ConfigParser()
@@ -32,8 +33,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (240, 0, 0)
 GREEN = (0, 240, 0)
-GOLD = (255, 215, 0) 
-KHAKI = (60, 100, 45)
+GOLD = (255, 215, 0)
 
 
 screen1 = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -42,9 +42,10 @@ clock = pygame.time.Clock()
 
 # Hintergrund laden
 game_folder = os.path.dirname(__file__)
-background = pygame.image.load(os.path.join(game_folder, '_image', "City2_pale.png")).convert()
+background = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.png")).convert()
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
+
 
 scroll = 0
 tiles = math.ceil(WIDTH / background_width) + 1
@@ -69,13 +70,12 @@ main_charakter = Charakter(
 )
 
 # Startbildschirm anzeigen, bevor das Spiel beginnt
-start_background = pygame.image.load(os.path.join(game_folder, '_image', "24.png")).convert()
+start_background = pygame.image.load(os.path.join(game_folder, '_image', "classroom.png")).convert()
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
 # Startbildschirm anzeigen
 am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play_button",game_folder=game_folder)
 
-# Zombie-Gruppe erstellen
 # Zombie-Gruppe erstellen
 all_zombies = pygame.sprite.Group()
 
@@ -86,15 +86,7 @@ def create_zombie():
 
 # Neuen Zombie beim Start des Spiels erstellen
 create_zombie()
-
-
-#plattfrom
-platform = pygame.Rect( 0, HEIGHT-127 ,1400, 150)           #y, x, width, height
-
-#ground_platform = pygame.image.load(os.path.join(game_folder, '_image', "classroom.png")).convert()
-
-
-
+waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegung,surface=screen1,springen=main_charakter.springen)
 last_spawn_time = pygame.time.get_ticks()
 running = True
 while running:
@@ -105,35 +97,29 @@ while running:
             if event.key == pygame.K_SPACE:
                 main_charakter.springen.start_sprung()
             if event.key == pygame.K_f:  # Schießen
-                main_charakter.schiessen.shoot(main_charakter.bewegung.x_pos, main_charakter.springen.y_pos)
-        
+               waffe.schiessen.shoot(waffe.rect)
+               print("F-Taste gedrückt - Schuss ausgelöst!") 
 
-# Müssen Haupt While Schleife Ordnung reinbringen
-                
     # Hintergrund scrollen
     scroll -= 6
     if abs(scroll) > background_width:
         scroll = 0
-
+    waffe.schiessen.draw(screen1)
+    waffe.schiessen.update()
     for i in range(tiles):
         screen1.blit(background, (scroll + i * background_width, 0))
 
-     # Score aktualisieren
+    # Score aktualisieren
     score += 1  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
-    score_text = font.render(f"{score:05d} m ", True, WHITE)
-    font = pygame.font.Font(None, 40)
-    text_rect = score_text.get_rect(topright=(WIDTH - 20, 20))  # Oben rechts mit 1px Abstand
+    score_text = font.render(f"{score:05d} m ", True, GOLD)
+    text_rect = score_text.get_rect(topright=(WIDTH - 10, 10))  # Oben rechts mit 10px Abstand
     screen1.blit(score_text, text_rect)
-    
+
     # Zombies und Charakter aktualisieren
     all_zombies.update()  # Alle Zombies aktualisieren
     main_charakter.update()
-
-    #Boden zeichnen 
-    platfrom = pygame.draw.rect(screen1, KHAKI, platform)
-
 
     main_charakter.zeichnen()
 
@@ -146,19 +132,15 @@ while running:
 
     # Alle Zombies zeichnen
     all_zombies.draw(screen1)
-
-
+    # Kugeln aktualisieren und zeichnen
+    waffe.schiessen.update()  # Aktualisiere Kugeln
+    waffe.schiessen.draw(screen1)  # Zeichne Kugeln
     # Kollisionserkennung mit den Zombies
     for zombie in all_zombies:
         am.hitbox_check_enmy(wer=main_charakter, mitwem=zombie, surface=screen1)
 
-    
+    pygame.display.update()
 
     clock.tick(FPS)
 
-
-    pygame.display.update()
-
-
 pygame.quit()
-
