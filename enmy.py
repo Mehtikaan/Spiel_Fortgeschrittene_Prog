@@ -27,10 +27,11 @@ import pygame
 import animationen as am
 
 class Enmy(pygame.sprite.Sprite):
-    def __init__(self, x, y, surface, sprite_charakter):
+    def __init__(self, x, y, surface, sprite_charakter,hp):
         super().__init__()
         self.x = x
         self.y = y
+        self.hp=hp
         self.surface = surface
         self.fps = 60  # Standard FPS, kann aus der Konfiguration übernommen werden
         self.sprite_charakter = sprite_charakter  # Hier das sprite_charakter übergeben

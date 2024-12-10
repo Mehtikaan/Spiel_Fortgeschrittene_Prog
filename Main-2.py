@@ -81,7 +81,7 @@ all_zombies = pygame.sprite.Group()
 
 # Funktion zum Erstellen von Zombies
 def create_zombie():
-    zombie = Enmy(x=WIDTH + 100, y=HEIGHT - 200, surface=screen1, sprite_charakter=sprite_charakter)
+    zombie = Enmy(x=WIDTH + 100, y=HEIGHT - 200, surface=screen1, sprite_charakter=sprite_charakter,hp=5)
     all_zombies.add(zombie)
 
 # Neuen Zombie beim Start des Spiels erstellen
@@ -143,8 +143,10 @@ while running:
     for bullet in waffe.schiessen.bullets:
         for zombie in all_zombies:
             if am.hitbox_check_enmy_bullet(wer=bullet, mitwem=zombie, surface=screen1):
+                zombie.hp-=1
                 bullet.kill()
-                zombie.kill()
+                if zombie.hp==0:
+                    zombie.kill()
 
     pygame.display.update()
 
