@@ -107,7 +107,7 @@ def hitbox_check_enmy(wer, mitwem, surface):
     # Überprüfe, ob die Hitboxen kollidieren
     if playerhitbox.colliderect(hitbox):
         # Hier kannst du die Kollision behandeln
-        pass
+        print("xxxx")
     else:
         # Wenn keine Kollision vorliegt, aktualisiere die Bewegung des Spielers
         pass

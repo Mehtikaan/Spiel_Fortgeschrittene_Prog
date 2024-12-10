@@ -32,17 +32,17 @@ class Charakter:
         
         # Übergabe von bewegung und springen an Waffe
         self.waffe = Waffe(self.bewegung, self.springen, sprite_charakter, surface=self.surface)
-        
-        self.health_points = Health_points(healthpoints=100, surface=surface)
+        self.health_points=health_points
+        self.bar = Health_points(self.health_points, surface=surface)
         self.score_points = score_points
     def update(self):
         """Aktualisiert den Charakter: Bewegung, Animation, Schüsse und Springen"""
+        self.waffe.update(self.springen.y_pos)  
         self.bewegung.update()
         jumping_sprite, self.springen.y_pos = self.springen.update(self.bewegung.x_pos)
         if jumping_sprite:
-            self.bewegung.image = jumping_sprite
-        self.waffe.update(self.springen.y_pos)  # Aktualisiert die Position der Waffe
-        self.health_points.update()
+            self.bewegung.image = jumping_sprite # Aktualisiert die Position der Waffe
+        self.bar.update()
 
     def zeichnen(self):
         """Zeichnet den Charakter auf dem Bildschirm"""
@@ -153,7 +153,7 @@ class Waffe:
         self.sprite_charakter = sprite_charakter
         game_folder = os.path.dirname(__file__)
         # Bild laden und skalieren
-        self.image = pygame.image.load(os.path.join(game_folder, '_image', "US_Thompson.png")).convert_alpha()
+        self.image = pygame.image.load(os.path.join(game_folder, '_image', "kunai.png")).convert_alpha()
         self.image = pygame.transform.scale(self.image, (50, 20))  # Größe anpassen
         self.rect = self.image.get_rect()
         
@@ -163,7 +163,7 @@ class Waffe:
     def update(self, y_pos):
         """Aktualisiert die Position der Waffe basierend auf der Bewegung des Charakters"""
         self.rect.center = (
-            self.bewegung.x_pos - 20 + self.sprite_charakter["ninja_run1"].get_width(),
+            self.bewegung.x_pos - 60 + self.sprite_charakter["ninja_run1"].get_width(),
             y_pos + 45
         )
 
@@ -205,7 +205,7 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__()
 
         game_folder = os.path.dirname(__file__)
-        self.image = pygame.image.load(os.path.join(game_folder, '_image', "bullet.png")).convert_alpha()
+        self.image = pygame.image.load(os.path.join(game_folder, '_image', "kunai.png")).convert_alpha()
         self.image = pygame.transform.scale(self.image, (60, 40))  # Größe der Kugel anpassen
         # Weiß als transparent setzen
         self.image.set_colorkey((255, 255, 255))  # Weiß als transparent festlegen

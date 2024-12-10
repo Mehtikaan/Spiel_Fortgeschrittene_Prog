@@ -3,7 +3,7 @@ import os
 import math
 import configparser as cp
 import config_einstellungen as bib
-from charakter import Charakter, Waffe,Bullet
+from charakter import Charakter, Waffe,Bullet,Health_points
 import animationen as am
 from enmy import Enmy  # Importiere die Enmy-Klasse
 import pygame.font
@@ -66,7 +66,7 @@ am.sprite_image_loader(game_folder=game_folder, folder_name="_image", image_max_
 print(sprite_charakter)
 main_charakter = Charakter(
     x_pos=0, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,
-    tempo_x=2, scale_tempo_x=1.01, health_points=100, score_points=0, surface=screen1
+    tempo_x=2, scale_tempo_x=1.01, health_points=100, score_points=0, surface=screen1 
 )
 
 # Startbildschirm anzeigen, bevor das Spiel beginnt
@@ -137,8 +137,11 @@ while running:
     waffe.schiessen.draw(screen1)  # Zeichne Kugeln
     for zombie in all_zombies:
         # Kollision mit dem Spieler (wer) und Zombie (mitwem)
-        am.hitbox_check_enmy(wer=main_charakter, mitwem=zombie, surface=screen1)
-
+        if  am.hitbox_check_enmy(wer=main_charakter, mitwem=zombie, surface=screen1):
+            main_charakter.health_points=-10
+            main_charakter.bar.red_rect()
+            zombie_stirb=all_zombies.sprite(zombie)[0]
+            zombie_stirb.kill()
     # Kollision zwischen Kugeln und Zombies überprüfen
     for bullet in waffe.schiessen.bullets:
         for zombie in all_zombies:
