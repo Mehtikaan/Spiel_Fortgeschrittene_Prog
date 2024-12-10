@@ -3,7 +3,7 @@ import os
 import math
 import configparser as cp
 import config_einstellungen as bib
-from charakter import Charakter, Waffe,Bullet,Health_points
+from charakter import Charakter, Waffe,Bullet
 import animationen as am
 from enmy import Enmy  # Importiere die Enmy-Klasse
 import pygame.font
@@ -66,7 +66,7 @@ am.sprite_image_loader(game_folder=game_folder, folder_name="_image", image_max_
 print(sprite_charakter)
 main_charakter = Charakter(
     x_pos=0, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,
-    tempo_x=2, scale_tempo_x=1.01, health_points=100, score_points=0, surface=screen1 
+    tempo_x=2, scale_tempo_x=1.01, health_points=100, score_points=0, surface=screen1
 )
 
 # Startbildschirm anzeigen, bevor das Spiel beginnt
@@ -86,6 +86,16 @@ def create_zombie():
 
 # Neuen Zombie beim Start des Spiels erstellen
 create_zombie()
+
+score = 0.0
+
+# Plattform-Rechteck für Kollisionserkennung
+platform_rect = pygame.Rect(0, HEIGHT - 127, 1400, 150)
+
+#platform = pygame.Rect( 0, HEIGHT-127 ,1400, 150)           #y, x, width, height
+platform_image = pygame.image.load(os.path.join(game_folder, "_image", "stone_tile.png")).convert_alpha()
+platform_image = pygame.transform.scale(platform_image, (1400, 150))
+
 waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegung,surface=screen1,springen=main_charakter.springen)
 last_spawn_time = pygame.time.get_ticks()
 running = True
@@ -110,11 +120,12 @@ while running:
         screen1.blit(background, (scroll + i * background_width, 0))
 
     # Score aktualisieren
-    score += 1  # Score um 1 pro Frame erhöhen
+    score += 0.45  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
-    score_text = font.render(f"{score:05d} m ", True, GOLD)
-    text_rect = score_text.get_rect(topright=(WIDTH - 10, 10))  # Oben rechts mit 10px Abstand
+
+    score_text = font.render(f"{int(score):05d} m", True, WHITE)
+    text_rect = score_text.get_rect(topright=(WIDTH - 30, 10))
     screen1.blit(score_text, text_rect)
 
     # Zombies und Charakter aktualisieren
@@ -123,6 +134,12 @@ while running:
 
     main_charakter.zeichnen()
 
+
+
+    #Boden zeichnen 
+    screen1.blit(platform_image, (platform_rect.x, platform_rect.y))
+    
+
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
     spawn_interval = max(1000, 5000 - (elapsed_time * 100))  # Intervall wird alle 10 Sekunden kürzer
@@ -130,7 +147,8 @@ while running:
         create_zombie()  # Zombie nur hier erzeugen
         last_spawn_time = pygame.time.get_ticks()
 
-    # Alle Zombies zeichnen
+   
+ # Alle Zombies zeichnen
     all_zombies.draw(screen1)
     # Kugeln aktualisieren und zeichnen
     waffe.schiessen.update()  # Aktualisiere Kugeln
