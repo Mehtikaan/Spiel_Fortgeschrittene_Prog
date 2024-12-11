@@ -8,6 +8,7 @@ import animationen as am
 from enmy import Enmy  # Importiere die Enmy-Klasse
 import pygame.font
 from sequenz import wrap_text
+import random
 
 # Konfiguration laden oder erstellen
 config = cp.ConfigParser()
@@ -184,7 +185,10 @@ while running:
 
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
-    spawn_interval = max(1000, 5000 - (elapsed_time * 100))  # Intervall wird alle 10 Sekunden kürzer
+
+    # Zufälligen Spawn-Intervall setzen
+    spawn_interval = random.randint(500,50000)  # Zufälliger Wert zwischen 500 und 50000 Sekunden in Millisekunden
+
     if pygame.time.get_ticks() - last_spawn_time > spawn_interval:
         create_zombie()  # Zombie nur hier erzeugen
         last_spawn_time = pygame.time.get_ticks()
