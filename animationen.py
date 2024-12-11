@@ -23,14 +23,19 @@ except Exception as e:
     pygame.quit()
     exit()
     
-def animation_update(timer,max_ticks, act_frame,anim_frames, sprite_images,name:str):
-    timer+=1
-    if timer >=max_ticks:
-        timer=0
-        act_frame +=1
-    if act_frame>=anim_frames:
-        act_frame=1
-    return sprite_images[name+str(act_frame)], timer, act_frame
+def animation_update(timer, max_ticks, act_frame, anim_frames, sprite_images, name: str):
+    timer += 1
+    if timer >= max_ticks:
+        timer = 0
+        act_frame += 1
+
+    act_frame = min(act_frame, len(sprite_images) - 1)
+
+    # Begrenze act_frame, damit es nicht größer wird als die Anzahl der verfügbaren Frames
+    if act_frame >= anim_frames:
+        act_frame = 1  # Oder act_frame = 0, je nachdem, wie du die Animation starten willst
+    
+    return sprite_images[name + str(act_frame)], timer, act_frame
 
 def animation_gehen():
     

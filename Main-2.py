@@ -47,6 +47,49 @@ background = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.p
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
 
+#Bilder für level changer
+
+enemy_sprites_level_1 = {}
+enemy_sprites_level_2 = {}
+
+original_charakter = {}
+
+
+am.sprite_image_loader(
+    game_folder=game_folder,
+    folder_name = '_image',
+    image_max_num =10,
+    image_name='zombie_walk',
+    original_name=original_charakter,
+    sprite_dict_name=enemy_sprites_level_1
+)
+
+am.sprite_image_loader(
+    game_folder=game_folder,
+    folder_name='_image',
+    image_max_num = 7,
+    image_name='cowboy_run',
+    original_name=original_charakter,
+    sprite_dict_name=enemy_sprites_level_2
+
+)
+
+
+
+background_level_1 = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.png")).convert()
+background_level_1 = pygame.transform.scale(background_level_1, (WIDTH, HEIGHT))
+
+background_level_2 = pygame.image.load(os.path.join(game_folder, '_image', "BG.png")).convert()
+background_level_2 = pygame.transform.scale(background_level_2, (WIDTH, HEIGHT))
+
+platform_image_level_1 = pygame.image.load(os.path.join(game_folder, "_image", "stone_tile.png")).convert_alpha()
+platform_image_level_1 = pygame.transform.scale(platform_image_level_1, (1400, 150))
+
+platform_image_level_2 = pygame.image.load(os.path.join(game_folder, "_image", "sand_tile.png")).convert_alpha()
+platform_image_level_2 = pygame.transform.scale(platform_image_level_2, (1400, 150))
+
+
+
 
 scroll = 0
 tiles = math.ceil(WIDTH / background_width) + 1
@@ -124,11 +167,17 @@ all_zombies = pygame.sprite.Group()
 
 # Funktion zum Erstellen von Zombies
 def create_zombie():
-    zombie = Enmy(x=WIDTH + 100, y=HEIGHT - 200, surface=screen1, sprite_charakter=sprite_charakter,hp=5)
+    zombie = Enmy(
+        x=WIDTH + 100, y=HEIGHT - 200, surface=screen1,
+        sprite_charakter=sprite_charakter, anim_name="zombie_walk", hp=5
+    )
     all_zombies.add(zombie)
 
 # Neuen Zombie beim Start des Spiels erstellen
-create_zombie()
+if score <1000:
+    create_zombie()
+else:
+    pass
 
 score = 0.0
 
@@ -141,6 +190,37 @@ platform_image = pygame.transform.scale(platform_image, (1400, 150))
 
 waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegung,surface=screen1,springen=main_charakter.springen)
 last_spawn_time = pygame.time.get_ticks()
+
+
+
+#Level Wechsler
+level_changed = False
+
+def level_changer():
+   global platform_image, background, level_changed
+   if score >= 1000 and not level_changed:
+       level_changed = True
+       platform_image = platform_image_level_2
+       background = background_level_2
+
+        #entferne alle gegner
+       all_zombies.empty()
+
+       for _ in range(5):   #anzahl der neuen gegner
+           new_enemy = Enmy(
+               x=random.randint(WIDTH, WIDTH+200),
+               y=HEIGHT-200,
+               surface=screen1,
+               sprite_charakter=enemy_sprites_level_2,  # Hier Level 2 Sprites übergeben
+               anim_name="cowboy_run", 
+               hp= 5
+           )
+           all_zombies.add(new_enemy)
+
+
+
+
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -163,7 +243,7 @@ while running:
         screen1.blit(background, (scroll + i * background_width, 0))
 
     # Score aktualisieren
-    score += 0.45  # Score um 1 pro Frame erhöhen
+    score += 1.5  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
@@ -187,14 +267,7 @@ while running:
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
 
     # Zufälligen Spawn-Intervall setzen
-    if score <= 200:
-        spawn_interval = random.randint(2000,5000)
-    elif score <= 400:
-        spawn_interval = random.randint(1700,4000)
-    elif score <= 600:
-        spawn_interval = random.randint(1200,2000)
-    else:
-        zombie.kill()   # Zufälliger Wert zwischen 500 und 50000 Sekunden in Millisekunden
+    spawn_interval = random.randint(500,50000)  # Zufälliger Wert zwischen 500 und 50000 Sekunden in Millisekunden
 
     if pygame.time.get_ticks() - last_spawn_time > spawn_interval:
         create_zombie()  # Zombie nur hier erzeugen
@@ -221,6 +294,7 @@ while running:
                 bullet.kill()
                 if zombie.hp==0:
                     zombie.kill()
+    level_changer()
 
     pygame.display.update()
 

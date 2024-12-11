@@ -26,38 +26,79 @@ except Exception as e:
 import pygame
 import animationen as am
 
+# class Enmy(pygame.sprite.Sprite):
+#     def __init__(self, x, y, surface, sprite_charakter,hp):
+#         super().__init__()
+#         self.x = x
+#         self.y = y
+#         self.hp=hp
+#         self.surface = surface
+#         self.fps = 60  # Standard FPS, kann aus der Konfiguration übernommen werden
+#         self.sprite_charakter = sprite_charakter  # Hier das sprite_charakter übergeben
+#         self.anim_frames = 10  # Anzahl der Animationsbilder
+#         self.act_frame = 1
+#         self.timer = 0
+#         self.max_ticks_anim = 0.6 * self.fps / self.anim_frames
+#         self.image = self.sprite_charakter["zombie_walk1"]  # Startbild
+#         self.rect = self.image.get_rect()
+#         self.rect.midtop = (x, y)
+#         self.speed = 4  # Die Geschwindigkeit des Zombies nach links
+
+#     def update(self):
+#         # Animation des Zombies
+#         self.image, self.timer, self.act_frame = am.animation_update(
+#             timer=self.timer,
+#             max_ticks=self.max_ticks_anim,
+#             act_frame=self.act_frame,
+#             anim_frames=self.anim_frames,
+#             sprite_images=self.sprite_charakter,
+#             name="zombie_walk"
+#         )
+
+#         # Zombie nach links bewegen
+#         self.rect.x -= self.speed
+        
+#         # Entfernen, wenn der Zombie den linken Bildschirmrand verlässt
+#         if self.rect.right < 0:
+#             self.kill()
+
+
+
 class Enmy(pygame.sprite.Sprite):
-    def __init__(self, x, y, surface, sprite_charakter,hp):
+    def __init__(self, x, y, surface, sprite_charakter, anim_name, hp):
         super().__init__()
         self.x = x
         self.y = y
-        self.hp=hp
+        self.hp = hp
         self.surface = surface
         self.fps = 60  # Standard FPS, kann aus der Konfiguration übernommen werden
         self.sprite_charakter = sprite_charakter  # Hier das sprite_charakter übergeben
+        self.anim_name = anim_name  # Der Animationsname wird hier übergeben
         self.anim_frames = 10  # Anzahl der Animationsbilder
         self.act_frame = 1
         self.timer = 0
         self.max_ticks_anim = 0.6 * self.fps / self.anim_frames
-        self.image = self.sprite_charakter["zombie_walk1"]  # Startbild
+
+        # Dynamische Zuweisung des Startbildes für die Animation (je nach Animationsname)
+        self.image = self.sprite_charakter.get(f"{self.anim_name}1")  # Startbild je nach Animation
         self.rect = self.image.get_rect()
         self.rect.midtop = (x, y)
-        self.speed = 4  # Die Geschwindigkeit des Zombies nach links
+        self.speed = 4  # Die Geschwindigkeit des Gegners nach links
 
     def update(self):
-        # Animation des Zombies
+        # Animation des Gegners
         self.image, self.timer, self.act_frame = am.animation_update(
             timer=self.timer,
             max_ticks=self.max_ticks_anim,
             act_frame=self.act_frame,
             anim_frames=self.anim_frames,
             sprite_images=self.sprite_charakter,
-            name="zombie_walk"
+            name=self.anim_name  # Verwende den Animationsnamen, der beim Erstellen des Gegners übergeben wurde
         )
 
-        # Zombie nach links bewegen
+        # Gegner nach links bewegen
         self.rect.x -= self.speed
         
-        # Entfernen, wenn der Zombie den linken Bildschirmrand verlässt
+        # Entfernen, wenn der Gegner den linken Bildschirmrand verlässt
         if self.rect.right < 0:
             self.kill()
