@@ -72,7 +72,7 @@ def show_start_screen(screen1, start_background, clock, game_folder, name):
     button_rect = pygame.Rect(WIDTH // 2 - 75, HEIGHT-500 , 150, 50)  
     # Laden des Button-Bildes
     button_image = pygame.image.load(os.path.join(game_folder, "_image", f"{name}.png")).convert_alpha()
-    button_image = pygame.transform.scale(button_image, (150, 50))  # Skalieren, um der Größe des Rects zu entsprechen
+    button_image = pygame.transform.scale(button_image, (120, 120))  # Skalieren, um der Größe des Rects zu entsprechen
 
     running = True
     while running:

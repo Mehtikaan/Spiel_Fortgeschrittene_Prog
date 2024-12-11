@@ -114,13 +114,17 @@ main_charakter = Charakter(
 )
 
 sequence = [
-    "Es war ein langer Tag, und der Code scheint endlos.",
-    "Du sitzt an deinem Schreibtisch, die Müdigkeit übermannt dich...",
-    "Plötzlich wachst du auf, aber nicht in deinem Zimmer.",
-    "Chaos herrscht: fliegende Compiler-Fehler, endlose Schleifen, blinkende Variablen.",
-    "Eine Stimme dröhnt: 'Willkommen in deinem Traum... oder Albtraum.'",
-    "Bestehe die Prüfungen oder bleib gefangen!",
-    "Nur ein Weg führt dich zurück in die Realität: Kämpfe und überliste den Bug!"
+    "Es war ein langer Tag, und der Code scheint endlos zu sein.",
+    "Die ganze Zeit bist du am coden aber es läuft einfach nicht.",
+    "Doch plötzlich wachst du auf, aber irgendwie nicht in deinem Zimmer.",
+    "Sondern jetzt in TOGO und irgendwie wirst du sehr wild angetanzt.",
+    "Also wirklich so dieses freaky mit so Flügelbewegungen",
+    "Tövbe Tövbe",
+    "Was ist diese denke ich mir",
+    "Aber das große Problem???!",
+    "Es sind Männer!",
+    "Und noch schlimmer...",
+    "Es sind Abdoulss..."
 ]
 
 def show_sequence(screen, clock, sequence, font, width, height):
@@ -159,7 +163,7 @@ start_background = pygame.image.load(os.path.join(game_folder, '_image', "classr
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
 # Startbildschirm anzeigen
-am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play_button",game_folder=game_folder)
+am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play",game_folder=game_folder)
 show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT)
 
 # Zombie-Gruppe erstellen
@@ -243,7 +247,7 @@ while running:
         screen1.blit(background, (scroll + i * background_width, 0))
 
     # Score aktualisieren
-    score += 1.5  # Score um 1 pro Frame erhöhen
+    score += 0.8  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
