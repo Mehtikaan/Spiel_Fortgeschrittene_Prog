@@ -26,10 +26,7 @@ def show_intro_sequence(screen, clock):
         text_surface = font.render(text, True, (255, 255, 255))  # Weiße Schriftfarbe
         text_rect = text_surface.get_rect(center=(width // 2, height - 50))  # Text knapp über dem unteren Rand
 
-        # Zeit, wann das Bild wechseln soll
-        start_time = pygame.time.get_ticks()  # Aktuelle Zeit in Millisekunden
-
-        # Sequenz anzeigen
+        # Sequenz anzeigen und auf ENTER warten
         running = True
         while running:
             for event in pygame.event.get():
@@ -37,16 +34,15 @@ def show_intro_sequence(screen, clock):
                     pygame.quit()
                     exit()
 
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # Mit ENTER zur nächsten Szene
+                    running = False
+
             # Bildschirm leeren und Hintergrundbild anzeigen
             screen.fill((0, 0, 0))  # Hintergrund schwarz
             screen.blit(image, (0, 0))  # Bild auf den Bildschirm legen
             screen.blit(text_surface, text_rect)  # Text anzeigen
 
             pygame.display.update()
-
-            # Wenn 3 Sekunden vergangen sind, gehe zur nächsten Szene
-            if pygame.time.get_ticks() - start_time > 3000:  # 3000 ms = 3 Sekunden
-                running = False
 
             clock.tick(30)  # 30 FPS
 
