@@ -95,10 +95,20 @@ def show_sequence(screen, clock, sequence, font, width, height):
             screen.blit(text_surface, text_rect)  # Text anzeigen
             y_offset += 30  # Nächste Zeile nach unten verschieben
 
-        pygame.display.update()
-        
-        # 3 Sekunden warten, bevor die nächste Szene kommt
-        pygame.time.wait(3000)  # Warten für 3000 ms (3 Sekunden)
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # Mit ENTER zur nächsten Szene
+                    running = False
+
+
+            pygame.display.update()
+
+            clock.tick(30)  # 30 FPS
 
 # Startbildschirm anzeigen, bevor das Spiel beginnt
 start_background = pygame.image.load(os.path.join(game_folder, '_image', "classroom.png")).convert()
