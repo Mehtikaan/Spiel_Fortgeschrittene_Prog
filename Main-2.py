@@ -124,7 +124,10 @@ sequence = [
     "Aber das große Problem???!",
     "Es sind Männer!",
     "Und noch schlimmer...",
-    "Es sind Abdoulss..."
+    "Es sind komische Kurden..",
+    "Oder warte mal, ich weiß wer das ist",
+    "Goofy höchstpersönlich...",
+    "Goofy Zeype FN, der es geschafft hat, eine 20Bomb zu erzielen",
 ]
 
 def show_sequence(screen, clock, sequence, font, width, height):
