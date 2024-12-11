@@ -7,7 +7,7 @@ from charakter import Charakter, Waffe,Bullet
 import animationen as am
 from enmy import Enmy  # Importiere die Enmy-Klasse
 import pygame.font
-
+from sequenz import wrap_text
 
 # Konfiguration laden oder erstellen
 config = cp.ConfigParser()
@@ -69,12 +69,44 @@ main_charakter = Charakter(
     tempo_x=2, scale_tempo_x=1.01, health_points=100, score_points=0, surface=screen1
 )
 
+sequence = [
+    "Es war ein langer Tag, und der Code scheint endlos.",
+    "Du sitzt an deinem Schreibtisch, die Müdigkeit übermannt dich...",
+    "Plötzlich wachst du auf, aber nicht in deinem Zimmer.",
+    "Chaos herrscht: fliegende Compiler-Fehler, endlose Schleifen, blinkende Variablen.",
+    "Eine Stimme dröhnt: 'Willkommen in deinem Traum... oder Albtraum.'",
+    "Bestehe die Prüfungen oder bleib gefangen!",
+    "Nur ein Weg führt dich zurück in die Realität: Kämpfe und überliste den Bug!"
+]
+
+def show_sequence(screen, sequence, font, width, height):
+    for text in sequence:
+        # Text umbrechen, damit er nicht über den Bildschirm hinausgeht
+        lines = wrap_text(text, font, width - 40)  # Padding von 40 für den Rand
+
+        # Text rendern und positionieren
+        screen.fill((0, 0, 0))  # Bildschirm schwarz füllen
+        y_offset = height // 2 - (len(lines) * 20) // 2  # Vertikale Position, damit der Text mittig ist
+
+        # Jede Zeile des Texts rendern und anzeigen
+        for line in lines:
+            text_surface = font.render(line, True, (255, 255, 255))  # Weißer Text
+            text_rect = text_surface.get_rect(center=(width // 2, y_offset))
+            screen.blit(text_surface, text_rect)  # Text anzeigen
+            y_offset += 30  # Nächste Zeile nach unten verschieben
+
+        pygame.display.update()
+        
+        # 3 Sekunden warten, bevor die nächste Szene kommt
+        pygame.time.wait(3000)  # Warten für 3000 ms (3 Sekunden)
+
 # Startbildschirm anzeigen, bevor das Spiel beginnt
 start_background = pygame.image.load(os.path.join(game_folder, '_image', "classroom.png")).convert()
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
 # Startbildschirm anzeigen
 am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play_button",game_folder=game_folder)
+show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT)
 
 # Zombie-Gruppe erstellen
 all_zombies = pygame.sprite.Group()
