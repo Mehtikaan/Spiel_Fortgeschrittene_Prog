@@ -187,7 +187,14 @@ while running:
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
 
     # Zufälligen Spawn-Intervall setzen
-    spawn_interval = random.randint(500,50000)  # Zufälliger Wert zwischen 500 und 50000 Sekunden in Millisekunden
+    if score <= 200:
+        spawn_interval = random.randint(2000,5000)
+    elif score <= 400:
+        spawn_interval = random.randint(1700,4000)
+    elif score <= 600:
+        spawn_interval = random.randint(1200,2000)
+    else:
+        zombie.kill()   # Zufälliger Wert zwischen 500 und 50000 Sekunden in Millisekunden
 
     if pygame.time.get_ticks() - last_spawn_time > spawn_interval:
         create_zombie()  # Zombie nur hier erzeugen
