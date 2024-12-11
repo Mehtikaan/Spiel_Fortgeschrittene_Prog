@@ -79,7 +79,7 @@ sequence = [
     "Nur ein Weg führt dich zurück in die Realität: Kämpfe und überliste den Bug!"
 ]
 
-def show_sequence(screen, sequence, font, width, height):
+def show_sequence(screen, clock, sequence, font, width, height):
     for text in sequence:
         # Text umbrechen, damit er nicht über den Bildschirm hinausgeht
         lines = wrap_text(text, font, width - 40)  # Padding von 40 für den Rand
