@@ -63,7 +63,8 @@ enemy_sprites_level_0 = {
     "zombie_walk10": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk10.png")).convert_alpha(),
 
     #Waffe
-
+    "waffe": pygame.image.load(os.path.join(game_folder, "_image","kunai.png")).convert_alpha(),
+    "bullet": pygame.image.load(os.path.join(game_folder, "_image","kunai.png")).convert_alpha(),
 }
 enemy_sprites_level_1 = {
     #Gegner
@@ -74,33 +75,16 @@ enemy_sprites_level_1 = {
     "cowboy_run5": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run5.png")).convert_alpha(),
     "cowboy_run6": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run6.png")).convert_alpha(),
     "cowboy_run7": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run7.png")).convert_alpha(),
-    #Map Hintergrund
 
+    #Waffe
+    "zombie_walk8": pygame.image.load(os.path.join(game_folder, "_image","US_Thompson.png")).convert_alpha(),
+    "zombie_walk9": pygame.image.load(os.path.join(game_folder, "_image","bullet.png")).convert_alpha(),
+}
+enemy_sprites_level_2 = {
 
 }
-enemy_sprites_level_2 = {}
 
 original_charakter = {}
-
-
-am.sprite_image_loader(
-    game_folder=game_folder,
-    folder_name = '_image',
-    image_max_num =10,
-    image_name='zombie_walk',
-    original_name=original_charakter,
-    sprite_dict_name=enemy_sprites_level_1
-)
-
-am.sprite_image_loader(
-    game_folder=game_folder,
-    folder_name='_image',
-    image_max_num = 6,
-    image_name='cowboy_run',
-    original_name=original_charakter,
-    sprite_dict_name=enemy_sprites_level_2
-
-)
 
 
 
@@ -247,16 +231,6 @@ def level_changer():
         #entferne alle gegner
        all_zombies.empty()
 
-       for _ in range(5):   #anzahl der neuen gegner
-           new_enemy = Enmy(
-               x=random.randint(WIDTH, WIDTH+200),
-               y=HEIGHT-200,
-               surface=screen1,
-               sprite_charakter=enemy_sprites_level_2,  # Hier Level 2 Sprites übergeben
-               anim_name="cowboy_run", 
-               hp= 5
-           )
-           all_zombies.add(new_enemy)
 
 
 

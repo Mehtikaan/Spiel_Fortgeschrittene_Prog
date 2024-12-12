@@ -146,80 +146,60 @@ class Health_points:
         self.red_rect()
 
 class Waffe:
-    def __init__(self, bewegung, springen, sprite_charakter, surface):
+    def __init__(self, surface, x, y, image_path, scale=(50, 20)):
         self.surface = surface
-        self.bewegung = bewegung
-        self.springen = springen
-        self.sprite_charakter = sprite_charakter
-        game_folder = os.path.dirname(__file__)
-        # Bild laden und skalieren
-        self.image = pygame.image.load(os.path.join(game_folder, '_image', "kunai.png")).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (50, 20))  # Größe anpassen
+        self.x = x
+        self.y = y
+        self.image = pygame.image.load(image_path).convert_alpha()
+        self.image = pygame.transform.scale(self.image, scale)
         self.rect = self.image.get_rect()
-        
-        # Übergabe der Bewegung und Springen Instanzen an die Schießen Klasse
-        self.schiessen = Schießen(sprite_charakter, surface=surface, bewegung=self.bewegung, springen=self.springen)
-
-    def update(self, y_pos):
-        """Aktualisiert die Position der Waffe basierend auf der Bewegung des Charakters"""
-        self.rect.center = (
-            self.bewegung.x_pos - 60 + self.sprite_charakter["ninja_run1"].get_width(),
-            y_pos + 45
-        )
-
-    def zeichnen(self, surface):
-        """Zeichnet die Waffe auf dem Bildschirm"""
-        surface.blit(self.image, self.rect.topleft)
-
-class Schießen:
-    def __init__(self, sprite_charakter, surface, bewegung, springen):
-        self.surface = surface
-        self.sprite_charakter = sprite_charakter
-        self.shoot_cooldown = 0
+        self.rect.center = (x, y)
         self.bullets = pygame.sprite.Group()
-        self.bewegung = bewegung
-        self.springen = springen
+        self.shoot_cooldown = 0
 
-    def shoot(self, waffen_rect):
-        """Feuert eine Kugel ab, wenn der Cooldown abgelaufen ist"""
-        if self.shoot_cooldown == 0:
-            print(f"Schießen von Position: {waffen_rect.centerx}, {waffen_rect.centery}")  # Debugging-Ausgabe
-            # Kugel erzeugen und zur Gruppe hinzufügen
-            bullet = Bullet(self.bewegung.x_pos+80, self.springen.y_pos+40)
-            self.bullets.add(bullet)
-            self.shoot_cooldown = 20  # Cooldown aktivieren, um Schüsse zu verzögern
+    def update(self, x, y):
+        # Aktualisiert die Position der Waffe
+        self.rect.center = (x + 30, y + 15)
+        self.update_bullets()
 
-    def update(self):
-        """Aktualisiert die Kugeln und den Cooldown"""
-        self.bullets.update()  # Kugeln aktualisieren (Bewegung)
+    def update_bullets(self):
+        # Aktualisiert die Position und den Zustand der Kugeln
+        self.bullets.update()
         if self.shoot_cooldown > 0:
-            print(f"Shoot Cooldown: {self.shoot_cooldown}")  # Debugging-Ausgabe
-            self.shoot_cooldown -= 1  # Cooldown verringern
+            self.shoot_cooldown -= 1
 
-    def draw(self, surface):
-        """Zeichnet alle Kugeln auf dem Bildschirm"""
-        self.bullets.draw(surface)  # Kugeln zeichnen
+    def shoot(self):
+        if self.shoot_cooldown == 0:
+            bullet = Bullet(self.rect.centerx, self.rect.centery)
+            self.bullets.add(bullet)
+            self.shoot_cooldown = 20
+
+    def draw(self):
+        # Zeichnet die Waffe und ihre Kugeln
+        self.surface.blit(self.image, self.rect.topleft)
+        self.bullets.draw(self.surface)
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, surface, image_path, scale=(40, 15), speed=10):
         super().__init__()
-
-        game_folder = os.path.dirname(__file__)
-        self.image = pygame.image.load(os.path.join(game_folder, '_image', "kunai.png")).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (60, 40))  # Größe der Kugel anpassen
-        # Weiß als transparent setzen
-        self.image.set_colorkey((255, 255, 255))  # Weiß als transparent festlegen
+        self.x = x
+        self.y = y
+        self.speed = speed
+        self.surface = surface  # Oberfläche, auf der die Kugel gezeichnet wird
+        self.image_path = image_path  # Bildpfad als Attribut
+        self.image = pygame.image.load(self.image_path).convert_alpha()
+        self.image = pygame.transform.scale(self.image, scale)
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)  # Position von der Waffe nehmen
-        self.speed = 10  # Geschwindigkeit der Kugel
+        self.rect.center = (x, y)
 
     def update(self):
-        """Bewegt die Kugel nach rechts und entfernt sie, wenn sie den Bildschirm verlässt"""
+        # Bewegt die Kugel nach rechts
         self.rect.x += self.speed
 
-        if self.rect.x > pygame.display.get_surface().get_width():  # Wenn die Kugel den Bildschirm verlässt
-            self.kill()  # Entfernt die Kugel
+        # Entfernt die Kugel, wenn sie den Bildschirm verlässt
+        if self.rect.left > WIDTH:
+            self.kill()
 
-    def draw(self, surface):
-        """Zeichnet die Kugel auf dem Bildschirm"""
-        surface.blit(self.image, self.rect.center)
+    def draw(self):
+        # Zeichnet die Kugel auf die Oberfläche
+        self.surface.blit(self.image, self.rect.topleft)
