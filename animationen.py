@@ -1,4 +1,3 @@
-
 import os
 import pygame
 import config_einstellungen as bib
@@ -141,6 +140,3 @@ def hitbox_check_enmy_bullet(wer, mitwem, surface):
     # Zeichne die Hitboxen zur Visualisierung
     pygame.draw.rect(surface, (255, 0, 0), playerhitbox, 2)  # Spielerhitbox (rot)
     pygame.draw.rect(surface, (0, 0, 255), enemyhitbox, 2)   # Gegnerhitbox (blau)
-        
-
-    

@@ -68,4 +68,3 @@ def wrap_text(text, font, max_width):
         lines.append(current_line)
 
     return lines
-
