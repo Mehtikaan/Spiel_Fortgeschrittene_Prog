@@ -43,7 +43,7 @@ clock = pygame.time.Clock()
 
 # Hintergrund laden
 game_folder = os.path.dirname(__file__)
-background = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.png")).convert()
+background = pygame.image.load(os.path.join(game_folder, '_image', "zombie_map.png")).convert()
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
 
@@ -76,7 +76,7 @@ am.sprite_image_loader(
 
 
 
-background_level_1 = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.png")).convert()
+background_level_1 = pygame.image.load(os.path.join(game_folder, '_image', "zombie_map.png")).convert()
 background_level_1 = pygame.transform.scale(background_level_1, (WIDTH, HEIGHT))
 
 background_level_2 = pygame.image.load(os.path.join(game_folder, '_image', "BG.png")).convert()
@@ -192,7 +192,7 @@ score = 0.0
 platform_rect = pygame.Rect(0, HEIGHT - 127, 1400, 150)
 
 #platform = pygame.Rect( 0, HEIGHT-127 ,1400, 150)           #y, x, width, height
-platform_image = pygame.image.load(os.path.join(game_folder, "_image", "stone_tile.png")).convert_alpha()
+platform_image = pygame.image.load(os.path.join(game_folder, "_image", "zombietile.png")).convert_alpha()
 platform_image = pygame.transform.scale(platform_image, (1400, 150))
 
 waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegung,surface=screen1,springen=main_charakter.springen)
