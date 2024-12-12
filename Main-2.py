@@ -44,7 +44,7 @@ clock = pygame.time.Clock()
 
 # Hintergrund laden
 game_folder = os.path.dirname(__file__)
-background = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.png")).convert()
+background = pygame.image.load(os.path.join(game_folder, '_image', "zombie_map.png")).convert()
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
 
@@ -81,6 +81,18 @@ enemy_sprites_level_1 = {
 
 enemy_sprites_level_2 = {
     #Gegner
+    "robot_walk1": pygame.image.load(os.path.join(game_folder, "_image","robot_walk1.png")).convert_alpha(),
+    "robot_walk2": pygame.image.load(os.path.join(game_folder, "_image","robot_walk2.png")).convert_alpha(),
+    "robot_walk3": pygame.image.load(os.path.join(game_folder, "_image","robot_walk3.png")).convert_alpha(),
+    "robot_walk4": pygame.image.load(os.path.join(game_folder, "_image","robot_walk4.png")).convert_alpha(),
+    "robot_walk5": pygame.image.load(os.path.join(game_folder, "_image","robot_walk5.png")).convert_alpha(),
+    "robot_walk6": pygame.image.load(os.path.join(game_folder, "_image","robot_walk6.png")).convert_alpha(),
+    #Map Hintergrund
+
+
+}
+enemy_sprites_level_3 = {
+    #Gegner
     "knight_walk1": pygame.image.load(os.path.join(game_folder, "_image","knight_walk1.png")).convert_alpha(),
     "knight_walk2": pygame.image.load(os.path.join(game_folder, "_image","knight_walk2.png")).convert_alpha(),
     "knight_walk3": pygame.image.load(os.path.join(game_folder, "_image","knight_walk3.png")).convert_alpha(),
@@ -90,22 +102,6 @@ enemy_sprites_level_2 = {
     "knight_walk7": pygame.image.load(os.path.join(game_folder, "_image","knight_walk7.png")).convert_alpha(),
     #Map Hintergrund
 }
-
-
-# enemy_sprites_level_3 = {
-#     #Gegner
-#     "cowboy_run1": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run1.png")).convert_alpha(),
-#     "cowboy_run2": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run2.png")).convert_alpha(),
-#     "cowboy_run3": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run3.png")).convert_alpha(),
-#     "cowboy_run4": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run4.png")).convert_alpha(),
-#     "cowboy_run5": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run5.png")).convert_alpha(),
-#     "cowboy_run6": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run6.png")).convert_alpha(),
-#     "cowboy_run7": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run7.png")).convert_alpha(),
-#     #Map Hintergrund
-
-
-# }
-
 
 original_charakter = {}
 
@@ -130,17 +126,30 @@ am.sprite_image_loader(
 
 
 
-background_level_1 = pygame.image.load(os.path.join(game_folder, '_image', "City3_pale.png")).convert()
+background_level_0 = pygame.image.load(os.path.join(game_folder, '_image', "zombie_map.png")).convert()
+background_level_0 = pygame.transform.scale(background_level_0, (WIDTH, HEIGHT))
+
+background_level_1 = pygame.image.load(os.path.join(game_folder, '_image', "desert.png")).convert()
 background_level_1 = pygame.transform.scale(background_level_1, (WIDTH, HEIGHT))
 
-background_level_2 = pygame.image.load(os.path.join(game_folder, '_image', "BG.png")).convert()
+background_level_2 = pygame.image.load(os.path.join(game_folder, '_image', "robot_map.png")).convert()
 background_level_2 = pygame.transform.scale(background_level_2, (WIDTH, HEIGHT))
 
-platform_image_level_1 = pygame.image.load(os.path.join(game_folder, "_image", "stone_tile.png")).convert_alpha()
+background_level_3 = pygame.image.load(os.path.join(game_folder, '_image', "knight_map.png")).convert()
+background_level_3 = pygame.transform.scale(background_level_3, (WIDTH, HEIGHT))
+
+platform_image_level_0 = pygame.image.load(os.path.join(game_folder, "_image", "grave_tile.png")).convert_alpha()
+platform_image_level0 = pygame.transform.scale(platform_image_level_0, (1400, 150))
+
+platform_image_level_1 = pygame.image.load(os.path.join(game_folder, "_image", "sand_tile.png")).convert_alpha()
 platform_image_level_1 = pygame.transform.scale(platform_image_level_1, (1400, 150))
 
-platform_image_level_2 = pygame.image.load(os.path.join(game_folder, "_image", "sand_tile.png")).convert_alpha()
+platform_image_level_2 = pygame.image.load(os.path.join(game_folder, "_image", "robot_tile.png")).convert_alpha()
 platform_image_level_2 = pygame.transform.scale(platform_image_level_2, (1400, 150))
+
+platform_image_level_3 = pygame.image.load(os.path.join(game_folder, "_image", "stone_tile.png")).convert_alpha()
+platform_image_level_3 = pygame.transform.scale(platform_image_level_3, (1400, 150))
+
 
 
 
@@ -225,7 +234,13 @@ def create_enemy():
 
     elif score < 3000:
         sprite_set = enemy_sprites_level_2
+        anim_name = "robot_walk"
+
+    elif score < 4000:
+        sprite_set = enemy_sprites_level_2
         anim_name = "knight_walk"
+
+
     
     enemy = Enmy(
         x=WIDTH + 100,
@@ -264,18 +279,21 @@ def level_changer():
    global platform_image, background, level_changed
    if score >= 1000 and not level_changed:
        level_changed = True
-       platform_image = platform_image_level_2
-       background = background_level_2
+       platform_image = platform_image_level_1
+       background = background_level_1
 
 
-   elif score >= 2000 and not level_changed:
+   elif score >= 2000 :
        level_changed = True
        platform_image = platform_image_level_2
        background = background_level_2
+       
 
-
-
-
+   elif score >= 3000 :
+       level_changed = True
+       platform_image = platform_image_level_3
+       background = background_level_3
+  
 
 
 running = True
@@ -300,7 +318,7 @@ while running:
         screen1.blit(background, (scroll + i * background_width, 0))
 
     # Score aktualisieren
-    score += 2  # Score um 1 pro Frame erhöhen
+    score += 0.6  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
@@ -310,6 +328,7 @@ while running:
 
     # Zombies und Charakter aktualisieren
     all_zombies.update()  # Alle Zombies aktualisieren
+
     main_charakter.update()
 
     main_charakter.zeichnen()
