@@ -70,4 +70,3 @@
 #             x_pos += segment_width  # Verschiebe x_pos für jedes Zeichen, unabhängig von '1' oder '0'
 
 #         return ground_tiles
-
