@@ -63,8 +63,7 @@ enemy_sprites_level_0 = {
     "zombie_walk10": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk10.png")).convert_alpha(),
 
     #Waffe
-    "waffe": pygame.image.load(os.path.join(game_folder, "_image","kunai.png")).convert_alpha(),
-    "bullet": pygame.image.load(os.path.join(game_folder, "_image","kunai.png")).convert_alpha(),
+
 }
 enemy_sprites_level_1 = {
     #Gegner
@@ -75,16 +74,59 @@ enemy_sprites_level_1 = {
     "cowboy_run5": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run5.png")).convert_alpha(),
     "cowboy_run6": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run6.png")).convert_alpha(),
     "cowboy_run7": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run7.png")).convert_alpha(),
+    #Map Hintergrund
 
-    #Waffe
-    "zombie_walk8": pygame.image.load(os.path.join(game_folder, "_image","US_Thompson.png")).convert_alpha(),
-    "zombie_walk9": pygame.image.load(os.path.join(game_folder, "_image","bullet.png")).convert_alpha(),
+
 }
+
 enemy_sprites_level_2 = {
-
+    #Gegner
+    "knight_walk1": pygame.image.load(os.path.join(game_folder, "_image","knight_walk1.png")).convert_alpha(),
+    "knight_walk2": pygame.image.load(os.path.join(game_folder, "_image","knight_walk2.png")).convert_alpha(),
+    "knight_walk3": pygame.image.load(os.path.join(game_folder, "_image","knight_walk3.png")).convert_alpha(),
+    "knight_walk4": pygame.image.load(os.path.join(game_folder, "_image","knight_walk4.png")).convert_alpha(),
+    "knight_walk5": pygame.image.load(os.path.join(game_folder, "_image","knight_walk5.png")).convert_alpha(),
+    "knight_walk6": pygame.image.load(os.path.join(game_folder, "_image","knight_walk6.png")).convert_alpha(),
+    "knight_walk7": pygame.image.load(os.path.join(game_folder, "_image","knight_walk7.png")).convert_alpha(),
+    #Map Hintergrund
 }
+
+
+# enemy_sprites_level_3 = {
+#     #Gegner
+#     "cowboy_run1": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run1.png")).convert_alpha(),
+#     "cowboy_run2": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run2.png")).convert_alpha(),
+#     "cowboy_run3": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run3.png")).convert_alpha(),
+#     "cowboy_run4": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run4.png")).convert_alpha(),
+#     "cowboy_run5": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run5.png")).convert_alpha(),
+#     "cowboy_run6": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run6.png")).convert_alpha(),
+#     "cowboy_run7": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run7.png")).convert_alpha(),
+#     #Map Hintergrund
+
+
+# }
+
 
 original_charakter = {}
+
+am.sprite_image_loader(
+    game_folder=game_folder,
+    folder_name = '_image',
+    image_max_num =10,
+    image_name='zombie_walk',
+    original_name=original_charakter,
+    sprite_dict_name=enemy_sprites_level_1
+)
+
+am.sprite_image_loader(
+    game_folder=game_folder,
+    folder_name='_image',
+    image_max_num = 6,
+    image_name='cowboy_run',
+    original_name=original_charakter,
+    sprite_dict_name=enemy_sprites_level_2
+
+)
 
 
 
@@ -118,6 +160,7 @@ sprite_charakter = {}
 am.sprite_image_loader(game_folder=game_folder, folder_name="_image", image_max_num=8, image_name="ninja_run",
                         original_name=original_charakter, sprite_dict_name=sprite_charakter)
 print(sprite_charakter)
+
 main_charakter = Charakter(
     x_pos=0, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,
     tempo_x=2, scale_tempo_x=1.01, health_points=100, score_points=0, surface=screen1
@@ -125,16 +168,7 @@ main_charakter = Charakter(
 
 sequence = [
     "Es war ein langer Tag, und der Code scheint endlos zu sein.",
-    "Die ganze Zeit bist du am coden aber es läuft einfach nicht.",
-    "Doch plötzlich wachst du auf, aber irgendwie nicht in deinem Zimmer.",
-    "Sondern jetzt in TOGO und irgendwie wirst du sehr wild angetanzt.",
-    "Also wirklich so dieses freaky mit so Flügelbewegungen",
-    "Tövbe Tövbe",
-    "Was ist diese denke ich mir",
-    "Aber das große Problem???!",
-    "Es sind Männer!",
-    "Und noch schlimmer...",
-    "Es sind Abdoulss..."
+    "Die ganze Zeit bist du am coden aber es läuft einfach nicht."
 ]
 
 def show_sequence(screen, clock, sequence, font, width, height):
@@ -184,10 +218,15 @@ def create_enemy():
     if score < 1000:
         sprite_set = enemy_sprites_level_0  # Zombies bis Score 1000
         anim_name = "zombie_walk"
-    else:
-        sprite_set = enemy_sprites_level_2  # Cowboys ab Score 1000
+
+    elif score <2000:
+        sprite_set = enemy_sprites_level_1  # Cowboys ab Score 1000
         anim_name = "cowboy_run"
 
+    elif score < 3000:
+        sprite_set = enemy_sprites_level_2
+        anim_name = "knight_walk"
+    
     enemy = Enmy(
         x=WIDTH + 100,
         y=HEIGHT - 200,
@@ -228,8 +267,11 @@ def level_changer():
        platform_image = platform_image_level_2
        background = background_level_2
 
-        #entferne alle gegner
-       all_zombies.empty()
+
+   elif score >= 2000 and not level_changed:
+       level_changed = True
+       platform_image = platform_image_level_2
+       background = background_level_2
 
 
 
@@ -258,7 +300,7 @@ while running:
         screen1.blit(background, (scroll + i * background_width, 0))
 
     # Score aktualisieren
-    score += 0.8  # Score um 1 pro Frame erhöhen
+    score += 2  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
