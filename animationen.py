@@ -23,19 +23,22 @@ except Exception as e:
     pygame.quit()
     exit()
     
+# Vereinfachte Animation-Update-Funktion
 def animation_update(timer, max_ticks, act_frame, anim_frames, sprite_images, name: str):
-    timer += 1
+    """Aktualisiert die Animation für das Sprite"""
+    timer += 1  # Timer hochzählen, um die Zeit zu verfolgen
     if timer >= max_ticks:
-        timer = 0
-        act_frame += 1
+        timer = 0  # Timer zurücksetzen
+        act_frame += 1  # Nächster Frame
 
-    act_frame = min(act_frame, len(sprite_images) - 1)
-
-    # Begrenze act_frame, damit es nicht größer wird als die Anzahl der verfügbaren Frames
+    # Sicherstellen, dass der Frame innerhalb der verfügbaren Animationen bleibt
     if act_frame >= anim_frames:
-        act_frame = 1  # Oder act_frame = 0, je nachdem, wie du die Animation starten willst
+        act_frame = 1  # Zurück zum ersten Frame, um eine Schleifenanimation zu erstellen
+
+    # Auswahl des richtigen Animationsbildes basierend auf dem aktuellen Frame
+    image = sprite_images.get(f"{name}{act_frame}")
     
-    return sprite_images[name + str(act_frame)], timer, act_frame
+    return image, timer, act_frame  # Bild, Timer und aktueller Frame zurückgeben
 
 def animation_gehen():
     

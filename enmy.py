@@ -1,9 +1,7 @@
 import pygame
-import animationen as am
+import animationen as am  # Ich nehme an, dass 'am.animation_update' korrekt definiert ist
 import configparser as cp
 import config_einstellungen as bib
-#from waffe import Bullet
-
 
 # Konfiguration laden oder erstellen
 config = cp.ConfigParser()
@@ -18,87 +16,56 @@ try:
     HEIGHT = int(config.get("Fenster", "height"))
     WIDTH = int(config.get("Fenster", "width"))
     FPS = int(config.get("FPS", "fps"))
-    POSITION= int(config.get("Fenster", "position"))
+    POSITION = int(config.get("Fenster", "position"))
 except Exception as e:
     print("Fehler beim Laden der Konfigurationswerte:", e)
     pygame.quit()
     exit()
-import pygame
-import animationen as am
-
-# class Enmy(pygame.sprite.Sprite):
-#     def __init__(self, x, y, surface, sprite_charakter,hp):
-#         super().__init__()
-#         self.x = x
-#         self.y = y
-#         self.hp=hp
-#         self.surface = surface
-#         self.fps = 60  # Standard FPS, kann aus der Konfiguration übernommen werden
-#         self.sprite_charakter = sprite_charakter  # Hier das sprite_charakter übergeben
-#         self.anim_frames = 10  # Anzahl der Animationsbilder
-#         self.act_frame = 1
-#         self.timer = 0
-#         self.max_ticks_anim = 0.6 * self.fps / self.anim_frames
-#         self.image = self.sprite_charakter["zombie_walk1"]  # Startbild
-#         self.rect = self.image.get_rect()
-#         self.rect.midtop = (x, y)
-#         self.speed = 4  # Die Geschwindigkeit des Zombies nach links
-
-#     def update(self):
-#         # Animation des Zombies
-#         self.image, self.timer, self.act_frame = am.animation_update(
-#             timer=self.timer,
-#             max_ticks=self.max_ticks_anim,
-#             act_frame=self.act_frame,
-#             anim_frames=self.anim_frames,
-#             sprite_images=self.sprite_charakter,
-#             name="zombie_walk"
-#         )
-
-#         # Zombie nach links bewegen
-#         self.rect.x -= self.speed
-        
-#         # Entfernen, wenn der Zombie den linken Bildschirmrand verlässt
-#         if self.rect.right < 0:
-#             self.kill()
 
 
-
+# Einfacher und klarer Ansatz für den Gegner (Enmy)
 class Enmy(pygame.sprite.Sprite):
-    def __init__(self, x, y, surface, sprite_charakter, anim_name, hp):
+    def __init__(self, x, y, surface, sprite_charakter, anim_name, hp, scale=(75, 75)):
         super().__init__()
         self.x = x
         self.y = y
         self.hp = hp
         self.surface = surface
-        self.fps = 60  # Standard FPS, kann aus der Konfiguration übernommen werden
-        self.sprite_charakter = sprite_charakter  # Hier das sprite_charakter übergeben
-        self.anim_name = anim_name  # Der Animationsname wird hier übergeben
-        self.anim_frames = 10  # Anzahl der Animationsbilder
-        self.act_frame = 1
-        self.timer = 0
-        self.max_ticks_anim = 0.6 * self.fps / self.anim_frames
+        self.sprite_charakter = sprite_charakter  # Animationsbilder als Dictionary
+        self.anim_name = anim_name  # Name der Animation (z. B. "walk")
+        self.anim_frames = len([key for key in self.sprite_charakter.keys() if anim_name in key])  # Anzahl der Frames
+        self.act_frame = 1  # Aktueller Frame der Animation
+        self.timer = 0  # Timer für die Animation
+        self.max_ticks_anim = 5  # Anzahl der Ticks zwischen Frame-Updates
+        self.speed = 4  # Geschwindigkeit des Gegners nach links
+        self.scale = scale  # Zielgröße für die Bilder
 
-        # Dynamische Zuweisung des Startbildes für die Animation (je nach Animationsname)
-        self.image = self.sprite_charakter.get(f"{self.anim_name}1")  # Startbild je nach Animation
+        # Initiales Bild und Rechteck setzen
+        self.image = pygame.transform.scale(
+            self.sprite_charakter.get(f"{self.anim_name}{self.act_frame}"), self.scale
+        )
         self.rect = self.image.get_rect()
         self.rect.midtop = (x, y)
-        self.speed = 4  # Die Geschwindigkeit des Gegners nach links
 
     def update(self):
-        # Animation des Gegners
-        self.image, self.timer, self.act_frame = am.animation_update(
-            timer=self.timer,
-            max_ticks=self.max_ticks_anim,
-            act_frame=self.act_frame,
-            anim_frames=self.anim_frames,
-            sprite_images=self.sprite_charakter,
-            name=self.anim_name  # Verwende den Animationsnamen, der beim Erstellen des Gegners übergeben wurde
-        )
+        # Timer erhöhen und Frame wechseln, wenn nötig
+        self.timer += 1
+        if self.timer >= self.max_ticks_anim:
+            self.timer = 0
+            self.act_frame += 1
 
-        # Gegner nach links bewegen
+            # Animation zurücksetzen, wenn alle Frames abgespielt wurden
+            if self.act_frame > self.anim_frames:
+                self.act_frame = 1
+
+            # Aktuelles Bild aktualisieren und skalieren
+            self.image = pygame.transform.scale(
+                self.sprite_charakter.get(f"{self.anim_name}{self.act_frame}"), self.scale
+            )
+
+        # Bewegung nach links
         self.rect.x -= self.speed
-        
-        # Entfernen, wenn der Gegner den linken Bildschirmrand verlässt
+
+        # Gegner entfernen, wenn er den Bildschirm verlässt
         if self.rect.right < 0:
             self.kill()

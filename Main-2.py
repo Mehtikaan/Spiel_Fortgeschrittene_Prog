@@ -10,6 +10,7 @@ import pygame.font
 from sequenz import wrap_text
 import random
 
+
 # Konfiguration laden oder erstellen
 config = cp.ConfigParser()
 if not config.read("config_game.ini"):
@@ -48,8 +49,35 @@ background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
 
 #Bilder für level changer
+enemy_sprites_level_0 = {
+    #Gegner
+    "zombie_walk1": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk1.png")).convert_alpha(),
+    "zombie_walk2": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk2.png")).convert_alpha(),
+    "zombie_walk3": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk3.png")).convert_alpha(),
+    "zombie_walk4": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk4.png")).convert_alpha(),
+    "zombie_walk5": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk5.png")).convert_alpha(),
+    "zombie_walk6": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk6.png")).convert_alpha(),
+    "zombie_walk7": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk7.png")).convert_alpha(),
+    "zombie_walk8": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk8.png")).convert_alpha(),
+    "zombie_walk9": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk9.png")).convert_alpha(),
+    "zombie_walk10": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk10.png")).convert_alpha(),
 
-enemy_sprites_level_1 = {}
+    #Waffe
+
+}
+enemy_sprites_level_1 = {
+    #Gegner
+    "cowboy_run1": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run1.png")).convert_alpha(),
+    "cowboy_run2": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run2.png")).convert_alpha(),
+    "cowboy_run3": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run3.png")).convert_alpha(),
+    "cowboy_run4": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run4.png")).convert_alpha(),
+    "cowboy_run5": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run5.png")).convert_alpha(),
+    "cowboy_run6": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run6.png")).convert_alpha(),
+    "cowboy_run7": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run7.png")).convert_alpha(),
+    #Map Hintergrund
+
+
+}
 enemy_sprites_level_2 = {}
 
 original_charakter = {}
@@ -67,7 +95,7 @@ am.sprite_image_loader(
 am.sprite_image_loader(
     game_folder=game_folder,
     folder_name='_image',
-    image_max_num = 7,
+    image_max_num = 6,
     image_name='cowboy_run',
     original_name=original_charakter,
     sprite_dict_name=enemy_sprites_level_2
@@ -105,8 +133,6 @@ original_charakter = {}
 sprite_charakter = {}
 am.sprite_image_loader(game_folder=game_folder, folder_name="_image", image_max_num=8, image_name="ninja_run",
                         original_name=original_charakter, sprite_dict_name=sprite_charakter)
-am.sprite_image_loader(game_folder=game_folder, folder_name="_image", image_max_num=10, image_name="zombie_walk",
-                        original_name=original_charakter, sprite_dict_name=sprite_charakter)
 print(sprite_charakter)
 main_charakter = Charakter(
     x_pos=0, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,
@@ -124,10 +150,7 @@ sequence = [
     "Aber das große Problem???!",
     "Es sind Männer!",
     "Und noch schlimmer...",
-    "Es sind komische Kurden..",
-    "Oder warte mal, ich weiß wer das ist",
-    "Goofy höchstpersönlich...",
-    "Goofy Zeype FN, der es geschafft hat, eine 20Bomb zu erzielen",
+    "Es sind Abdoulss..."
 ]
 
 def show_sequence(screen, clock, sequence, font, width, height):
@@ -172,17 +195,28 @@ show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT)
 # Zombie-Gruppe erstellen
 all_zombies = pygame.sprite.Group()
 
-# Funktion zum Erstellen von Zombies
-def create_zombie():
-    zombie = Enmy(
-        x=WIDTH + 100, y=HEIGHT - 200, surface=screen1,
-        sprite_charakter=sprite_charakter, anim_name="zombie_walk", hp=5
+# Funktion zum Erstellen von Gegnern
+def create_enemy():
+    if score < 1000:
+        sprite_set = enemy_sprites_level_0  # Zombies bis Score 1000
+        anim_name = "zombie_walk"
+    else:
+        sprite_set = enemy_sprites_level_2  # Cowboys ab Score 1000
+        anim_name = "cowboy_run"
+
+    enemy = Enmy(
+        x=WIDTH + 100,
+        y=HEIGHT - 200,
+        surface=screen1,
+        sprite_charakter=sprite_set,
+        anim_name=anim_name,
+        hp=5,
     )
-    all_zombies.add(zombie)
+    all_zombies.add(enemy)
 
 # Neuen Zombie beim Start des Spiels erstellen
 if score <1000:
-    create_zombie()
+    create_enemy()
 else:
     pass
 
@@ -277,7 +311,7 @@ while running:
     spawn_interval = random.randint(500,50000)  # Zufälliger Wert zwischen 500 und 50000 Sekunden in Millisekunden
 
     if pygame.time.get_ticks() - last_spawn_time > spawn_interval:
-        create_zombie()  # Zombie nur hier erzeugen
+        create_enemy()  # Zombie nur hier erzeugen
         last_spawn_time = pygame.time.get_ticks()
 
    
@@ -293,6 +327,11 @@ while running:
             main_charakter.bar.red_rect()
             zombie_stirb=all_zombies.sprite(zombie)[0]
             zombie_stirb.kill()
+            
+
+    
+
+
     # Kollision zwischen Kugeln und Zombies überprüfen
     for bullet in waffe.schiessen.bullets:
         for zombie in all_zombies:
