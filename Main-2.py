@@ -103,8 +103,26 @@ enemy_sprites_level_3 = {
     #Map Hintergrund
 }
 
+enemy_sprites_level_4 = {
+    #Gegner
+    "santa_walk1": pygame.image.load(os.path.join(game_folder, "_image","santa_walk1.png")).convert_alpha(),
+    "santa_walk2": pygame.image.load(os.path.join(game_folder, "_image","santa_walk2.png")).convert_alpha(),
+    "santa_walk3": pygame.image.load(os.path.join(game_folder, "_image","santa_walk3.png")).convert_alpha(),
+    "santa_walk4": pygame.image.load(os.path.join(game_folder, "_image","santa_walk4.png")).convert_alpha(),
+    "santa_walk5": pygame.image.load(os.path.join(game_folder, "_image","santa_walk5.png")).convert_alpha(),
+    "santa_walk6": pygame.image.load(os.path.join(game_folder, "_image","santa_walk6.png")).convert_alpha(),
+    "santa_walk7": pygame.image.load(os.path.join(game_folder, "_image","santa_walk7.png")).convert_alpha(),
+    "santa_walk8": pygame.image.load(os.path.join(game_folder, "_image","santa_walk8.png")).convert_alpha(),
+    "santa_walk9": pygame.image.load(os.path.join(game_folder, "_image","santa_walk9.png")).convert_alpha(),
+    "santa_walk10": pygame.image.load(os.path.join(game_folder, "_image","santa_walk10.png")).convert_alpha(),
+    "santa_walk11": pygame.image.load(os.path.join(game_folder, "_image","santa_walk11.png")).convert_alpha(),
+    #Map Hintergrund
+}
+
+
 original_charakter = {}
 
+'''
 am.sprite_image_loader(
     game_folder=game_folder,
     folder_name = '_image',
@@ -123,7 +141,7 @@ am.sprite_image_loader(
     sprite_dict_name=enemy_sprites_level_2
 
 )
-
+'''
 
 
 background_level_0 = pygame.image.load(os.path.join(game_folder, '_image', "zombie_map.png")).convert()
@@ -138,6 +156,9 @@ background_level_2 = pygame.transform.scale(background_level_2, (WIDTH, HEIGHT))
 background_level_3 = pygame.image.load(os.path.join(game_folder, '_image', "knight_map.png")).convert()
 background_level_3 = pygame.transform.scale(background_level_3, (WIDTH, HEIGHT))
 
+background_level_4 = pygame.image.load(os.path.join(game_folder, '_image', "santa_map.png")).convert()
+background_level_4 = pygame.transform.scale(background_level_4, (WIDTH, HEIGHT))
+
 platform_image_level_0 = pygame.image.load(os.path.join(game_folder, "_image", "grave_tile.png")).convert_alpha()
 platform_image_level0 = pygame.transform.scale(platform_image_level_0, (1400, 150))
 
@@ -150,7 +171,8 @@ platform_image_level_2 = pygame.transform.scale(platform_image_level_2, (1400, 1
 platform_image_level_3 = pygame.image.load(os.path.join(game_folder, "_image", "stone_tile.png")).convert_alpha()
 platform_image_level_3 = pygame.transform.scale(platform_image_level_3, (1400, 150))
 
-
+platform_image_level_4 = pygame.image.load(os.path.join(game_folder, "_image", "santa_tile.png")).convert_alpha()
+platform_image_level_4 = pygame.transform.scale(platform_image_level_4, (1400, 150))
 
 
 
@@ -237,8 +259,12 @@ def create_enemy():
         anim_name = "robot_walk"
 
     elif score < 4000:
-        sprite_set = enemy_sprites_level_2
+        sprite_set = enemy_sprites_level_3
         anim_name = "knight_walk"
+
+    elif score < 5000:
+        sprite_set = enemy_sprites_level_4
+        anim_name = "santa_walk"
 
 
     
@@ -273,27 +299,38 @@ last_spawn_time = pygame.time.get_ticks()
 
 
 #Level Wechsler
-level_changed = False
+current_level = 0
 
 def level_changer():
-   global platform_image, background, level_changed
-   if score >= 1000 and not level_changed:
-       level_changed = True
+   global platform_image, background, current_level
+   if score >= 1000 and current_level < 1:
+       current_level = 1
        platform_image = platform_image_level_1
        background = background_level_1
+       for enemy in all_zombies:
+           enemy.kill()
 
 
-   elif score >= 2000 :
-       level_changed = True
-       platform_image = platform_image_level_2
-       background = background_level_2
-       
+   elif score >= 2000 and current_level < 2 :
+      current_level = 2
+      platform_image = platform_image_level_2
+      background = background_level_2
+      for enemy in all_zombies:
+           enemy.kill()
 
-   elif score >= 3000 :
-       level_changed = True
+   elif score >= 3000 and current_level < 3:
+       current_level = 3
        platform_image = platform_image_level_3
        background = background_level_3
-  
+       for enemy in all_zombies:
+           enemy.kill()
+           
+   elif score >= 4000 and current_level < 4:
+       current_level = 4
+       platform_image = platform_image_level_4
+       background = background_level_4
+       for enemy in all_zombies:
+           enemy.kill()  
 
 
 running = True
@@ -318,7 +355,7 @@ while running:
         screen1.blit(background, (scroll + i * background_width, 0))
 
     # Score aktualisieren
-    score += 0.6  # Score um 1 pro Frame erhöhen
+    score += 3  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 

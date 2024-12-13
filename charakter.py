@@ -111,7 +111,7 @@ class Springen:
         self.surface = surface
         self.y_velocity = 0
         self.gravity = 1
-        self.jumping_height = 23
+        self.jumping_height = 27
         self.jumping = False
 
     def start_sprung(self):
