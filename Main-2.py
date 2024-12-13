@@ -48,6 +48,10 @@ background = pygame.image.load(os.path.join(game_folder, '_image', "zombie_map.p
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
 
+# Sound
+kunai_sound = pygame.mixer.Sound('sword-swing-whoosh-sound-effect-2-241823.mp3')
+
+
 #Bilder für level changer
 enemy_sprites_level_0 = {
     #Gegner
@@ -382,6 +386,7 @@ while running:
                 main_charakter.springen.start_sprung()
             if event.key == pygame.K_f:  # Schießen
                waffe.schiessen.shoot(waffe.rect)
+                kunai_sound.play()
                print("F-Taste gedrückt - Schuss ausgelöst!") 
 
 
