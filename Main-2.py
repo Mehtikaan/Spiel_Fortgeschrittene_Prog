@@ -159,6 +159,17 @@ am.sprite_image_loader(
 )
 '''
 
+# Plattform-Rechteck für Kollisionserkennung
+platform_y = HEIGHT - 127
+platform_rect = pygame.Rect(0,platform_y, 1400, 150)
+
+#platform = pygame.Rect( 0, HEIGHT-127 ,1400, 150)           #y, x, width, height
+platform_width = 1400
+platform_height = 150
+platform_image = pygame.image.load(os.path.join(game_folder, "_image", "stone_tile.png")).convert_alpha()
+platform_image = pygame.transform.scale(platform_image, (platform_width, platform_height))
+
+
 
 background_level_0 = pygame.image.load(os.path.join(game_folder, '_image', "zombie_map.png")).convert()
 background_level_0 = pygame.transform.scale(background_level_0, (WIDTH, HEIGHT))
@@ -196,8 +207,11 @@ platform_image_level_4 = pygame.transform.scale(platform_image_level_4, (1400, 1
 platform_image_level_5 = pygame.image.load(os.path.join(game_folder, "_image", "grave_tile.png")).convert_alpha()
 platform_image_level_5 = pygame.transform.scale(platform_image_level_5, (1400, 150))
 
-scroll = 0
-tiles = math.ceil(WIDTH / background_width) + 1
+back_scroll = 0.0
+p_scroll = 0.0
+
+back_tiles = math.ceil(WIDTH / background_width) + 1
+p_tiles = math.ceil(WIDTH / platform_width) + 1
 
 # Score initialisieren
 score = 0
@@ -309,12 +323,6 @@ else:
 
 score = 0.0
 
-# Plattform-Rechteck für Kollisionserkennung
-platform_rect = pygame.Rect(0, HEIGHT - 127, 1400, 150)
-
-#platform = pygame.Rect( 0, HEIGHT-127 ,1400, 150)           #y, x, width, height
-platform_image = pygame.image.load(os.path.join(game_folder, "_image", "stone_tile.png")).convert_alpha()
-platform_image = pygame.transform.scale(platform_image, (1400, 150))
 
 waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegung,surface=screen1,springen=main_charakter.springen)
 last_spawn_time = pygame.time.get_ticks()
@@ -376,14 +384,27 @@ while running:
                waffe.schiessen.shoot(waffe.rect)
                print("F-Taste gedrückt - Schuss ausgelöst!") 
 
+
+
     # Hintergrund scrollen
-    scroll -= 6
-    if abs(scroll) > background_width:
-        scroll = 0
+    back_scroll -= 0.6
+    if abs(back_scroll) > background_width:
+        back_scroll = 0
     waffe.schiessen.draw(screen1)
     waffe.schiessen.update()
-    for i in range(tiles):
-        screen1.blit(background, (scroll + i * background_width, 0))
+    for i in range(back_tiles):
+        screen1.blit(background, (back_scroll + i * background_width, 0))
+
+
+        # Platform scrollen
+    p_scroll -= 7.5
+    if abs(p_scroll) > platform_width:
+        p_scroll = 0
+    # Plattformen zeichnen
+    for i in range(p_tiles):
+        screen1.blit(platform_image, (p_scroll + i * platform_width, platform_y))
+
+
 
     # Score aktualisieren
     score += 0.7  # Score um 1 pro Frame erhöhen
@@ -402,10 +423,6 @@ while running:
     main_charakter.zeichnen()
 
 
-
-    #Boden zeichnen 
-    screen1.blit(platform_image, (platform_rect.x, platform_rect.y))
-    
 
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
@@ -450,3 +467,4 @@ while running:
     clock.tick(FPS)
 
 pygame.quit()
+
