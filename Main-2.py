@@ -5,7 +5,7 @@ import configparser as cp
 import config_einstellungen as bib
 from charakter import Charakter, Waffe,Bullet
 import animationen as am
-from enmy import Enmy  # Importiere die Enmy-Klasse
+from enemy import Enemy  # Importiere die Enmy-Klasse
 import pygame.font
 from sequenz import wrap_text
 import random
@@ -119,6 +119,22 @@ enemy_sprites_level_4 = {
     #Map Hintergrund
 }
 
+enemy_sprites_level_5 = {
+    #Gegner
+    "pumpkin_walk1": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk1.png")).convert_alpha(),
+    "pumpkin_walk2": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk2.png")).convert_alpha(),
+    "pumpkin_walk3": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk3.png")).convert_alpha(),
+    "pumpkin_walk4": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk4.png")).convert_alpha(),
+    "pumpkin_walk5": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk5.png")).convert_alpha(),
+    "pumpkin_walk5": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk5.png")).convert_alpha(),
+    "pumpkin_walk6": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk6.png")).convert_alpha(),
+    "pumpkin_walk7": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk7.png")).convert_alpha(),
+    "pumpkin_walk8": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk8.png")).convert_alpha(),
+    "pumpkin_walk9": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk9.png")).convert_alpha(),
+    "pumpkin_walk10": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk10.png")).convert_alpha(),
+    #Map Hintergrund
+}
+
 
 original_charakter = {}
 
@@ -159,6 +175,9 @@ background_level_3 = pygame.transform.scale(background_level_3, (WIDTH, HEIGHT))
 background_level_4 = pygame.image.load(os.path.join(game_folder, '_image', "santa_map.png")).convert()
 background_level_4 = pygame.transform.scale(background_level_4, (WIDTH, HEIGHT))
 
+background_level_5 = pygame.image.load(os.path.join(game_folder, '_image', "pumpkin_map.png")).convert()
+background_level_5 = pygame.transform.scale(background_level_5, (WIDTH, HEIGHT))
+
 platform_image_level_0 = pygame.image.load(os.path.join(game_folder, "_image", "grave_tile.png")).convert_alpha()
 platform_image_level0 = pygame.transform.scale(platform_image_level_0, (1400, 150))
 
@@ -174,7 +193,8 @@ platform_image_level_3 = pygame.transform.scale(platform_image_level_3, (1400, 1
 platform_image_level_4 = pygame.image.load(os.path.join(game_folder, "_image", "santa_tile.png")).convert_alpha()
 platform_image_level_4 = pygame.transform.scale(platform_image_level_4, (1400, 150))
 
-
+platform_image_level_5 = pygame.image.load(os.path.join(game_folder, "_image", "grave_tile.png")).convert_alpha()
+platform_image_level_5 = pygame.transform.scale(platform_image_level_5, (1400, 150))
 
 scroll = 0
 tiles = math.ceil(WIDTH / background_width) + 1
@@ -265,10 +285,13 @@ def create_enemy():
     elif score < 5000:
         sprite_set = enemy_sprites_level_4
         anim_name = "santa_walk"
-
+   
+    elif score < 6000:
+        sprite_set = enemy_sprites_level_5
+        anim_name = "pumpkin_walk"
 
     
-    enemy = Enmy(
+    enemy = Enemy(
         x=WIDTH + 100,
         y=HEIGHT - 200,
         surface=screen1,
@@ -330,7 +353,15 @@ def level_changer():
        platform_image = platform_image_level_4
        background = background_level_4
        for enemy in all_zombies:
-           enemy.kill()  
+           enemy.kill()
+             
+   elif score >= 5000 and current_level < 5:
+       current_level = 5
+       platform_image = platform_image_level_5
+       background = background_level_5
+       for enemy in all_zombies:
+           enemy.kill()
+              
 
 
 running = True
@@ -355,7 +386,7 @@ while running:
         screen1.blit(background, (scroll + i * background_width, 0))
 
     # Score aktualisieren
-    score += 3  # Score um 1 pro Frame erhöhen
+    score += 0.7  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 

@@ -24,7 +24,7 @@ except Exception as e:
 
 
 # Einfacher und klarer Ansatz für den Gegner (Enmy)
-class Enmy(pygame.sprite.Sprite):
+class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, surface, sprite_charakter, anim_name, hp, scale=(75, 75)):
         super().__init__()
         self.x = x
