@@ -385,9 +385,9 @@ while running:
             if event.key == pygame.K_SPACE:
                 main_charakter.springen.start_sprung()
             if event.key == pygame.K_f:  # Schießen
-               waffe.schiessen.shoot(waffe.rect)
+                waffe.schiessen.shoot(waffe.rect)
                 kunai_sound.play()
-               print("F-Taste gedrückt - Schuss ausgelöst!") 
+               
 
 
 
