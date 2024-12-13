@@ -36,6 +36,7 @@ BLACK = (0, 0, 0)
 RED = (240, 0, 0)
 GREEN = (0, 240, 0)
 GOLD = (255, 215, 0)
+BLUE = (150, 0, 160)
 
 
 screen1 = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -129,7 +130,6 @@ enemy_sprites_level_5 = {
     "pumpkin_walk2": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk2.png")).convert_alpha(),
     "pumpkin_walk3": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk3.png")).convert_alpha(),
     "pumpkin_walk4": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk4.png")).convert_alpha(),
-    "pumpkin_walk5": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk5.png")).convert_alpha(),
     "pumpkin_walk5": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk5.png")).convert_alpha(),
     "pumpkin_walk6": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk6.png")).convert_alpha(),
     "pumpkin_walk7": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk7.png")).convert_alpha(),
@@ -237,7 +237,6 @@ main_charakter = Charakter(
 
 sequence = [
     "Es war ein langer Tag, und der Code scheint endlos zu sein.",
-    "Die ganze Zeit bist du am coden aber es läuft einfach nicht."
 ]
 
 def show_sequence(screen, clock, sequence, font, width, height):
@@ -331,46 +330,108 @@ score = 0.0
 waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegung,surface=screen1,springen=main_charakter.springen)
 last_spawn_time = pygame.time.get_ticks()
 
+#Levelwechsel Übergang
+
+def fade(screen, color, duration, fade_out=True, text=None, font=None, text_color=WHITE):
+    """
+    Blendet den Bildschirm aus (oder ein) mit einer bestimmten Farbe.
+    Optional: Zeigt einen Text, während der Fade-Effekt läuft.
+    """
+    fade_surface = pygame.Surface((WIDTH, HEIGHT))
+    fade_surface.fill(color)
+
+    # Schrittweite basierend auf der Dauer und der FPS
+    step = int(255 / (FPS * duration))
+    
+    # Wenn wir ausblenden (fade_out=True), dann müssen wir die Alpha-Werte steigern,
+    # beim Einblenden müssen wir sie verringern.
+    for alpha in range(0, 255, step):
+        fade_surface.set_alpha(alpha if fade_out else 255 - alpha)
+
+        # Text wird direkt während des Fade-Effekts angezeigt und allmählich sichtbar
+        if text and font:
+            rendered_text = font.render(text, True, text_color)
+            text_rect = rendered_text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+            
+            # Text wird mit jedem Schritt immer sichtbarer, je mehr der Hintergrund eingeblendet wird
+            screen.blit(fade_surface, (0, 0))
+            screen.blit(rendered_text, text_rect)
+
+        else:
+            screen.blit(fade_surface, (0, 0))
+
+        pygame.display.update()
+        clock.tick(FPS)
+
+def transition_sequence():
+    global score
+    # Score pausieren
+    current_score = score  # Aktuellen Score speichern
+    fade(screen1, BLACK, 1, fade_out=True)  # Bildschirm ausblenden (1 Sekunde)
+    
+    pygame.time.delay(2000)  # 2 Sekunden pausieren
+    
+    fade(screen1, BLACK, 1, fade_out=True)  # Bildschirm einblenden
+    score = current_score  # Score zurücksetzen (während der Pause bleibt er gleich)
+
 
 
 #Level Wechsler
 current_level = 0
 
+
 def level_changer():
    global platform_image, background, current_level
+   level_texts = {
+       1: "Wieso sehe ich nichts mehr ?!! Was passiert hier...?",
+       2: "Puh war das heiß, ich verstehe nicht wo ich bin.",
+       3: "Nicht schon wieder!!",
+       4: "Frohe Weihnachten! Jetzt kommen die Santa-Gegner.",
+       5: "Das Kürbislevel! Nichts für schwache Nerven."
+   }
    if score >= 1000 and current_level < 1:
        current_level = 1
+       transition_sequence() 
        platform_image = platform_image_level_1
        background = background_level_1
+       fade(screen1, BLACK, 1, fade_out=True, text=level_texts[1], font=font)
        for enemy in all_zombies:
            enemy.kill()
 
 
    elif score >= 2000 and current_level < 2 :
       current_level = 2
+      transition_sequence() 
       platform_image = platform_image_level_2
       background = background_level_2
+      fade(screen1, BLACK, 1, fade_out=True, text=level_texts[2], font=font)
       for enemy in all_zombies:
            enemy.kill()
 
    elif score >= 3000 and current_level < 3:
        current_level = 3
+       transition_sequence() 
        platform_image = platform_image_level_3
        background = background_level_3
+       fade(screen1, BLACK, 1, fade_out=True, text=level_texts[3], font=font)
        for enemy in all_zombies:
            enemy.kill()
            
    elif score >= 4000 and current_level < 4:
        current_level = 4
+       transition_sequence() 
        platform_image = platform_image_level_4
        background = background_level_4
+       fade(screen1, BLACK, 1, fade_out=True, text=level_texts[4], font=font)
        for enemy in all_zombies:
            enemy.kill()
              
    elif score >= 5000 and current_level < 5:
        current_level = 5
+       transition_sequence() 
        platform_image = platform_image_level_5
        background = background_level_5
+       fade(screen1, BLACK, 1, fade_out=True, text=level_texts[5], font=font)
        for enemy in all_zombies:
            enemy.kill()
               
