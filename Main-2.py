@@ -50,7 +50,7 @@ background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
 
 # Sound
-kunai_sound = pygame.mixer.Sound('sword-swing-whoosh-sound-effect-2-241823.mp3')
+kunai_sound = pygame.mixer.Sound('kunai.mp3')
 kunai_sound.set_volume(0.15)
 jump_sound = pygame.mixer.Sound('grunting.wav')
 jump_sound.set_volume(0.15)
