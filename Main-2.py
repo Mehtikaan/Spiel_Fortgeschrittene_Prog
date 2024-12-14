@@ -303,7 +303,10 @@ start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 start_music = pygame.mixer.Sound('zombie_music.wav')
 start_music.set_volume(0.15)
 
-start_music.play()
+# Sound abspielen und Kanal speichern
+start_music_channel = start_music.play()
+start_music_channel = pygame.mixer.Channel(0)  # Reserviere Kanal 0
+start_music_channel.play(start_music)
 
 # Startbildschirm anzeigen
 am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play",game_folder=game_folder)
@@ -430,7 +433,7 @@ level_music = {
 pygame.mixer.music.set_volume(0.3)  # Lautstärke auf 50% einstellen
 
 def level_changer():
-   global platform_image, background, current_level, level_music
+   global platform_image, background, current_level, level_music, start_music_channel
    level_texts = {
        1: "Wieso sehe ich nichts mehr ?!! Was passiert hier...?",
        2: "Puh war das heiß, ich verstehe nicht wo ich bin.",
@@ -440,10 +443,14 @@ def level_changer():
        6: "Warte mal..."    
     }
 
-#    if score < 1000 and current_level == 0 :
-#        pygame.mixer.music.load(level_music[0])  # Lade Level-1-Musik
-#        pygame.mixer.music.play(-1)  # Endlosschleife
-       
+
+   if score == 1000 and current_level == 0:
+       if start_music_channel:  # Prüfen, ob Kanal existiert
+        print("Stopping music on channel:", start_music_channel)
+        start_music_channel.stop()
+        start_music_channel = None
+       else:
+           print("start_music_channel does not exist or is None!")
 
    if score >= 1000 and current_level < 1:
        current_level = 1
@@ -550,7 +557,7 @@ while running:
 
 
     # Score aktualisieren
-    score += 0.5  # Score um 1 pro Frame erhöhen
+    score += 1  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
