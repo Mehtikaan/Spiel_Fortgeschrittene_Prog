@@ -3,7 +3,8 @@ import pygame
 import config_einstellungen as bib
 import configparser as cp
 import charakter as ck
-
+import time
+pygame.mixer.init()
 config = cp.ConfigParser()
 
 
@@ -108,7 +109,14 @@ def show_start_screen(screen1, start_background, clock, game_folder, name):
         pygame.display.flip()
         clock.tick(FPS)
 
+damage_sound = pygame.mixer.Sound('damage_sound.wav')
+damage_sound.set_volume(0.15)
+# Variable, um den Zeitpunkt der letzten Soundwiedergabe zu speichern
+last_damage_sound_time = 0  # Startwert ist 0
+damage_sound_cooldown = 1  # Cooldown in Sekunden
+
 def hitbox_check_enmy(wer, mitwem, surface):
+    global last_damage_sound_time, damage_sound_cooldown
     # Erstelle die Hitbox des Gegners (Zombie oder Objekt)
     hitbox = pygame.Rect(mitwem.rect.x + 20, mitwem.rect.y + 20, 50, 50)
     
@@ -119,11 +127,18 @@ def hitbox_check_enmy(wer, mitwem, surface):
     if playerhitbox.colliderect(hitbox):
         # Hier kannst du die Kollision behandeln
        # print("xxxx")
-        main_charakter.health_points -= 25
+        main_charakter.health_points -= 1
+         # Überprüfe, ob genug Zeit seit dem letzten Sound vergangen ist
+        current_time = time.time()
+        if current_time - last_damage_sound_time > damage_sound_cooldown:
+            damage_sound.play()
+            last_damage_sound_time = current_time  # Aktualisiere die Zeit der letzten Wiedergabe
+
         print(main_charakter.health_points)
     else:
         # Wenn keine Kollision vorliegt, aktualisiere die Bewegung des Spielers
         pass
+    
     
     # Zeichne die Hitboxen zur Visualisierung
     pygame.draw.rect(surface, (255, 0, 0), playerhitbox, 2)  # Zeichnet die Hitbox des Spielers (rot)

@@ -52,8 +52,11 @@ background_width = background.get_width()
 # Sound
 kunai_sound = pygame.mixer.Sound('sword-swing-whoosh-sound-effect-2-241823.mp3')
 kunai_sound.set_volume(0.15)
-jump_sound = pygame.mixer.Sound('jump.mp3')
+jump_sound = pygame.mixer.Sound('grunting.wav')
 jump_sound.set_volume(0.15)
+# damage_sound = pygame.mixer.Sound('damage_sound.wav')
+# damage_sound.set_volume(0.15)
+
 
 #Bilder für level changer
 enemy_sprites_level_0 = {
@@ -384,12 +387,12 @@ def transition_sequence():
 current_level = 0
 
 level_music = {
-    0: "bird-sounds-241394.mp3",
+    0: "zombie_music.wav",
     1: "firewood-burning-sound-179862.mp3",
-    2: "coding-fast-typing-on-keyboard-sound-247411.mp3",
-    3: "zoom-sound-effect-125029.mp3",
+    2: "cyberpunk_music.mp3",
+    3: "knight_music.wav",
     4: "wind-blowing-sfx-12809.mp3",
-    5: "level_5_music.mp3",
+    5: "pumpkin_music.wav",
 }
 
 pygame.mixer.music.set_volume(0.3)  # Lautstärke auf 50% einstellen
@@ -414,8 +417,8 @@ def level_changer():
        transition_sequence() 
        platform_image = platform_image_level_1
        background = background_level_1
-       pygame.mixer.music.load(level_music[1])  # Lade Level-1-Musik
-       pygame.mixer.music.play(-1)  # Endlosschleife
+       #pygame.mixer.music.load(level_music[1])  # Lade Level-1-Musik
+       #pygame.mixer.music.play(-1)  # Endlosschleife
        fade(screen1, BLACK, 1, fade_out=True, text=level_texts[1], font=font)
        for enemy in all_zombies:
            enemy.kill()
