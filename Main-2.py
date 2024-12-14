@@ -29,7 +29,8 @@ except Exception as e:
     exit()
 
 pygame.init()
-pygame.mixer.init()
+
+pygame.mixer.init() #Sound Nutzung importieren
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -40,7 +41,9 @@ BLUE = (150, 0, 160)
 
 
 screen1 = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("exam.ension() Run")
+
+pygame.display.set_caption("exam.ension() Run") # Überschrift
+
 clock = pygame.time.Clock()
 
 # Hintergrund laden
@@ -339,7 +342,7 @@ last_spawn_time = pygame.time.get_ticks()
 
 #Levelwechsel Übergang
 
-def fade(screen, color, duration, fade_out=True, text=None, font=None, text_color=WHITE):
+def fade(screen, color, duration=float, fade_out=True, text=None, font=None, text_color=WHITE):
     """
     Blendet den Bildschirm aus (oder ein) mit einer bestimmten Farbe.
     Optional: Zeigt einen Text, während der Fade-Effekt läuft.
@@ -362,7 +365,7 @@ def fade(screen, color, duration, fade_out=True, text=None, font=None, text_colo
             
             # Text wird mit jedem Schritt immer sichtbarer, je mehr der Hintergrund eingeblendet wird
             screen.blit(fade_surface, (0, 0))
-            screen.blit(rendered_text, text_rect)
+            screen.blit(rendered_text, text_rect) ###############hier vllt
 
         else:
             screen.blit(fade_surface, (0, 0))
@@ -374,11 +377,11 @@ def transition_sequence():
     global score
     # Score pausieren
     current_score = score  # Aktuellen Score speichern
-    fade(screen1, BLACK, 1, fade_out=True)  # Bildschirm ausblenden (1 Sekunde)
+    fade(screen1, BLACK, 0.1, fade_out=True)  # Bildschirm ausblenden (1 Sekunde)
     
     pygame.time.delay(2000)  # 2 Sekunden pausieren
     
-    fade(screen1, BLACK, 1, fade_out=True)  # Bildschirm einblenden
+    fade(screen1, BLACK, 0.2, fade_out=False)  # Bildschirm einblenden
     score = current_score  # Score zurücksetzen (während der Pause bleibt er gleich)
 
 
@@ -388,8 +391,8 @@ current_level = 0
 
 level_music = {
     0: "zombie_music.wav",
-    1: "firewood-burning-sound-179862.mp3",
-    2: "cyberpunk_music.mp3",
+    1: "zombie_music.wav",
+    2: "knight_music.wav",
     3: "knight_music.wav",
     4: "wind-blowing-sfx-12809.mp3",
     5: "pumpkin_music.wav",
