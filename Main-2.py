@@ -300,8 +300,14 @@ def show_sequence(screen, clock, sequence, font, width, height):
 start_background = pygame.image.load(os.path.join(game_folder, '_image', "dino_map.png")).convert()
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
+start_music = pygame.mixer.Sound('zombie_music.wav')
+start_music.set_volume(0.15)
+
+start_music.play()
+
 # Startbildschirm anzeigen
 am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play",game_folder=game_folder)
+
 show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT)
 
 # Zombie-Gruppe erstellen
@@ -412,13 +418,13 @@ def transition_sequence():
 current_level = 0
 
 level_music = {
-    0: "zombie_music.wav",
-    1: "zombie_music.wav",
-    2: "knight_music.wav",
+   # 0: "zombie_music.wav",
+    1: "cowboy_music.wav",
+    2: "robot_music.wav",
     3: "knight_music.wav",
     4: "wind-blowing-sfx-12809.mp3",
     5: "pumpkin_music.wav",
-    6: "zombie_music.wav"
+    6: "courli_music.wav"
 }
 
 pygame.mixer.music.set_volume(0.3)  # Lautstärke auf 50% einstellen
@@ -434,9 +440,9 @@ def level_changer():
        6: "Warte mal..."    
     }
 
-   if score < 1000 and current_level == 0 :
-       pygame.mixer.music.load(level_music[0])  # Lade Level-1-Musik
-       pygame.mixer.music.play(-1)  # Endlosschleife
+#    if score < 1000 and current_level == 0 :
+#        pygame.mixer.music.load(level_music[0])  # Lade Level-1-Musik
+#        pygame.mixer.music.play(-1)  # Endlosschleife
        
 
    if score >= 1000 and current_level < 1:
@@ -444,8 +450,8 @@ def level_changer():
        transition_sequence() 
        platform_image = platform_image_level_1
        background = background_level_1
-       #pygame.mixer.music.load(level_music[1])  # Lade Level-1-Musik
-       #pygame.mixer.music.play(-1)  # Endlosschleife
+       pygame.mixer.music.load(level_music[1])  # Lade Level-1-Musik
+       pygame.mixer.music.play(-1)  # Endlosschleife
        fade(screen1, BLACK, 1, fade_out=True, text=level_texts[1], font=font)
        for enemy in all_zombies:
            enemy.kill()
