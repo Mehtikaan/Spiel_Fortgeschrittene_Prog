@@ -237,6 +237,8 @@ main_charakter = Charakter(
     tempo_x=2, scale_tempo_x=1.01, health_points=100, score_points=0, surface=screen1
 )
 
+am.main_charakter = main_charakter
+
 sequence = [
     "Es war ein langer Tag, und der Code scheint endlos zu sein.",
 ]

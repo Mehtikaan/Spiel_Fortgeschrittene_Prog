@@ -22,6 +22,10 @@ except Exception as e:
     pygame.quit()
     exit()
     
+
+main_charakter = None
+
+
 # Vereinfachte Animation-Update-Funktion
 def animation_update(timer, max_ticks, act_frame, anim_frames, sprite_images, name: str):
     """Aktualisiert die Animation für das Sprite"""
@@ -114,7 +118,9 @@ def hitbox_check_enmy(wer, mitwem, surface):
     # Überprüfe, ob die Hitboxen kollidieren
     if playerhitbox.colliderect(hitbox):
         # Hier kannst du die Kollision behandeln
-        print("xxxx")
+       # print("xxxx")
+        main_charakter.health_points -= 25
+        print(main_charakter.health_points)
     else:
         # Wenn keine Kollision vorliegt, aktualisiere die Bewegung des Spielers
         pass
