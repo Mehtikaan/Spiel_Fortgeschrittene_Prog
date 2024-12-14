@@ -147,6 +147,16 @@ enemy_sprites_level_5 = {
     #Map Hintergrund
 }
 
+enemy_sprites_level_6 = {
+    #Gegner
+    "courli1": pygame.image.load(os.path.join(game_folder, "_image","courli1.png")).convert_alpha(),
+    "courli2": pygame.image.load(os.path.join(game_folder, "_image","courli2.png")).convert_alpha(),
+    "courli3": pygame.image.load(os.path.join(game_folder, "_image","courli3.png")).convert_alpha(),
+    "courli4": pygame.image.load(os.path.join(game_folder, "_image","courli4.png")).convert_alpha(),
+
+    #Map Hintergrund
+}
+
 
 original_charakter = {}
 
@@ -201,6 +211,9 @@ background_level_4 = pygame.transform.scale(background_level_4, (WIDTH, HEIGHT))
 background_level_5 = pygame.image.load(os.path.join(game_folder, '_image', "pumpkin_map.png")).convert()
 background_level_5 = pygame.transform.scale(background_level_5, (WIDTH, HEIGHT))
 
+background_level_6 = pygame.image.load(os.path.join(game_folder, '_image', "dino_map.png")).convert()
+background_level_6 = pygame.transform.scale(background_level_6, (WIDTH, HEIGHT))
+
 platform_image_level_0 = pygame.image.load(os.path.join(game_folder, "_image", "grave_tile.png")).convert_alpha()
 platform_image_level0 = pygame.transform.scale(platform_image_level_0, (1400, 150))
 
@@ -219,6 +232,9 @@ platform_image_level_4 = pygame.transform.scale(platform_image_level_4, (1400, 1
 platform_image_level_5 = pygame.image.load(os.path.join(game_folder, "_image", "grave_tile.png")).convert_alpha()
 platform_image_level_5 = pygame.transform.scale(platform_image_level_5, (1400, 150))
 
+platform_image_level_6 = pygame.image.load(os.path.join(game_folder, "_image", "dino_tile.png")).convert_alpha()
+platform_image_level_6 = pygame.transform.scale(platform_image_level_6, (1400, 150))
+
 back_scroll = 0.0
 p_scroll = 0.0
 
@@ -226,7 +242,7 @@ back_tiles = math.ceil(WIDTH / background_width) + 1
 p_tiles = math.ceil(WIDTH / platform_width) + 1
 
 # Score initialisieren
-score = 0
+score = 6000
 
 # Schriftart für den Score
 font = pygame.font.Font(None, 56)  # Standard-Schriftart, Größe 56
@@ -240,7 +256,7 @@ print(sprite_charakter)
 
 main_charakter = Charakter(
     x_pos=0, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,
-    tempo_x=2, scale_tempo_x=1.01, health_points=100, score_points=0, surface=screen1
+    tempo_x=2, scale_tempo_x=1.01, health_points=200, score_points=0, surface=screen1
 )
 
 am.main_charakter = main_charakter
@@ -281,7 +297,7 @@ def show_sequence(screen, clock, sequence, font, width, height):
             clock.tick(30)  # 30 FPS
 
 # Startbildschirm anzeigen, bevor das Spiel beginnt
-start_background = pygame.image.load(os.path.join(game_folder, '_image', "classroom.png")).convert()
+start_background = pygame.image.load(os.path.join(game_folder, '_image', "dino_map.png")).convert()
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
 # Startbildschirm anzeigen
@@ -317,6 +333,11 @@ def create_enemy():
         sprite_set = enemy_sprites_level_5
         anim_name = "pumpkin_walk"
 
+    elif score < 7000:
+        sprite_set = enemy_sprites_level_6
+        anim_name = "courli"
+        
+
     
     enemy = Enemy(
         x=WIDTH + 100,
@@ -327,6 +348,7 @@ def create_enemy():
         hp=5,
     )
     all_zombies.add(enemy)
+
 
 # Neuen Zombie beim Start des Spiels erstellen
 if score <1000:
@@ -396,6 +418,7 @@ level_music = {
     3: "knight_music.wav",
     4: "wind-blowing-sfx-12809.mp3",
     5: "pumpkin_music.wav",
+    6: "zombie_music.wav"
 }
 
 pygame.mixer.music.set_volume(0.3)  # Lautstärke auf 50% einstellen
@@ -407,8 +430,9 @@ def level_changer():
        2: "Puh war das heiß, ich verstehe nicht wo ich bin.",
        3: "Nicht schon wieder!!",
        4: "Frohe Weihnachten! Jetzt kommen die Santa-Gegner.",
-       5: "Das Kürbislevel! Nichts für schwache Nerven."
-   }
+       5: "Das Kürbislevel! Nichts für schwache Nerven.",
+       6: "Warte mal..."    
+    }
 
    if score < 1000 and current_level == 0 :
        pygame.mixer.music.load(level_music[0])  # Lade Level-1-Musik
@@ -470,7 +494,17 @@ def level_changer():
        fade(screen1, BLACK, 1, fade_out=True, text=level_texts[5], font=font)
        for enemy in all_zombies:
            enemy.kill()
-              
+    
+   elif score >= 6000 and current_level < 6:
+       current_level = 6
+       transition_sequence() 
+       platform_image = platform_image_level_6
+       background = background_level_6
+       pygame.mixer.music.load(level_music[6])  # Lade Level-6-Musik
+       pygame.mixer.music.play(-1)
+       fade(screen1, BLACK, 1, fade_out=True, text=level_texts[6], font=font)
+       for enemy in all_zombies:
+           enemy.kill()
 
 
 running = True
@@ -510,12 +544,12 @@ while running:
 
 
     # Score aktualisieren
-    score += 0.7  # Score um 1 pro Frame erhöhen
+    score += 0.5  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
     score_text = font.render(f"{int(score):05d} m", True, WHITE)
-    text_rect = score_text.get_rect(topright=(WIDTH - 30, 10))
+    text_rect = score_text.get_rect(topright=(WIDTH - 60, 50))
     screen1.blit(score_text, text_rect)
 
     # Zombies und Charakter aktualisieren

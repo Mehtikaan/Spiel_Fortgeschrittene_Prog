@@ -111,7 +111,7 @@ class Springen:
         self.surface = surface
         self.y_velocity = 0
         self.gravity = 1
-        self.jumping_height = 27
+        self.jumping_height = 28
         self.jumping = False
 
     def start_sprung(self):
@@ -145,9 +145,9 @@ class Health_points:
         self.surface = surface
 
     def red_rect(self):
-        pygame.draw.rect(self.surface, RED, (1240, 65, 100, 15))
-        pygame.draw.rect(self.surface, GREEN, (1240, 65, self.charakter.health_points, 15))
-        pygame.draw.rect(self.surface, BLACK, (1240, 65, 102, 15), 3)
+        pygame.draw.rect(self.surface, RED, (100, 30, 200, 30))
+        pygame.draw.rect(self.surface, GREEN, (100, 30, self.charakter.health_points, 30))
+        pygame.draw.rect(self.surface, BLACK, (100, 30, 202, 30), 2)
         return
 
     def update(self):
@@ -212,14 +212,15 @@ class Waffe:
         """Zeichnet die Waffe auf dem Bildschirm"""
         surface.blit(self.image, self.rect.topleft)
 
-    def shoot(self):
-        """Schießt eine Kugel ab, wenn der Cooldown abgelaufen ist"""
-        if self.schiessen.shoot_cooldown == 0:
-            print(f"Schießen von Position: {self.rect.centerx}, {self.rect.centery}")  # Debugging-Ausgabe
-            # Kugel erzeugen und zur Gruppe hinzufügen
-            bullet = Bullet(self.bewegung.x_pos + 80 + self.x_offset, self.springen.y_pos + 40 + self.y_offset)
-            self.schiessen.bullets.add(bullet)
-            self.schiessen.shoot_cooldown = 20  # Cooldown aktivieren
+    # def shoot(self):
+    #     """Schießt eine Kugel ab, wenn der Cooldown abgelaufen ist"""
+    #     if self.schiessen.shoot_cooldown == 0:
+    #         print(f"Schießen von Position: {self.rect.centerx}, {self.rect.centery}")  # Debugging-Ausgabe
+    #         # Kugel erzeugen und zur Gruppe hinzufügen
+    #         bullet = Bullet(self.bewegung.x_pos + 80 + self.x_offset, self.springen.y_pos + 40 + self.y_offset)
+    #         self.schiessen.bullets.add(bullet)
+    #         self.schiessen.shoot_cooldown = 20  # Cooldown aktivieren
+        
 class Schießen:
     def __init__(self, sprite_charakter, surface, bewegung, springen):
         self.surface = surface
@@ -236,13 +237,13 @@ class Schießen:
             # Kugel erzeugen und zur Gruppe hinzufügen
             bullet = Bullet(self.bewegung.x_pos + 80, self.springen.y_pos + 40, new_image)
             self.bullets.add(bullet)
-            self.shoot_cooldown = 20  # Cooldown aktivieren, um Schüsse zu verzögern
+            self.shoot_cooldown = 10  # Cooldown aktivieren, um Schüsse zu verzögern
 
     def update(self):
         """Aktualisiert die Kugeln und den Cooldown"""
         self.bullets.update()  # Kugeln aktualisieren (Bewegung)
         if self.shoot_cooldown > 0:
-            self.shoot_cooldown -= 1  # Cooldown verringern
+            self.shoot_cooldown -= 5  # Cooldown verringern
 
     def draw(self, surface):
         """Zeichnet alle Kugeln auf dem Bildschirm"""
@@ -257,7 +258,7 @@ class Bullet(pygame.sprite.Sprite):
         self.image.set_colorkey((255, 255, 255))  # Weiß als transparent festlegen
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)  # Position von der Waffe nehmen
-        self.speed = 10  # Geschwindigkeit der Kugel
+        self.speed = 7  # Geschwindigkeit der Kugel
         self.new_image = new_image
 
     def change_image(self, new_image):
