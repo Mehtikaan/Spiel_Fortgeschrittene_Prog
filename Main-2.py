@@ -53,9 +53,9 @@ background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
 
 # Sound
-kunai_sound = pygame.mixer.Sound('kunai.mp3')
+kunai_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', "kunai.mp3"))
 kunai_sound.set_volume(0.15)
-jump_sound = pygame.mixer.Sound('grunting.wav')
+jump_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', "grunting.wav"))
 jump_sound.set_volume(0.15)
 # damage_sound = pygame.mixer.Sound('damage_sound.wav')
 # damage_sound.set_volume(0.15)
@@ -300,7 +300,7 @@ def show_sequence(screen, clock, sequence, font, width, height):
 start_background = pygame.image.load(os.path.join(game_folder, '_image', "dino_map.png")).convert()
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
-start_music = pygame.mixer.Sound('zombie_music.wav')
+start_music = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', 'zombie_music.wav'))
 start_music.set_volume(0.15)
 
 # Sound abspielen und Kanal speichern
@@ -422,12 +422,12 @@ current_level = 0
 
 level_music = {
    # 0: "zombie_music.wav",
-    1: "cowboy_music.wav",
-    2: "robot_music.wav",
-    3: "knight_music.wav",
-    4: "wind-blowing-sfx-12809.mp3",
-    5: "pumpkin_music.wav",
-    6: "courli_music.wav"
+    1: os.path.join(game_folder, '_sounds',"cowboy_music.wav"),
+    2: os.path.join(game_folder, '_sounds',"robot_music.wav"),
+    3: os.path.join(game_folder, '_sounds',"knight_music.wav"),
+    4: os.path.join(game_folder, '_sounds',"wind-blowing-sfx-12809.mp3"),
+    5: os.path.join(game_folder, '_sounds',"pumpkin_music.wav"),
+    6: os.path.join(game_folder, '_sounds',"courli_music.wav")
 }
 
 pygame.mixer.music.set_volume(0.3)  # Lautstärke auf 50% einstellen
