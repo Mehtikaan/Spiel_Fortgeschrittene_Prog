@@ -297,7 +297,7 @@ def show_sequence(screen, clock, sequence, font, width, height):
             clock.tick(30)  # 30 FPS
 
 # Startbildschirm anzeigen, bevor das Spiel beginnt
-start_background = pygame.image.load(os.path.join(game_folder, '_image', "dino_map.png")).convert()
+start_background = pygame.image.load(os.path.join(game_folder, '_image', "exam_bild.png")).convert()
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
 start_music = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', 'zombie_music.wav'))
