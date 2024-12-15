@@ -444,7 +444,7 @@ def level_changer():
     }
 
 
-   if score == 1000 and current_level == 0:
+   if score >= 1000.0 and current_level == 0:
        if start_music_channel:  # Prüfen, ob Kanal existiert
         print("Stopping music on channel:", start_music_channel)
         start_music_channel.stop()
@@ -557,7 +557,7 @@ while running:
 
 
     # Score aktualisieren
-    score += 1  # Score um 1 pro Frame erhöhen
+    score += 3  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
