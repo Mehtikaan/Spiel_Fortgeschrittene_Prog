@@ -109,7 +109,10 @@ def show_start_screen(screen1, start_background, clock, game_folder, name):
         pygame.display.flip()
         clock.tick(FPS)
 
-damage_sound = pygame.mixer.Sound('schmerzen.wav')
+
+game_folder = os.path.dirname(__file__)
+
+damage_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','schmerzen.wav'))
 damage_sound.set_volume(0.15)
 
 # Variable, um den Zeitpunkt der letzten Soundwiedergabe zu speichern
