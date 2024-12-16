@@ -366,7 +366,7 @@ def create_enemy():
         x=WIDTH + 100,
         y=HEIGHT - 200,
         surface=screen1,
-        sprite_charakter= ,
+        sprite_charakter=sprite_set,
         anim_name=anim_name,
         hp=5,
     )
