@@ -12,7 +12,7 @@ class Health_reg(pygame.sprite.Sprite):
     def __init__(self, surface, gamefolder):
         super().__init__()
         self.x = WIDTH+10
-        self.y = HEIGHT-200
+        self.y = HEIGHT-270
         self.gamefolder = gamefolder
         # Das Herzbild wird geladen
         self.images = pygame.image.load(os.path.join(gamefolder, '_image', "herz.png")).convert_alpha()
@@ -37,4 +37,4 @@ class Health_reg(pygame.sprite.Sprite):
         """Zeichnet das Bild auf der Oberfläche"""
         self.surface.blit(self.images, self.rect.center)
 
-class Powerups()
+#class Powerups()
