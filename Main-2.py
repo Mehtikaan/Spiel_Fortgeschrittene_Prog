@@ -595,7 +595,7 @@ while running:
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
 
-    if score>6500:
+    if score>500:
             endboss.update()
             endboss.draw()
             endboss.shoot()
@@ -623,7 +623,6 @@ while running:
             
 
     
-
     # Kollision zwischen Kugeln und Zombies überprüfen
     for bullet in waffe.schiessen.bullets:
         for zombie in all_zombies:
@@ -632,7 +631,9 @@ while running:
                 bullet.kill()
                 if zombie.hp==0:
                     zombie.kill()
+
     level_changer()
+
 
     pygame.display.update()
 
