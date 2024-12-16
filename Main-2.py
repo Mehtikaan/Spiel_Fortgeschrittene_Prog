@@ -11,6 +11,7 @@ from sequenz import wrap_text
 import random
 from endboss import Endboss,Meteoriten,Blitzen
 from power_Up_health import Health_reg,Powerups
+from power_Up_health import Health_reg
 
 
 # Konfiguration laden oder erstellen
@@ -59,8 +60,8 @@ kunai_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', "kunai.mp3
 kunai_sound.set_volume(0.15)
 jump_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', "grunting.wav"))
 jump_sound.set_volume(0.15)
-# damage_sound = pygame.mixer.Sound('damage_sound.wav')
-# damage_sound.set_volume(0.15)
+death_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','death_sound.wav'))
+death_sound.set_volume(0.15)
 
 
 #Bilder für level changer
@@ -394,10 +395,7 @@ last_spawn_time = pygame.time.get_ticks()
 #Levelwechsel Übergang
 
 def fade(screen, color, duration=float, fade_out=True, text=None, font=None, text_color=WHITE):
-    """
-    Blendet den Bildschirm aus (oder ein) mit einer bestimmten Farbe.
-    Optional: Zeigt einen Text, während der Fade-Effekt läuft.
-    """
+  
     fade_surface = pygame.Surface((WIDTH, HEIGHT))
     fade_surface.fill(color)
 
@@ -548,7 +546,7 @@ def main_game():
     #main_charakter.reset()  # Methode, die den Charakter zurücksetzt
     all_zombies.empty()  # Alle Zombies entfernen
     current_level = 0
-    pygame.mixer.music.play(-1)  # Spielmusik starten
+    #pygame.mixer.music.play(-1)  # Spielmusik starten
 
 # Angriffsmuster und Initialisierung
 running = True
@@ -563,8 +561,6 @@ while running:
             if event.key == pygame.K_f:  # Schießen
                 waffe.schiessen.shoot(waffe.rect)
                 kunai_sound.play()
-            if event.key == pygame.K_ESCAPE:
-                show_pause_menu(screen1= screen1, font= font)
                
 
 
@@ -657,8 +653,9 @@ while running:
     level_changer()
     # Prüfen, ob Lebenspunkte <= 0 sind
     if main_charakter.health_points <= 0:
-        pygame.mixer.music.stop()
-        fade(screen1, BLACK, 2.0, fade_out=True, text="Game Over", font=font, text_color=WHITE)
+        death_sound.play()
+        #pygame.mixer.music.stop()
+        fade(screen1, WHITE, 3.5, fade_out=True, text="Game Over", font=font, text_color=BLACK)
 
         running = False
 

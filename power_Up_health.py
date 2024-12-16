@@ -16,7 +16,7 @@ class Health_reg(pygame.sprite.Sprite):
         self.gamefolder = gamefolder
         self.charakter=charakter
         # Das Herzbild wird geladen
-        self.images = pygame.image.load(os.path.join(gamefolder, '_image', "herz.png")).convert_alpha()
+        self.images = pygame.image.load(os.path.join(gamefolder, '_image', "pixel_heart.png")).convert_alpha()
         self.images=pygame.transform.scale(self.images,(50,50))
         self.surface = surface
         self.rect = self.images.get_rect()
@@ -33,8 +33,7 @@ class Health_reg(pygame.sprite.Sprite):
         self.x-=self.speed
         self.rect.center = (self.x, self.y)  # Update der Rect-Position
         # Überprüfe, ob das Power-up den Charakter berührt
-        if self.rect.colliderect(self.charakter.hitbox):  # Zugriff auf den Charakter und sein rect
-            self.charakter.bar.health_points=+40
+
     def draw(self):
         self.update()
         """Zeichnet das Bild auf der Oberfläche"""
