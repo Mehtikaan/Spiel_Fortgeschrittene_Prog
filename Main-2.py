@@ -11,6 +11,7 @@ from sequenz import wrap_text
 import random
 from endboss import Endboss,Meteoriten,Blitzen
 from power_Up_health import Health_reg
+from traps import FloatingObstacle
 
 
 # Konfiguration laden oder erstellen
@@ -315,6 +316,17 @@ def show_sequence(screen, clock, sequence, font, width, height):
 start_background = pygame.image.load(os.path.join(game_folder, '_image', "exam_bild.png")).convert()
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
+# Bild für die Falle laden
+obstacle_image = pygame.image.load(os.path.join(game_folder, '_image', "zombie_bush.png")).convert_alpha()
+
+# Hindernis-Gruppe erstellen
+all_obstacles = pygame.sprite.Group()
+
+floating_obstacle = FloatingObstacle(
+    x=1600, y=HEIGHT - 225, surface=screen1, sprite_image=obstacle_image, scale=(100, 100), speed=6
+)
+all_obstacles.add(floating_obstacle)
+
 start_music = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', 'zombie_music.wav'))
 start_music.set_volume(0.15)
 
@@ -546,6 +558,10 @@ def main_game():
     current_level = 0
     #pygame.mixer.music.play(-1)  # Spielmusik starten
 
+
+
+
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -596,6 +612,11 @@ while running:
     # Zombies und Charakter aktualisieren
     all_zombies.update()
 
+     # Hindernisse aktualisieren und zeichnen
+    all_obstacles.update()
+    for obstacle in all_obstacles:
+        obstacle.draw()
+
     main_charakter.update()
 
     main_charakter.zeichnen()
@@ -644,6 +665,8 @@ while running:
                 if zombie.hp==0:
                     zombie.kill()
 
+ 
+
     level_changer()
     # Prüfen, ob Lebenspunkte <= 0 sind
     if main_charakter.health_points <= 0:
@@ -661,7 +684,6 @@ while running:
 
 am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play",game_folder=game_folder)
 main_game()  # Hauptspiel starten
-   
 pygame.quit()
 
 
