@@ -10,13 +10,25 @@ import pygame.font
 from sequenz import wrap_text
 import random
 from endboss import Endboss,Meteoriten,Blitzen
-from power_Up_health import Health_reg,Powerups
+from power_Up_health import Health_reg
 
 
-HEIGHT= 700
-WIDTH = 1400
-POSITION = 250
-FPS=60
+# Konfiguration laden oder erstellen
+config = cp.ConfigParser()
+if not config.read("config_game.ini"):
+    print("Erstelle Konfigurationsdatei...")
+    bib.erstelle_config_datei()
+
+config.read("config_game.ini")
+
+try:
+    HEIGHT = int(config.get("Fenster", "height"))
+    WIDTH = int(config.get("Fenster", "width"))
+    FPS = int(config.get("FPS", "fps"))
+except Exception as e:
+    print("Fehler beim Laden der Konfigurationswerte:", e)
+    pygame.quit()
+    exit()
 
 pygame.init()
 
@@ -528,6 +540,15 @@ def level_changer():
        for enemy in all_zombies:
            enemy.kill()
 
+def main_game():
+    """Die Hauptspiel-Schleife."""
+    global score, main_charakter, all_zombies, current_level
+    # Setze alle Werte zurück
+    score = 0
+    #main_charakter.reset()  # Methode, die den Charakter zurücksetzt
+    all_zombies.empty()  # Alle Zombies entfernen
+    current_level = 0
+    pygame.mixer.music.play(-1)  # Spielmusik starten
 
 running = True
 while running:
@@ -541,6 +562,8 @@ while running:
             if event.key == pygame.K_f:  # Schießen
                 waffe.schiessen.shoot(waffe.rect)
                 kunai_sound.play()
+            if event.key == pygame.K_ESCAPE:
+                show_pause_menu(screen1= screen1, font= font)
                
 
 
@@ -583,7 +606,7 @@ while running:
 
     main_charakter.zeichnen()
 
-
+    
 
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
@@ -628,12 +651,22 @@ while running:
                     zombie.kill()
 
     level_changer()
+    # Prüfen, ob Lebenspunkte <= 0 sind
+    if main_charakter.health_points <= 0:
+        pygame.mixer.music.stop()
+        fade(screen1, BLACK, 2.0, fade_out=True, text="Game Over", font=font, text_color=WHITE)
+
+        running = False
+
 
 
     pygame.display.update()
 
     clock.tick(FPS)
 
+am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play",game_folder=game_folder)
+main_game()  # Hauptspiel starten
+   
 pygame.quit()
 
 

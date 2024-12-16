@@ -6,6 +6,12 @@ import charakter as ck
 import time
 pygame.mixer.init()
 config = cp.ConfigParser()
+import sys
+
+WHITE = (255, 255, 255)
+GRAY = (50, 50, 50)
+BLACK = (0, 0, 0)
+clock = pygame.time.Clock()
 
 
 
@@ -110,6 +116,66 @@ def show_start_screen(screen1, start_background, clock, game_folder, name):
         clock.tick(FPS)
 
 
+def draw_blurred_background(screen1):
+    # Einen Screenshot machen und eine Verkleinerung für den Blur-Effekt erstellen
+    surface = pygame.Surface((WIDTH // 5, HEIGHT // 5))
+    pygame.transform.scale(screen1 , (WIDTH // 5, HEIGHT // 5), surface)
+    pygame.transform.scale(surface, (WIDTH, HEIGHT), screen1 )
+
+
+running = True
+
+def show_pause_menu(screen1, font):
+    running = False
+    while running == False:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if continue_button.collidepoint(mouse_pos):  # Klick auf "Continue"
+                    running = True
+                elif restart_button.collidepoint(mouse_pos):  # Klick auf "Restart"
+                    #main_game()  # Hauptspiel neu starten
+                    pass
+
+        # Verschwommenen Hintergrund und Menü-Elemente zeichnen
+        draw_blurred_background(screen1= screen1)
+        #pygame.draw.rect(screen1, GRAY, (200, 150, 400, 300), border_radius=10)
+
+        # Buttons
+        button_width, button_height = 200, 50
+        button_spacing = 20  # Abstand zwischen Buttons
+
+        continue_button = pygame.Rect(
+            (WIDTH - button_width) // 2,  # X-Position: mittig
+            (HEIGHT - button_height) // 2 - button_height - button_spacing // 2,  # Oberhalb der Mitte
+            button_width, button_height
+        )
+        restart_button = pygame.Rect(
+            (WIDTH - button_width) // 2,  # X-Position: mittig
+            (HEIGHT - button_height) // 2 + button_spacing // 2,  # Unterhalb der Mitte
+            button_width, button_height
+        )
+
+        # Buttons zeichnen
+        pygame.draw.rect(screen1, BLACK, continue_button, border_radius=10)
+        pygame.draw.rect(screen1, BLACK, restart_button, border_radius=10)
+
+        # Button-Text rendern
+        continue_text = font.render("Continue", True, WHITE)
+        restart_text = font.render("Restart", True, WHITE)
+        screen1.blit(continue_text, (continue_button.x + (button_width - continue_text.get_width()) // 2,
+                                     continue_button.y + (button_height - continue_text.get_height()) // 2))
+        screen1.blit(restart_text, (restart_button.x + (button_width - restart_text.get_width()) // 2,
+                                    restart_button.y + (button_height - restart_text.get_height()) // 2))
+
+        # Bildschirm aktualisieren
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
 game_folder = os.path.dirname(__file__)
 
 damage_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','schmerzen.wav'))
@@ -128,7 +194,7 @@ def hitbox_check_enmy(wer, mitwem, surface):
     if 'last_damage_time' not in globals():
         last_damage_time = 0
     if 'damage_cooldown' not in globals():
-        damage_cooldown = 2.0  # Cooldown in Sekunden
+        damage_cooldown = 1.0  # Cooldown in Sekunden
 
     # Erstelle die Hitbox des Gegners (Zombie oder Objekt)
     hitbox = pygame.Rect(mitwem.rect.x + 20, mitwem.rect.y + 20, 50, 50)
