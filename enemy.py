@@ -22,14 +22,13 @@ except Exception as e:
     pygame.quit()
     exit()
 
-
-# Einfacher und klarer Ansatz für den Gegner (Enmy)
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, surface, sprite_charakter, anim_name, hp, scale=(75, 75)):
         super().__init__()
         self.x = x
         self.y = y
-        self.hp = hp
+        self.hp = hp  # Aktuelle Gesundheit des Gegners
+        self.max_hp = hp  # Maximale Gesundheit des Gegners
         self.surface = surface
         self.sprite_charakter = sprite_charakter  # Animationsbilder als Dictionary
         self.anim_name = anim_name  # Name der Animation (z. B. "walk")
@@ -48,6 +47,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.midtop = (x, y)
 
     def update(self):
+        """Update der Gegner-Logik, Animation und Bewegung"""
         # Timer erhöhen und Frame wechseln, wenn nötig
         self.timer += 1
         if self.timer >= self.max_ticks_anim:
@@ -69,3 +69,22 @@ class Enemy(pygame.sprite.Sprite):
         # Gegner entfernen, wenn er den Bildschirm verlässt
         if self.rect.right < 0:
             self.kill()
+
+    def draw_healthbar(self):
+        """Zeichnet die Gesundheitsanzeige des Gegners"""
+        bar_width = 50  # Breite der Gesundheitsanzeige
+        bar_height = 5  # Höhe der Gesundheitsanzeige
+        # Berechne die Breite der Gesundheitsanzeige basierend auf der aktuellen Gesundheit
+        health_ratio = self.hp / self.max_hp
+        health_bar_width = bar_width * health_ratio
+
+        # Rechteck für den Hintergrund der Gesundheitsanzeige (grau)
+        pygame.draw.rect(self.surface, (0, 0, 0), (self.rect.x - 5, self.rect.y - 10, bar_width + 10, bar_height + 5))
+        # Rechteck für den aktuellen Gesundheitsbalken (grün)
+        pygame.draw.rect(self.surface, (0, 255, 0), (self.rect.x, self.rect.y - 10, health_bar_width, bar_height))
+
+    def draw(self):
+        """Zeichnet den Gegner und seine Gesundheitsanzeige"""
+        self.draw_healthbar()  # Zeichne die Gesundheitsanzeige
+        self.surface.blit(self.image, self.rect)
+        

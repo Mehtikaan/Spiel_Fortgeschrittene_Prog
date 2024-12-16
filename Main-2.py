@@ -352,7 +352,7 @@ def create_enemy():
     elif score < 5000:
         sprite_set = enemy_sprites_level_4
         anim_name = "santa_walk"
-   
+
     elif score < 6000:
         sprite_set = enemy_sprites_level_5
         anim_name = "pumpkin_walk"
@@ -360,7 +360,6 @@ def create_enemy():
     elif score < 7000:
         sprite_set = enemy_sprites_level_6
         anim_name = "courli"
-        
 
     
     enemy = Enemy(
@@ -372,6 +371,8 @@ def create_enemy():
         hp=5,
     )
     all_zombies.add(enemy)
+
+
 
 
 endboss = Endboss(x=WIDTH-200, y=HEIGHT-400, surface=screen1, sprite_charakter=enemy_sprites_level_endboss, anim_name="endboss", hp=100, gamefolder=game_folder)
@@ -554,7 +555,9 @@ while running:
                
 
 
-
+    for zombie in all_zombies:
+        zombie.update()
+        zombie.draw()
     # Hintergrund scrollen
     back_scroll -= 0.6
     if abs(back_scroll) > background_width:
@@ -585,7 +588,7 @@ while running:
     screen1.blit(score_text, text_rect)
 
     # Zombies und Charakter aktualisieren
-    all_zombies.update()  # Alle Zombies aktualisieren
+    all_zombies.update()
 
     main_charakter.update()
 
@@ -631,6 +634,7 @@ while running:
             if am.hitbox_check_enmy_bullet(wer=bullet, mitwem=zombie, surface=screen1):
                 zombie.hp-=1
                 bullet.kill()
+                zombie.draw()
                 if zombie.hp==0:
                     zombie.kill()
 
