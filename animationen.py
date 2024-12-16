@@ -128,7 +128,7 @@ def hitbox_check_enmy(wer, mitwem, surface):
     if 'last_damage_time' not in globals():
         last_damage_time = 0
     if 'damage_cooldown' not in globals():
-        damage_cooldown = 2.0  # Cooldown in Sekunden
+        damage_cooldown = 1.0  # Cooldown in Sekunden
 
     # Erstelle die Hitbox des Gegners (Zombie oder Objekt)
     hitbox = pygame.Rect(mitwem.rect.x + 20, mitwem.rect.y + 20, 50, 50)
