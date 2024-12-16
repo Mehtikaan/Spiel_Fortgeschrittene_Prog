@@ -3,7 +3,6 @@ import animationen as am
 import configparser as cp
 import config_einstellungen as bib
 import os
-
 HEIGHT= 700
 WIDTH = 1400
 POSITION = 250
@@ -49,7 +48,9 @@ class Charakter:
             Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=30, y_offset=30,new_image="kunai.png"),
             Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=100, y_offset=30,new_image="kunai.png"),
             Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=70, y_offset=-10,new_image="kunai.png")]
+        
         self.hitbox = pygame.Rect(self.bewegung.x_pos, self.springen.y_pos, 75, 75)
+        self.hitbox.topleft = (self.bewegung.x_pos, self.springen.y_pos)
     def update(self):
         """Aktualisiert den Charakter: Bewegung, Animation, Schüsse und Springen"""
         for waffe in self.waffen:

@@ -201,12 +201,18 @@ class Endboss(pygame.sprite.Sprite):
     def enable_shooting(self):
         """Methode, um den Schuss wieder zu ermöglichen, z.B. nach einer Verzögerung oder einer Bedingung."""
         self.can_shoot = True
+import pygame
+import os
+
+# Höhe des Bildschirms (hier als Beispiel)
+HEIGHT = 600  # Passe diese Höhe an, je nach deinem Spiel
+
 class Blitzen(pygame.sprite.Sprite):
     def __init__(self, x, y, gamefolder, surface):
         super().__init__()
         self.gamefolder = gamefolder
         self.x = x
-        self.y = y
+        self.y = y  # Y-Position wird beim Initialisieren gesetzt
         self.surface = surface
         self.images = []  # Liste für die Bilder
         self.index = 0
@@ -217,18 +223,19 @@ class Blitzen(pygame.sprite.Sprite):
             image = pygame.image.load(os.path.join(self.gamefolder, "_image", f"Explosion_{i}.png")).convert_alpha()
             
             # Skaliere das Bild auf die gewünschten Dimensionen
-            image = pygame.transform.scale(image, (self.x, HEIGHT-200))  # Hier die gewünschte Größe setzen
-            
-            # Füge das Bild zur Liste hinzu
-            self.images.append(image)  # Hier korrigiert: append() statt append[]
+            image = pygame.transform.scale(image, (100, HEIGHT + 350))  # Breite x Höhe
+            self.images.append(image)
         
         # Setze das erste Bild als initiales Bild
         self.image = self.images[self.index]
         self.rect = self.image.get_rect()
-        self.rect.center = (self.x, self.y)  # Stelle sicher, dass die Position korrekt ist
+        self.rect.center = (self.x, self.y)  # Startposition: Oben im Bildschirmbereich
 
         self.animation_speed = 5  # Geschwindigkeit der Bildwechsel (Verzögerung)
         self.timer = 0  # Timer, um die Bilder zu wechseln
+
+        # Hier definieren wir eine zusätzliche Hitbox (optional)
+        self.hitbox = pygame.Rect(self.rect.x-10, self.rect.y-10, self.rect.width-10, self.rect.height-10)  # Standardhitbox ist das rect
 
     def update(self):
         """Update die Animation der Explosion"""
@@ -246,14 +253,20 @@ class Blitzen(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()  # Aktualisiere das Rechteck
             self.rect.center = (self.x, self.y)  # Position beibehalten
 
+            # Update die Hitbox, wenn nötig
+            self.hitbox.topleft = self.rect.topleft  # Optional, wenn die Hitbox verschoben wird
+
     def draw(self):
         """Zeichne das aktuelle Bild auf die Surface"""
+        self.update()  # Update die Animation
         self.surface.blit(self.image, self.rect)  # Zeichne das Bild an der Position des Rects
 
+        # Zeichne ein Viereck um die Hitbox (Rot und eine Linienstärke von 2)
+        pygame.draw.rect(self.surface, (255, 0, 0), self.hitbox, 1)  # Das Viereck wird rot und 2 Pixel dick gezeichnet
 
-
-
-
+    def get_hitbox(self):
+        """Gibt die Hitbox zurück für Kollisionserkennung"""
+        return self.hitbox
 
 
 

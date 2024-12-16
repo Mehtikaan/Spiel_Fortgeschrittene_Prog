@@ -9,11 +9,12 @@ FPS=60
 
 
 class Health_reg(pygame.sprite.Sprite):
-    def __init__(self, surface, gamefolder):
+    def __init__(self, surface, gamefolder,charakter):
         super().__init__()
         self.x = WIDTH+10
         self.y = HEIGHT-270
         self.gamefolder = gamefolder
+        self.charakter=charakter
         # Das Herzbild wird geladen
         self.images = pygame.image.load(os.path.join(gamefolder, '_image', "herz.png")).convert_alpha()
         self.images=pygame.transform.scale(self.images,(50,50))
@@ -31,7 +32,9 @@ class Health_reg(pygame.sprite.Sprite):
         self.y = self.original_y + self.amplitude * math.sin(self.angle)  # Berechnung der schwebenden Bewegung
         self.x-=self.speed
         self.rect.center = (self.x, self.y)  # Update der Rect-Position
-
+        # Überprüfe, ob das Power-up den Charakter berührt
+        if self.rect.colliderect(self.charakter.hitbox):  # Zugriff auf den Charakter und sein rect
+            self.charakter.bar.health_points=+40
     def draw(self):
         self.update()
         """Zeichnet das Bild auf der Oberfläche"""
