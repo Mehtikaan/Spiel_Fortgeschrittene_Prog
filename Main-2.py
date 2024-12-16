@@ -12,6 +12,7 @@ import random
 from endboss import Endboss,Meteoriten,Blitzen
 from power_Up_health import Health_reg
 from traps import FloatingObstacle
+from animationen import show_pause_menu
 
 
 # Konfiguration laden oder erstellen
@@ -574,6 +575,8 @@ while running:
             if event.key == pygame.K_f:  # Schießen
                 waffe.schiessen.shoot(waffe.rect)
                 kunai_sound.play()
+            if event.key == pygame.K_ESCAPE:
+                show_pause_menu(screen1= screen1, font= font)
                
 
 

@@ -122,6 +122,10 @@ def draw_blurred_background(screen1):
     pygame.transform.scale(screen1 , (WIDTH // 5, HEIGHT // 5), surface)
     pygame.transform.scale(surface, (WIDTH, HEIGHT), screen1 )
 
+def restart_game():
+    """Startet das Spiel durch erneuten Aufruf der Python-Datei."""
+    python = sys.executable
+    os.execl(python, python, *sys.argv)
 
 running = True
 
@@ -137,8 +141,8 @@ def show_pause_menu(screen1, font):
                 if continue_button.collidepoint(mouse_pos):  # Klick auf "Continue"
                     running = True
                 elif restart_button.collidepoint(mouse_pos):  # Klick auf "Restart"
-                    #main_game()  # Hauptspiel neu starten
-                    pass
+                    restart_game()
+                    
 
         # Verschwommenen Hintergrund und Menü-Elemente zeichnen
         draw_blurred_background(screen1= screen1)
