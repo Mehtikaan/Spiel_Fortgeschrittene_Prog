@@ -280,7 +280,7 @@ class Blitzen(pygame.sprite.Sprite):
 
 
 
-"""        endboss.update()
+"""     endboss.update()
         endboss.draw()
         endboss.shoot()
 """

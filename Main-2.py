@@ -10,6 +10,7 @@ import pygame.font
 from sequenz import wrap_text
 import random
 from endboss import Endboss,Meteoriten,Blitzen
+from power_Up_health import Health_reg
 
 
 # Konfiguration laden oder erstellen
@@ -384,7 +385,7 @@ else:
     pass
 
 score = 0.0
-
+herz=Health_reg(screen1,game_folder)
 
 waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegung,surface=screen1,springen=main_charakter.springen)
 last_spawn_time = pygame.time.get_ticks()
@@ -511,7 +512,7 @@ def level_changer():
        background = background_level_4
        pygame.mixer.music.load(level_music[4])  # Lade Level-4-Musik
        pygame.mixer.music.play(-1)
-       fade(screen1, BLACK, 1, fade_out=True, text=level_texts[4], font=font)
+       fade(screen1, BLACK, 1, fade_out=True, text=level_texts[4], font=font)  # Zeichne alle Sprites
        for enemy in all_zombies:
            enemy.kill()
              
@@ -599,6 +600,7 @@ while running:
             endboss.update()
             endboss.draw()
             endboss.shoot()
+            herz.draw()
 
     # Zufälligen Spawn-Intervall setzen
     spawn_interval = random.randint(500,50000)  # Zufälliger Wert zwischen 500 und 50000 Sekunden in Millisekunden
