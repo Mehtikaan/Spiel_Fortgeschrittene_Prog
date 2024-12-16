@@ -11,7 +11,6 @@ from sequenz import wrap_text
 import random
 from endboss import Endboss,Meteoriten,Blitzen
 from power_Up_health import Health_reg
-from animationen import show_pause_menu
 
 
 # Konfiguration laden oder erstellen
@@ -60,8 +59,8 @@ kunai_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', "kunai.mp3
 kunai_sound.set_volume(0.15)
 jump_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', "grunting.wav"))
 jump_sound.set_volume(0.15)
-# damage_sound = pygame.mixer.Sound('damage_sound.wav')
-# damage_sound.set_volume(0.15)
+death_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','death_sound.wav'))
+death_sound.set_volume(0.15)
 
 
 #Bilder für level changer
@@ -395,10 +394,7 @@ last_spawn_time = pygame.time.get_ticks()
 #Levelwechsel Übergang
 
 def fade(screen, color, duration=float, fade_out=True, text=None, font=None, text_color=WHITE):
-    """
-    Blendet den Bildschirm aus (oder ein) mit einer bestimmten Farbe.
-    Optional: Zeigt einen Text, während der Fade-Effekt läuft.
-    """
+  
     fade_surface = pygame.Surface((WIDTH, HEIGHT))
     fade_surface.fill(color)
 
@@ -540,6 +536,38 @@ def level_changer():
        for enemy in all_zombies:
            enemy.kill()
 
+def spawn_enemy(last_spawn_time, score):
+        # Bestimme den maximalen und minimalen Spawn-Intervall basierend auf dem Score
+        if score < 1000:
+            min_interval, max_interval = 3000, 5000  # Anfangswert
+        elif score < 2000:
+            min_interval, max_interval = 2500, 4000
+        elif score < 3000:
+            min_interval, max_interval = 2000, 3500
+        elif score < 4000:
+            min_interval, max_interval = 1500, 3000
+        elif score < 5000:
+            min_interval, max_interval = 1000, 2500
+        elif score < 6000:
+            min_interval, max_interval = 800, 2000
+        elif score < 7000:
+            min_interval, max_interval = 500, 1500
+        else:
+            min_interval, max_interval = 300, 1000  # Maximal schnelle Spawnrate nach Level 7
+
+        # Zufälliges Spawn-Intervall innerhalb der Levelgrenzen
+        spawn_interval = random.randint(min_interval, max_interval)
+
+        # Prüfe, ob genug Zeit seit dem letzten Spawn vergangen ist
+        if pygame.time.get_ticks() - last_spawn_time > spawn_interval:
+            create_enemy()  # Neuen Gegner erstellen
+            return pygame.time.get_ticks()  # Aktualisiere die letzte Spawnzeit
+
+        return last_spawn_time
+
+# last_spawn_time = spawn_enemy(last_spawn_time, score)
+
+
 def main_game():
     """Die Hauptspiel-Schleife."""
     global score, main_charakter, all_zombies, current_level
@@ -548,7 +576,7 @@ def main_game():
     #main_charakter.reset()  # Methode, die den Charakter zurücksetzt
     all_zombies.empty()  # Alle Zombies entfernen
     current_level = 0
-    pygame.mixer.music.play(-1)  # Spielmusik starten
+    #pygame.mixer.music.play(-1)  # Spielmusik starten
 
 running = True
 while running:
@@ -562,8 +590,6 @@ while running:
             if event.key == pygame.K_f:  # Schießen
                 waffe.schiessen.shoot(waffe.rect)
                 kunai_sound.play()
-            if event.key == pygame.K_ESCAPE:
-                show_pause_menu(screen1= screen1, font= font)
                
 
 
@@ -618,11 +644,7 @@ while running:
             herz.draw()
 
     # Zufälligen Spawn-Intervall setzen
-    spawn_interval = random.randint(500,50000)  # Zufälliger Wert zwischen 500 und 50000 Sekunden in Millisekunden
-
-    if pygame.time.get_ticks() - last_spawn_time > spawn_interval:
-        create_enemy()  # Zombie nur hier erzeugen
-        last_spawn_time = pygame.time.get_ticks()
+    last_spawn_time = spawn_enemy(last_spawn_time, score)
 
    
  # Alle Zombies zeichnen
@@ -653,8 +675,9 @@ while running:
     level_changer()
     # Prüfen, ob Lebenspunkte <= 0 sind
     if main_charakter.health_points <= 0:
-        pygame.mixer.music.stop()
-        fade(screen1, BLACK, 2.0, fade_out=True, text="Game Over", font=font, text_color=WHITE)
+        death_sound.play()
+        #pygame.mixer.music.stop()
+        fade(screen1, WHITE, 3.5, fade_out=True, text="Game Over", font=font, text_color=BLACK)
 
         running = False
 
@@ -668,6 +691,7 @@ am.show_start_screen(screen1=screen1, clock=clock, start_background=start_backgr
 main_game()  # Hauptspiel starten
    
 pygame.quit()
+
 
 
 
