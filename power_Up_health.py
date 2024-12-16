@@ -15,7 +15,7 @@ class Health_reg(pygame.sprite.Sprite):
         self.y = HEIGHT-270
         self.gamefolder = gamefolder
         # Das Herzbild wird geladen
-        self.images = pygame.image.load(os.path.join(gamefolder, '_image', "herz.png")).convert_alpha()
+        self.images = pygame.image.load(os.path.join(gamefolder, '_image', "pixel_heart.png")).convert_alpha()
         self.images=pygame.transform.scale(self.images,(50,50))
         self.surface = surface
         self.rect = self.images.get_rect()
