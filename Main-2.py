@@ -9,6 +9,7 @@ from enemy import Enemy  # Importiere die Enmy-Klasse
 import pygame.font
 from sequenz import wrap_text
 import random
+from endboss import Endboss,Meteoriten,Blitzen
 
 
 # Konfiguration laden oder erstellen
@@ -153,6 +154,19 @@ enemy_sprites_level_6 = {
     "courli2": pygame.image.load(os.path.join(game_folder, "_image","courli2.png")).convert_alpha(),
     "courli3": pygame.image.load(os.path.join(game_folder, "_image","courli3.png")).convert_alpha(),
     "courli4": pygame.image.load(os.path.join(game_folder, "_image","courli4.png")).convert_alpha(),
+
+    #Map Hintergrund
+}
+
+enemy_sprites_level_endboss = {
+    #Gegner
+    "endboss1": pygame.image.load(os.path.join(game_folder, "_image","endboss1.png")).convert_alpha(),
+    "endboss2": pygame.image.load(os.path.join(game_folder, "_image","endboss2.png")).convert_alpha(),
+    "endboss3": pygame.image.load(os.path.join(game_folder, "_image","endboss3.png")).convert_alpha(),
+    "endboss4": pygame.image.load(os.path.join(game_folder, "_image","endboss4.png")).convert_alpha(),
+    "endboss5": pygame.image.load(os.path.join(game_folder, "_image","endboss5.png")).convert_alpha(),
+    "endboss6": pygame.image.load(os.path.join(game_folder, "_image","endboss6.png")).convert_alpha(),
+ 
 
     #Map Hintergrund
 }
@@ -358,6 +372,10 @@ def create_enemy():
     )
     all_zombies.add(enemy)
 
+
+endboss = Endboss(x=WIDTH-200, y=HEIGHT-400, surface=screen1, sprite_charakter=enemy_sprites_level_endboss, anim_name="endboss", hp=100, gamefolder=game_folder)
+
+blitz=Blitzen(x=350,y=HEIGHT-200,gamefolder=game_folder,surface=screen1) 
 
 # Neuen Zombie beim Start des Spiels erstellen
 if score <1000:
@@ -577,6 +595,11 @@ while running:
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
 
+    if score>6500:
+            endboss.update()
+            endboss.draw()
+            endboss.shoot()
+
     # Zufälligen Spawn-Intervall setzen
     spawn_interval = random.randint(500,50000)  # Zufälliger Wert zwischen 500 und 50000 Sekunden in Millisekunden
 
@@ -600,7 +623,6 @@ while running:
             
 
     
-
 
     # Kollision zwischen Kugeln und Zombies überprüfen
     for bullet in waffe.schiessen.bullets:
