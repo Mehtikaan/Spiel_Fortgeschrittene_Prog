@@ -4,42 +4,52 @@ import configparser as cp
 import config_einstellungen as bib
 import os
 
-# Konfiguration laden oder erstellen
-config = cp.ConfigParser()
-if not config.read("config_game.ini"):
-    print("Erstelle Konfigurationsdatei...")
-    bib.erstelle_config_datei()  # Stelle sicher, dass die Funktion existiert
+HEIGHT= 700
+WIDTH = 1400
+POSITION = 250
+FPS=60
 
-config.read("config_game.ini")  # Konfigurationsdatei lesen
+class WaffenManager:
+    def __init__(self, surface, new_image):
+        self.surface = surface
+        self.waffen = []
+        self.new_image = new_image
 
-# Werte aus der Konfiguration laden und konvertieren
-try:
-    HEIGHT = int(config.get("Fenster", "height"))
-    WIDTH = int(config.get("Fenster", "width"))
-    FPS = int(config.get("FPS", "fps"))
-    POSITION = int(config.get("Fenster", "position"))
-except Exception as e:
-    print("Fehler beim Laden der Konfigurationswerte:", e)
-    pygame.quit()
-    exit()
+    def add_waffe(self, waffe):
+        """Fügt eine Waffe zum Manager hinzu"""
+        self.waffen.append(waffe)
+
+    def update(self, y_pos):
+        """Aktualisiert alle Waffen"""
+        for waffe in self.waffen:
+            waffe.update(y_pos)
+
+    def zeichnen(self):
+        """Zeichnet alle Waffen auf der Oberfläche"""
+        for waffe in self.waffen:
+            waffe.zeichnen(self.surface)
+
+    def shoot(self):
+        """Lässt jede Waffe schießen"""
+        for waffe in self.waffen:
+            waffe.shoot()
 
 class Charakter:
     def __init__(self, x_pos, y_pos, sprite_charakter, fps, tempo_x, scale_tempo_x, health_points, score_points, surface):
         self.surface = surface
         self.bewegung = Bewegung(x_pos, tempo_x, scale_tempo_x, sprite_charakter, fps)
         self.springen = Springen(y_pos, sprite_charakter, surface)
-        
-        # Mehrere Waffen instanziieren mit unterschiedlichen y_offset
-        self.waffen =  [
-            Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=20, y_offset=5),  # Oben
-            Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=60, y_offset=50),
-            Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=30, y_offset=30),
-            Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=100, y_offset=30),
-            Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=70, y_offset=-10)]
+
         self.health_points = health_points
         self.bar = Health_points(self, self.health_points, surface=surface)
         self.score_points = score_points
-
+        self.waffen =  [
+            Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=20, y_offset=5,new_image="kunai.png"),  # Oben
+            Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=60, y_offset=50,new_image="kunai.png"),
+            Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=30, y_offset=30,new_image="kunai.png"),
+            Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=100, y_offset=30,new_image="kunai.png"),
+            Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=70, y_offset=-10,new_image="kunai.png")]
+        self.hitbox = pygame.Rect(self.bewegung.x_pos, self.springen.y_pos, 75, 75)
     def update(self):
         """Aktualisiert den Charakter: Bewegung, Animation, Schüsse und Springen"""
         for waffe in self.waffen:
@@ -154,7 +164,7 @@ class Health_points:
         self.red_rect()
 
 class Waffe:
-    def __init__(self, bewegung, springen, sprite_charakter, surface, x_offset=0, y_offset=0, new_image="kunai.png"):
+    def __init__(self, bewegung, springen, sprite_charakter, surface,new_image, x_offset=0, y_offset=0, ):
         self.surface = surface
         self.bewegung = bewegung
         self.springen = springen

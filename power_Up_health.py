@@ -40,11 +40,12 @@ class Health_reg(pygame.sprite.Sprite):
 
 # Die generische Powerups-Klasse
 class Powerups(pygame.sprite.Sprite):
-    def __init__(self, surface, gamefolder, power_up_image, power_up_type, speed=2):
+    def __init__(self, surface, gamefolder, power_up_image, power_up_type, charakter, speed=2):
         super().__init__()
         self.surface = surface
         self.gamefolder = gamefolder
         self.power_up_type = power_up_type  # Typ des Power-ups (z.B. 'jump', 'speed')
+        self.charakter = charakter  # Speichern des Charakters
         self.image = pygame.image.load(os.path.join(gamefolder, '_image', power_up_image)).convert_alpha()
         self.image = pygame.transform.scale(self.image, (50, 50))  # Größe des Power-ups
         self.rect = self.image.get_rect()
@@ -58,6 +59,7 @@ class Powerups(pygame.sprite.Sprite):
         self.speed = speed
 
     def update(self):
+        
         """Update der Power-up-Position und Kollision mit dem Charakter"""
         # Schwebende Bewegung
         self.angle += self.frequency
@@ -65,19 +67,15 @@ class Powerups(pygame.sprite.Sprite):
         self.rect.x -= self.speed  # Power-up bewegt sich nach links
 
         # Überprüfe, ob das Power-up den Charakter berührt
-        if self.rect.colliderect(self.charakter.bewegung.rect):
+        if self.rect.colliderect(self.charakter.hitbox):  # Zugriff auf den Charakter und sein rect
             self.apply_power_up()
 
     def apply_power_up(self):
-        """Anwenden des spezifischen Power-ups"""
-        if self.power_up_type == 'jump':
-            self.charakter.springen.jumping_height = 40  # Sprunghöhe erhöhen
-        self.kill()  # Entferne das Power-up nach Anwendung
+            """Anwenden des spezifischen Power-ups"""
+            if self.power_up_type == 'jump':
+                self.charakter.springen.jumping_height = 40  # Sprunghöhe erhöhen
+            self.kill()  # Entferne das Power-up nach Anwendung
 
     def draw(self):
         """Zeichnet das Power-up auf der Oberfläche"""
         self.surface.blit(self.image, self.rect)
-class Jump_power_up(Powerups):
-    def __init__(self, surface, gamefolder, power_up_image, charakter):
-        super().__init__(surface, gamefolder, power_up_image, 'jump')
-        self.charakter = charakter  # Der Charakter, dem das Power-up gegeben wird

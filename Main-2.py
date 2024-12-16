@@ -10,25 +10,13 @@ import pygame.font
 from sequenz import wrap_text
 import random
 from endboss import Endboss,Meteoriten,Blitzen
-from power_Up_health import Health_reg
+from power_Up_health import Health_reg,Powerups
 
 
-# Konfiguration laden oder erstellen
-config = cp.ConfigParser()
-if not config.read("config_game.ini"):
-    print("Erstelle Konfigurationsdatei...")
-    bib.erstelle_config_datei()
-
-config.read("config_game.ini")
-
-try:
-    HEIGHT = int(config.get("Fenster", "height"))
-    WIDTH = int(config.get("Fenster", "width"))
-    FPS = int(config.get("FPS", "fps"))
-except Exception as e:
-    print("Fehler beim Laden der Konfigurationswerte:", e)
-    pygame.quit()
-    exit()
+HEIGHT= 700
+WIDTH = 1400
+POSITION = 250
+FPS=60
 
 pygame.init()
 
@@ -372,9 +360,9 @@ def create_enemy():
     )
     all_zombies.add(enemy)
 
-
-
-
+power_up = Powerups(surface=screen1, gamefolder=game_folder, power_up_image="powerup.png", power_up_type="jump", speed=2,charakter=main_charakter )
+power_ups=pygame.sprite.Group()
+power_ups.add(power_up)
 endboss = Endboss(x=WIDTH-200, y=HEIGHT-400, surface=screen1, sprite_charakter=enemy_sprites_level_endboss, anim_name="endboss", hp=100, gamefolder=game_folder)
 
 blitz=Blitzen(x=350,y=HEIGHT-200,gamefolder=game_folder,surface=screen1) 
@@ -388,7 +376,7 @@ else:
 score = 0.0
 herz=Health_reg(screen1,game_folder)
 
-waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegung,surface=screen1,springen=main_charakter.springen)
+waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegung,surface=screen1,springen=main_charakter.springen,new_image="kunai.png")
 last_spawn_time = pygame.time.get_ticks()
 
 #Levelwechsel Übergang
@@ -527,6 +515,7 @@ def level_changer():
        fade(screen1, BLACK, 1, fade_out=True, text=level_texts[5], font=font)
        for enemy in all_zombies:
            enemy.kill()
+
     
    elif score >= 6000 and current_level < 6:
        current_level = 6
@@ -575,7 +564,8 @@ while running:
     # Plattformen zeichnen
     for i in range(p_tiles):
         screen1.blit(platform_image, (p_scroll + i * platform_width, platform_y))
-
+    power_ups.draw(screen1)
+    power_ups.update()
 
 
     # Score aktualisieren
@@ -588,7 +578,6 @@ while running:
     screen1.blit(score_text, text_rect)
 
     # Zombies und Charakter aktualisieren
-    all_zombies.update()
 
     main_charakter.update()
 
