@@ -66,6 +66,8 @@ jump_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', "grunting.w
 jump_sound.set_volume(0.15)
 death_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','death_sound.wav'))
 death_sound.set_volume(0.15)
+welcome_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','welcome.wav'))
+welcome_sound.set_volume(0.15)
 
 
 #Bilder für level changer
