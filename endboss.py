@@ -186,7 +186,7 @@ class Endboss(pygame.sprite.Sprite):
 
     def shoot(self):
         """Schießt einen Meteoriten auf das Ziel, aber nur wenn noch kein Meteoriten geschossen wurde."""
-        sound_fireball= pygame.mixer.Sound(os.path.join(self.game_folder, '_sounds','fireball.wav'))
+        sound_fireball= pygame.mixer.Sound(os.path.join(self.gamefolder, '_sounds','fireball.wav'))
         sound_fireball.set_volume(0.15)
 
         if self.can_shoot:  # Nur schießen, wenn der Endboss gerade nicht schießt
