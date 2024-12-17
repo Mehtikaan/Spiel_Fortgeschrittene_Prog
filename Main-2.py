@@ -11,7 +11,9 @@ from sequenz import wrap_text
 import random
 from endboss import Endboss,Meteoriten,Blitzen
 from power_Up_health import Health_reg, Powerups
-from traps import FloatingObstacle
+from traps import Trap
+from animationen import show_pause_menu
+from endboss import Endboss,Meteoriten,Blitzen
 from animationen import show_pause_menu
 from endboss import Endboss,Meteoriten,Blitzen
 
@@ -178,26 +180,7 @@ enemy_sprites_level_endboss = {
 
 original_charakter = {}
 
-'''
-am.sprite_image_loader(
-    game_folder=game_folder,
-    folder_name = '_image',
-    image_max_num =10,
-    image_name='zombie_walk',
-    original_name=original_charakter,
-    sprite_dict_name=enemy_sprites_level_1
-)
 
-am.sprite_image_loader(
-    game_folder=game_folder,
-    folder_name='_image',
-    image_max_num = 6,
-    image_name='cowboy_run',
-    original_name=original_charakter,
-    sprite_dict_name=enemy_sprites_level_2
-
-)
-'''
 
 # Plattform-Rechteck für Kollisionserkennung
 platform_y = HEIGHT - 127
@@ -252,6 +235,7 @@ platform_image_level_5 = pygame.transform.scale(platform_image_level_5, (1400, 1
 
 platform_image_level_6 = pygame.image.load(os.path.join(game_folder, "_image", "dino_tile.png")).convert_alpha()
 platform_image_level_6 = pygame.transform.scale(platform_image_level_6, (1400, 150))
+
 
 back_scroll = 0.0
 p_scroll = 0.0
@@ -319,15 +303,15 @@ start_background = pygame.image.load(os.path.join(game_folder, '_image', "exam_b
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
 # Bild für die Falle laden
-obstacle_image = pygame.image.load(os.path.join(game_folder, '_image', "zombie_bush.png")).convert_alpha()
+trap_image = pygame.image.load(os.path.join(game_folder, '_image', "skeleton.png")).convert_alpha()
 
 # Hindernis-Gruppe erstellen
-all_obstacles = pygame.sprite.Group()
+all_traps = pygame.sprite.Group()
 
-floating_obstacle = FloatingObstacle(
-    x=1600, y=HEIGHT - 225, surface=screen1, sprite_image=obstacle_image, scale=(100, 100), speed=6
+trap = Trap(
+    x=1600, y=HEIGHT - 158, surface=screen1, sprite_image=trap_image, scale=(75, 45), speed=7
 )
-all_obstacles.add(floating_obstacle)
+all_traps.add(trap)
 
 start_music = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', 'zombie_music.wav'))
 start_music.set_volume(0.15)
@@ -466,7 +450,7 @@ level_music = {
 pygame.mixer.music.set_volume(0.3)  # Lautstärke auf 50% einstellen
 
 def level_changer():
-   global platform_image, background, current_level, level_music, start_music_channel
+   global platform_image, background, current_level, level_music, start_music_channel, trap_image
    level_texts = {
        1: "Wieso sehe ich nichts mehr ?!! Was passiert hier...?",
        2: "Puh war das heiß, ich verstehe nicht wo ich bin.",
@@ -602,6 +586,8 @@ while running:
                 kunai_sound.play()
             if event.key == pygame.K_ESCAPE:
                 show_pause_menu(screen1= screen1, font= font)
+            if event.key == pygame.K_ESCAPE:
+                show_pause_menu(screen1= screen1, font= font)
                
 
 
@@ -641,8 +627,8 @@ while running:
     all_zombies.update()
 
      # Hindernisse aktualisieren und zeichnen
-    all_obstacles.update()
-    for obstacle in all_obstacles:
+    all_traps.update()
+    for obstacle in all_traps:
         obstacle.draw()
 
     main_charakter.update()
@@ -712,6 +698,7 @@ while running:
         death_sound.play()
         #pygame.mixer.music.stop()
         fade(screen1, WHITE, 3.5, fade_out=True, text="Game Over", font=font, text_color=BLACK)
+        am.restart_game()
         am.restart_game()
 
 
