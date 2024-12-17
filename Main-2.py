@@ -275,7 +275,25 @@ sequence = [
 
 ]
 
-def show_sequence(screen, clock, sequence, font, width, height):
+def show_sequence(screen, clock, sequence, font, width, height, game_folder):
+    image_path = os.path.join(game_folder, '_image', "comic.png")
+    comic = pygame.image.load(image_path).convert()
+    comic = pygame.transform.scale(comic, (width, height))  # An Bildschirmgröße anpassen
+
+    # Bild anzeigen
+    screen.blit(comic, (0, 0))
+    pygame.display.update()
+    
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # ENTER gedrückt
+                running = False
+                
     for text in sequence:
         # Text umbrechen, damit er nicht über den Bildschirm hinausgeht
         lines = wrap_text(text, font, width - 40)  # Padding von 40 für den Rand
@@ -332,7 +350,7 @@ start_music_channel.play(start_music)
 # Startbildschirm anzeigen
 am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play",game_folder=game_folder)
 
-show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT)
+show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT, game_folder)
 
 # Zombie-Gruppe erstellen
 all_zombies = pygame.sprite.Group()
