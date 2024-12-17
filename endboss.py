@@ -1,4 +1,3 @@
-
 import pygame
 import animationen as am
 import configparser as cp
@@ -187,6 +186,9 @@ class Endboss(pygame.sprite.Sprite):
 
     def shoot(self):
         """Schießt einen Meteoriten auf das Ziel, aber nur wenn noch kein Meteoriten geschossen wurde."""
+        sound_fireball= pygame.mixer.Sound(os.path.join(self.game_folder, '_sounds','fireball.wav'))
+        sound_fireball.set_volume(0.15)
+
         if self.can_shoot:  # Nur schießen, wenn der Endboss gerade nicht schießt
             # Das Ziel, auf das der Meteoriten geschossen wird
             target_position = (30, HEIGHT -90)
@@ -195,13 +197,14 @@ class Endboss(pygame.sprite.Sprite):
             # Meteoriten zur Ziel-Gruppe hinzufügen
             new_meteor = MeteorToTarget(start_x, start_y, self.meteor_image, target_position)
             self.meteoriten_target_group.add(new_meteor)
-
+            sound_fireball.play()
             # Setze can_shoot auf False, um weitere Schüsse zu verhindern
             self.can_shoot = False
 
     def enable_shooting(self):
         """Methode, um den Schuss wieder zu ermöglichen, z.B. nach einer Verzögerung oder einer Bedingung."""
         self.can_shoot = True
+
 
 class Blitzen(pygame.sprite.Sprite):
     def __init__(self, x, y, gamefolder, surface):
@@ -264,15 +267,3 @@ class Blitzen(pygame.sprite.Sprite):
     def get_hitbox(self):
         """Gibt die Hitbox zurück für Kollisionserkennung"""
         return self.hitbox
-
-
-
-
-
-
-
-
-"""     endboss.update()
-        endboss.draw()
-        endboss.shoot()
-"""

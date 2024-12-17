@@ -70,7 +70,8 @@ krauss_attack = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','you_got_
 krauss_attack.set_volume(0.15)
 portal_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','portal.wav'))
 portal_sound.set_volume(0.15)
-
+welcome_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','welcome.wav'))
+welcome_sound.set_volume(0.15)
 
 
 #Bilder für level changer
@@ -580,27 +581,34 @@ power_up_group=pygame.sprite.Group()
 def game_manager():
     # Überprüfe, ob das aktuelle Herz im Spiel weniger als oder gleich 40 HP ist
     if main_charakter.health_points <= 40:
-        # Überprüfe, ob bereits ein Herz in der Gruppe ist, um nur eins gleichzeitig anzuzeigen
         if len(herzen_group) <= 1:  # Es sind keine Herzen in der Gruppe
-            # Erstelle ein neues Health_reg Objekt, das vom rechten Rand kommt
             herz = Health_reg(screen1, game_folder, charakter=main_charakter)
             herz.rect.x = WIDTH + 10  # Das Herz startet vom rechten Rand des Fensters
             herzen_group.add(herz)
         herzen_group.update()
         herzen_group.draw(screen1)
-            # Füge das Herz der Gruppe hinzu
-        
-    
-    # Wenn der Punktestand ein Vielfaches von 1000 erreicht
-    if score % 1000 == 0:
-        # Erstelle das Power-Up (z.B. Jump Power-Up)
-        jump_power_up = Powerups(screen1, game_folder, power_up_image="play.png",power_up_type='jump' ,charakter=main_charakter)
-        power_up_group.add(jump_power_up)
-        
 
-def bossfight_manager():
-    pass
+    # Überprüfe, ob die Bedingungen für den Blitz erfüllt sind
+    if score >= 500 and main_charakter.health_points > 60:
+        if len(blitze) < 1:  # Wenn noch kein Blitz existiert
+            blitz = Blitzen(350, 1, game_folder, screen1)
+            blitze.add(blitz)  # Blitz der Gruppe hinzufügen
+        blitze.update()  # Update der Blitze
+        blitze.draw(screen1)  # Blitze auf dem Bildschirm anzeigen
 
+    # Wenn der Charakter unter 100 HP fällt, entferne den Blitz
+    if main_charakter.health_points < 100:
+        print(f"Health points are below 100: {main_charakter.health_points}")
+        for blitz in blitze:
+            blitz.kill()  # Entfernt den Blitz aus der Gruppe
+        blitze.empty()  # Leert die Blitz-Gruppe
+
+    # Wenn die Bedingungen für den Endboss erfüllt sind (Score > 600 und Lebenspunkte <= 60)
+    if score > 600 and main_charakter.health_points <= 60:
+        for blitz in blitze:
+            blitz.kill()  # Entferne den Blitz
+        blitze.empty()  # Leere die Gruppe
+        endboss.shoot()  # Endboss schießt
 
 running = True
 while running:
@@ -670,10 +678,17 @@ while running:
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
 
-    if score>500:
+    # if score>500:
+    #         endboss.update()
+    #         endboss.draw()
+    #         endboss.shoot()
+            
+    if score>6500:
             endboss.update()
             endboss.draw()
             endboss.shoot()
+    if score==6500:
+        welcome_sound.play()
 
     if blitze:
         for blitz in blitze:
