@@ -10,8 +10,10 @@ import pygame.font
 from sequenz import wrap_text
 import random
 from endboss import Endboss,Meteoriten,Blitzen
-from power_Up_health import Health_reg,Powerups
-from power_Up_health import Health_reg
+from power_Up_health import Health_reg, Powerups
+from traps import FloatingObstacle
+from animationen import show_pause_menu
+from endboss import Endboss,Meteoriten,Blitzen
 
 
 # Konfiguration laden oder erstellen
@@ -316,6 +318,17 @@ def show_sequence(screen, clock, sequence, font, width, height):
 start_background = pygame.image.load(os.path.join(game_folder, '_image', "exam_bild.png")).convert()
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
+# Bild für die Falle laden
+obstacle_image = pygame.image.load(os.path.join(game_folder, '_image', "zombie_bush.png")).convert_alpha()
+
+# Hindernis-Gruppe erstellen
+all_obstacles = pygame.sprite.Group()
+
+floating_obstacle = FloatingObstacle(
+    x=1600, y=HEIGHT - 225, surface=screen1, sprite_image=obstacle_image, scale=(100, 100), speed=6
+)
+all_obstacles.add(floating_obstacle)
+
 start_music = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', 'zombie_music.wav'))
 start_music.set_volume(0.15)
 
@@ -373,13 +386,14 @@ def create_enemy():
     )
     all_zombies.add(enemy)
 
-power_up = Powerups(surface=screen1, gamefolder=game_folder, power_up_image="powerup.png", power_up_type="jump", speed=2,charakter=main_charakter )
-power_ups=pygame.sprite.Group()
-power_ups.add(power_up)
+
+
+
 endboss = Endboss(x=WIDTH-200, y=HEIGHT-400, surface=screen1, sprite_charakter=enemy_sprites_level_endboss, anim_name="endboss", hp=100, gamefolder=game_folder)
 blitz = Blitzen(350, 1, game_folder, screen1)
 blitze=pygame.sprite.Group()
-blitze.add(blitz)
+
+
 # Neuen Zombie beim Start des Spiels erstellen
 if score <1000:
     create_enemy()
@@ -387,9 +401,10 @@ else:
     pass
 
 score = 0.0
-herz=Health_reg(screen1,game_folder,charakter=main_charakter)
 
-waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegung,surface=screen1,springen=main_charakter.springen,new_image="kunai.png")
+herzen_group=pygame.sprite.Group()
+
+waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegung,surface=screen1,springen=main_charakter.springen)
 last_spawn_time = pygame.time.get_ticks()
 
 #Levelwechsel Übergang
@@ -525,7 +540,6 @@ def level_changer():
        fade(screen1, BLACK, 1, fade_out=True, text=level_texts[5], font=font)
        for enemy in all_zombies:
            enemy.kill()
-
     
    elif score >= 6000 and current_level < 6:
        current_level = 6
@@ -547,8 +561,33 @@ def main_game():
     all_zombies.empty()  # Alle Zombies entfernen
     current_level = 0
     #pygame.mixer.music.play(-1)  # Spielmusik starten
+jump_power_up = Powerups(screen1, game_folder, power_up_image="play.png",power_up_type='jump' ,charakter=main_charakter)
+power_up_group=pygame.sprite.Group()
 
-# Angriffsmuster und Initialisierung
+def game_manager():
+    # Überprüfe, ob das aktuelle Herz im Spiel weniger als oder gleich 40 HP ist
+    if main_charakter.health_points <= 40:
+        # Überprüfe, ob bereits ein Herz in der Gruppe ist, um nur eins gleichzeitig anzuzeigen
+        if len(herzen_group) <= 1:  # Es sind keine Herzen in der Gruppe
+            # Erstelle ein neues Health_reg Objekt, das vom rechten Rand kommt
+            herz = Health_reg(screen1, game_folder, charakter=main_charakter)
+            herz.rect.x = WIDTH + 10  # Das Herz startet vom rechten Rand des Fensters
+            herzen_group.add(herz)
+        herzen_group.update()
+        herzen_group.draw(screen1)
+            # Füge das Herz der Gruppe hinzu
+        
+    
+    # Wenn der Punktestand ein Vielfaches von 1000 erreicht
+    if score % 1000 == 0:
+        # Erstelle das Power-Up (z.B. Jump Power-Up)
+        jump_power_up = Powerups(screen1, game_folder, power_up_image="play.png",power_up_type='jump' ,charakter=main_charakter)
+        power_up_group.add(jump_power_up)
+        
+
+
+
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -561,6 +600,8 @@ while running:
             if event.key == pygame.K_f:  # Schießen
                 waffe.schiessen.shoot(waffe.rect)
                 kunai_sound.play()
+            if event.key == pygame.K_ESCAPE:
+                show_pause_menu(screen1= screen1, font= font)
                
 
 
@@ -584,8 +625,7 @@ while running:
     # Plattformen zeichnen
     for i in range(p_tiles):
         screen1.blit(platform_image, (p_scroll + i * platform_width, platform_y))
-    power_ups.draw(screen1)
-    power_ups.update()
+
 
 
     # Score aktualisieren
@@ -598,12 +638,18 @@ while running:
     screen1.blit(score_text, text_rect)
 
     # Zombies und Charakter aktualisieren
+    all_zombies.update()
+
+     # Hindernisse aktualisieren und zeichnen
+    all_obstacles.update()
+    for obstacle in all_obstacles:
+        obstacle.draw()
 
     main_charakter.update()
 
     main_charakter.zeichnen()
 
-    
+    game_manager()
 
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
@@ -612,11 +658,19 @@ while running:
             endboss.update()
             endboss.draw()
             endboss.shoot()
-            herz.draw()
-            blitze.update()
-            blitze.draw(screen1)
-            for blitz in blitze:
-               am.hitbox_check_blitz(main_charakter, blitz, screen1)
+
+    if blitze:
+        for blitz in blitze:
+            am.hitbox_check_blitz(main_charakter, blitz, screen1)
+    if herzen_group:
+        herzen_group.draw(screen1)
+        for herz in herzen_group:
+            if am.hitbox_check_enmy(main_charakter,herz,screen1,eventtyp="heilen"):
+                am.hitbox_check_enmy(main_charakter,herz,screen1,eventtyp="heilen")
+                herzen_group.empty()
+                herz.kill()
+
+    
     # Zufälligen Spawn-Intervall setzen
     spawn_interval = random.randint(500,50000)  # Zufälliger Wert zwischen 500 und 50000 Sekunden in Millisekunden
 
@@ -632,10 +686,10 @@ while running:
     waffe.schiessen.draw(screen1)  # Zeichne Kugeln
     for zombie in all_zombies:
         # Kollision mit dem Spieler (wer) und Zombie (mitwem)
-        if  am.hitbox_check_enmy(wer=main_charakter, mitwem=zombie, surface=screen1):
-            main_charakter.health_points=-10
+        if  am.hitbox_check_enmy(wer=main_charakter, mitwem=zombie, surface=screen1,eventtyp="schaden"):
+            am.hitbox_check_enmy(wer=main_charakter, mitwem=zombie, surface=screen1,eventtyp="schaden")
             main_charakter.bar.red_rect()
-            zombie_stirb=all_zombies.sprite(zombie)[0]
+            zombie_stirb=all_zombies.sprites()[0]
             zombie_stirb.kill()
             
 
@@ -650,14 +704,15 @@ while running:
                 if zombie.hp==0:
                     zombie.kill()
 
+ 
+
     level_changer()
     # Prüfen, ob Lebenspunkte <= 0 sind
     if main_charakter.health_points <= 0:
         death_sound.play()
         #pygame.mixer.music.stop()
         fade(screen1, WHITE, 3.5, fade_out=True, text="Game Over", font=font, text_color=BLACK)
-
-        running = False
+        am.restart_game()
 
 
 
@@ -667,7 +722,6 @@ while running:
 
 am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play",game_folder=game_folder)
 main_game()  # Hauptspiel starten
-   
 pygame.quit()
 
 

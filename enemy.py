@@ -1,47 +1,30 @@
 import pygame
-import animationen as am  
-
-import pygame
 import animationen as am  # Ich nehme an, dass 'am.animation_update' korrekt definiert ist
 import configparser as cp
 import config_einstellungen as bib
 
-HEIGHT = 700
-WIDTH = 1400
-POSITION = 250
-FPS = 60
+# Konfiguration laden oder erstellen
+config = cp.ConfigParser()
+if not config.read("config_game.ini"):
+    print("Erstelle Konfigurationsdatei...")
+    bib.erstelle_config_datei()  # Stelle sicher, dass die Funktion existiert
 
-class HealthBar:
-    def __init__(self, x, y, max_hp):
-        self.x = x
-        self.y = y
-        self.max_hp = max_hp
-        self.current_hp = max_hp
+config.read("config_game.ini")  # Konfigurationsdatei lesen
 
-    def update(self, current_hp):
-        """Aktualisiert die Lebensanzeige mit dem aktuellen HP-Wert"""
-        self.current_hp = current_hp
-
-    def draw(self, surface):
-        """Zeichnet die Lebensanzeige"""
-        bar_width = 50  # Breite der Gesundheitsanzeige
-        bar_height = 5  # Höhe der Gesundheitsanzeige
-
-        # Berechne die Breite der Gesundheitsanzeige basierend auf der aktuellen Gesundheit
-        health_ratio = self.current_hp / self.max_hp
-        health_bar_width = bar_width * health_ratio
-
-        # Rechteck für den Hintergrund der Gesundheitsanzeige (schwarz)
-        pygame.draw.rect(surface, (0, 0, 0), (self.x - 5, self.y - 10, bar_width + 10, bar_height + 5))
-
-        # Rechteck für den aktuellen Gesundheitsbalken (grün)
-        pygame.draw.rect(surface, (0, 255, 0), (self.x, self.y - 10, health_bar_width, bar_height))
-
+# Werte aus der Konfiguration laden und konvertieren
+try:
+    HEIGHT = int(config.get("Fenster", "height"))
+    WIDTH = int(config.get("Fenster", "width"))
+    FPS = int(config.get("FPS", "fps"))
+    POSITION = int(config.get("Fenster", "position"))
+except Exception as e:
+    print("Fehler beim Laden der Konfigurationswerte:", e)
+    pygame.quit()
+    exit()
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, surface, sprite_charakter, anim_name, hp, scale=(75, 75)):
         super().__init__()
-
         self.x = x
         self.y = y
         self.hp = hp  # Aktuelle Gesundheit des Gegners
@@ -62,9 +45,6 @@ class Enemy(pygame.sprite.Sprite):
         )
         self.rect = self.image.get_rect()
         self.rect.midtop = (x, y)
-
-        # Lebensanzeige erstellen
-        self.health_bar = HealthBar(self.rect.centerx - 25, self.rect.top - 10, self.hp)
 
     def update(self):
         """Update der Gegner-Logik, Animation und Bewegung"""
@@ -90,17 +70,20 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.right < 0:
             self.kill()
 
-        # Lebensanzeige aktualisieren
-        self.health_bar.update(self.hp)
+    def draw_healthbar(self):
+        """Zeichnet die Gesundheitsanzeige des Gegners"""
+        bar_width = 50  # Breite der Gesundheitsanzeige
+        bar_height = 5  # Höhe der Gesundheitsanzeige
+        # Berechne die Breite der Gesundheitsanzeige basierend auf der aktuellen Gesundheit
+        health_ratio = self.hp / self.max_hp
+        health_bar_width = bar_width * health_ratio
 
-        # Position der Lebensanzeige anpassen (immer oben und in der Mitte des Gegners)
-        self.health_bar.x = self.rect.centerx - 25  # Zentrale Position des Balkens
-        self.health_bar.y = self.rect.top - 10     # Direkt über dem Gegner
+        # Rechteck für den Hintergrund der Gesundheitsanzeige (grau)
+        pygame.draw.rect(self.surface, (0, 0, 0), (self.rect.x - 5, self.rect.y - 10, bar_width + 10, bar_height + 5))
+        # Rechteck für den aktuellen Gesundheitsbalken (grün)
+        pygame.draw.rect(self.surface, (0, 255, 0), (self.rect.x, self.rect.y - 10, health_bar_width, bar_height))
 
     def draw(self):
         """Zeichnet den Gegner und seine Gesundheitsanzeige"""
-        # Zeichne den Gegner
+        self.draw_healthbar()  # Zeichne die Gesundheitsanzeige
         self.surface.blit(self.image, self.rect)
-
-        # Zeichne die Lebensanzeige
-        self.health_bar.draw(self.surface)

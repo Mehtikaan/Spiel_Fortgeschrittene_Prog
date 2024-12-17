@@ -122,6 +122,10 @@ def draw_blurred_background(screen1):
     pygame.transform.scale(screen1 , (WIDTH // 5, HEIGHT // 5), surface)
     pygame.transform.scale(surface, (WIDTH, HEIGHT), screen1 )
 
+def restart_game():
+    """Startet das Spiel durch erneuten Aufruf der Python-Datei."""
+    python = sys.executable
+    os.execl(python, python, *sys.argv)
 
 running = True
 
@@ -137,8 +141,8 @@ def show_pause_menu(screen1, font):
                 if continue_button.collidepoint(mouse_pos):  # Klick auf "Continue"
                     running = True
                 elif restart_button.collidepoint(mouse_pos):  # Klick auf "Restart"
-                    #main_game()  # Hauptspiel neu starten
-                    pass
+                    restart_game()
+                    
 
         # Verschwommenen Hintergrund und Menü-Elemente zeichnen
         draw_blurred_background(screen1= screen1)
@@ -186,7 +190,7 @@ last_damage_sound_time = 0  # Startwert ist 0
 damage_sound_cooldown = 1  # Cooldown in Sekunden
 
 
-def hitbox_check_enmy(wer, mitwem, surface):
+def hitbox_check_enmy(wer, mitwem, surface,eventtyp):
     global last_damage_time, damage_cooldown
     global last_damage_sound_time, damage_sound_cooldown
 
@@ -206,16 +210,30 @@ def hitbox_check_enmy(wer, mitwem, surface):
     if playerhitbox.colliderect(hitbox):
         # Überprüfe, ob genug Zeit seit dem letzten Schaden vergangen ist
         current_time = time.time()
-        if current_time - last_damage_time > damage_cooldown:
-            main_charakter.health_points -= 40
-            last_damage_time = current_time  # Aktualisiere die Zeit des letzten Schadens
+        if eventtyp=="schaden":
+            if current_time - last_damage_time > damage_cooldown:
+                main_charakter.health_points -= 40
+                last_damage_time = current_time  # Aktualisiere die Zeit des letzten Schadens
 
-            # Überprüfe, ob genug Zeit seit dem letzten Sound vergangen ist
-            if current_time - last_damage_sound_time > damage_sound_cooldown:
-                damage_sound.play()
-                last_damage_sound_time = current_time  # Aktualisiere die Zeit der letzten Wiedergabe
+                # Überprüfe, ob genug Zeit seit dem letzten Sound vergangen ist
+                if current_time - last_damage_sound_time > damage_sound_cooldown:
+                    damage_sound.play()
+                    last_damage_sound_time = current_time  # Aktualisiere die Zeit der letzten Wiedergabe
+                return True
+        elif eventtyp=="heilen":
+            if current_time - last_damage_time > damage_cooldown:
+                main_charakter.health_points += 40
+                last_damage_time = current_time  # Aktualisiere die Zeit des letzten Schadens
 
+                # Überprüfe, ob genug Zeit seit dem letzten Sound vergangen ist
+                if current_time - last_damage_sound_time > damage_sound_cooldown:
+                    damage_sound.play()
+                    last_damage_sound_time = current_time  # Aktualisiere die Zeit der letzten Wiedergabe
+                    mitwem.kill()
+                return True
             print(main_charakter.health_points)
+        else:
+            return False
     else:
         # Wenn keine Kollision vorliegt, aktualisiere die Bewegung des Spielers
         pass
@@ -246,27 +264,19 @@ def hitbox_check_enmy_bullet(wer, mitwem, surface):
     pygame.draw.rect(surface, (255, 0, 0), playerhitbox, 2)  # Spielerhitbox (rot)
     pygame.draw.rect(surface, (0, 0, 255), enemyhitbox, 2)   # Gegnerhitbox (blau)
 
-# Global Variablen für den Schaden und die Cooldowns
-last_damage_time = 0
-damage_cooldown = 0.4  # Cooldown in Sekunden
-last_damage_sound_time = 0
-damage_sound_cooldown = 0.5  # Cooldown für den Sound in Sekunden
-
-
 def hitbox_check_blitz(wer, blitzen, surface):
-    global last_damage_time, damage_cooldown
-    global last_damage_sound_time, damage_sound_cooldown
+    global last_damage_time, damage_cooldown, last_damage_sound_time, damage_sound_cooldown
 
-    # Erstelle die Hitbox des Charakters
+    # Erstelle die Hitbox des Charakters (wer)
     playerhitbox = pygame.Rect(wer.bewegung.x_pos, wer.springen.y_pos, 75, 75)  # Beispielhafte Hitbox des Charakters
 
-    # Hole die Hitbox des Blitzes (von der get_hitbox Methode des Blitzen Objekts)
+    # Hole die Hitbox des Blitzes
     blitzhitbox = blitzen.get_hitbox()
 
     # Überprüfe, ob die Hitboxen kollidieren
     if playerhitbox.colliderect(blitzhitbox):
         current_time = time.time()
-        
+
         # Überprüfe, ob genug Zeit seit dem letzten Schaden vergangen ist
         if current_time - last_damage_time > damage_cooldown:
             wer.health_points -= 40  # Schaden zufügen (z.B. 40 Lebenspunkte)
@@ -276,7 +286,9 @@ def hitbox_check_blitz(wer, blitzen, surface):
             if current_time - last_damage_sound_time > damage_sound_cooldown:
                 damage_sound.play()  # Schaden-Sound abspielen
                 last_damage_sound_time = current_time  # Aktualisiere den Zeitstempel des letzten Sounds
-    
+
+            print(f"Schaden zugefügt! Neue Lebenspunkte: {wer.health_points}")
+
     # Zeichne die Hitboxen zur Visualisierung auf der Oberfläche
     pygame.draw.rect(surface, (255, 0, 0), playerhitbox, 2)  # Zeichnet die Hitbox des Spielers (rot)
     pygame.draw.rect(surface, (0, 0, 255), blitzhitbox, 2)   # Zeichnet die Hitbox des Blitzes (blau)

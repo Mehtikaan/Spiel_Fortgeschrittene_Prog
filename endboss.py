@@ -1,3 +1,4 @@
+
 import pygame
 import animationen as am
 import configparser as cp
@@ -201,30 +202,25 @@ class Endboss(pygame.sprite.Sprite):
     def enable_shooting(self):
         """Methode, um den Schuss wieder zu ermöglichen, z.B. nach einer Verzögerung oder einer Bedingung."""
         self.can_shoot = True
-import pygame
-import os
 
-# Höhe des Bildschirms (hier als Beispiel)
-HEIGHT = 600  # Passe diese Höhe an, je nach deinem Spiel
 class Blitzen(pygame.sprite.Sprite):
     def __init__(self, x, y, gamefolder, surface):
         super().__init__()
         self.gamefolder = gamefolder
         self.x = x
-        self.y = y
+        self.y = y  # Y-Position wird beim Initialisieren gesetzt
         self.surface = surface
         self.images = []  # Liste für die Bilder
         self.index = 0
-
+        
         # Lade die Explosion-Bilder und füge sie der Liste hinzu
         for i in range(5):  # 5 Bilder für die Animation
-            # Lade das Bild
             image = pygame.image.load(os.path.join(self.gamefolder, "_image", f"Explosion_{i}.png")).convert_alpha()
-
-            # Skaliere das Bild auf die gewünschten Dimensionen
-            image = pygame.transform.scale(image, (100, HEIGHT + 350))  # Breite x Höhe
+            print(f"Image size: {image.get_width()} x {image.get_height()}")  # Debug-Ausgabe
+            image = pygame.transform.scale(image, (100, HEIGHT + 250))  # Breite x Höhe
+            print(f"Scaled image size: {image.get_width()} x {image.get_height()}")  # Debug-Ausgabe
             self.images.append(image)
-
+        
         # Setze das erste Bild als initiales Bild
         self.image = self.images[self.index]
         self.rect = self.image.get_rect()
@@ -233,8 +229,8 @@ class Blitzen(pygame.sprite.Sprite):
         self.animation_speed = 5  # Geschwindigkeit der Bildwechsel (Verzögerung)
         self.timer = 0  # Timer, um die Bilder zu wechseln
 
-        # Berechne die präzisere Hitbox basierend auf den sichtbaren Pixeln
-        self.hitbox = self.create_precise_hitbox(self.image)
+        # Definiere die Hitbox des Blitzes
+        self.hitbox = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height)  # Standardhitbox ist das rect
 
     def update(self):
         """Update die Animation der Explosion"""
@@ -252,49 +248,23 @@ class Blitzen(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()  # Aktualisiere das Rechteck
             self.rect.center = (self.x, self.y)  # Position beibehalten
 
-            # Update die Hitbox basierend auf dem neuen Bild
-            self.hitbox = self.create_precise_hitbox(self.image)
+            # Update die Hitbox
+            self.hitbox = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height)
 
     def draw(self):
         """Zeichne das aktuelle Bild auf die Surface"""
         self.update()  # Update die Animation
         self.surface.blit(self.image, self.rect)  # Zeichne das Bild an der Position des Rects
 
+        # Debug-Ausgabe der Position
+        print(f"Blitz Position: x={self.rect.centerx}, y={self.rect.centery}")
+
         # Zeichne ein Viereck um die Hitbox (Rot und eine Linienstärke von 1)
         pygame.draw.rect(self.surface, (255, 0, 0), self.hitbox, 1)  # Das Viereck wird rot und 1 Pixel dick gezeichnet
-
-    def create_precise_hitbox(self, image):
-        """
-        Erstellt eine präzisere Hitbox basierend auf den sichtbaren (nicht transparenten) Pixeln des Bildes.
-        """
-        # Hole die Pixel-Daten des Bildes
-        pixels = pygame.surfarray.pixels_alpha(image)  # Holt die Alphakanal-Werte des Bildes
-
-        # Berechne die Begrenzung der sichtbaren Pixel
-        min_x, min_y = image.get_width(), image.get_height()
-        max_x, max_y = 0, 0
-
-        # Durchlaufe alle Pixel und finde die äußersten nicht-transparenten Pixel
-        for x in range(image.get_width()):
-            for y in range(image.get_height()):
-                if pixels[x, y] > 0:  # Wenn der Pixel sichtbar (nicht transparent) ist
-                    min_x = min(min_x, x)
-                    min_y = min(min_y, y)
-                    max_x = max(max_x, x)
-                    max_y = max(max_y, y)
-
-        # Erstelle eine neue Hitbox basierend auf den gefundenen Grenzen der sichtbaren Pixel
-        width = max_x - min_x + 1
-        height = max_y - min_y + 1
-
-        # Rückgabe der präzisen Hitbox
-        return pygame.Rect(self.rect.x + min_x, self.rect.y + min_y, width, height)
 
     def get_hitbox(self):
         """Gibt die Hitbox zurück für Kollisionserkennung"""
         return self.hitbox
-
-
 
 
 
