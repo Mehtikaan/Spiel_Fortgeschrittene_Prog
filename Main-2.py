@@ -13,6 +13,7 @@ from endboss import Endboss,Meteoriten,Blitzen
 from power_Up_health import Health_reg
 from traps import FloatingObstacle
 from animationen import show_pause_menu
+from endboss import Endboss,Meteoriten,Blitzen
 
 
 # Konfiguration laden oder erstellen
@@ -389,8 +390,9 @@ def create_enemy():
 
 
 endboss = Endboss(x=WIDTH-200, y=HEIGHT-400, surface=screen1, sprite_charakter=enemy_sprites_level_endboss, anim_name="endboss", hp=100, gamefolder=game_folder)
-
-blitz=Blitzen(x=350,y=HEIGHT-200,gamefolder=game_folder,surface=screen1) 
+blitz = Blitzen(350, 1, game_folder, screen1)
+blitze=pygame.sprite.Group()
+blitze.add(blitz)
 
 # Neuen Zombie beim Start des Spiels erstellen
 if score <1000:
@@ -634,6 +636,10 @@ while running:
             endboss.draw()
             endboss.shoot()
             herz.draw()
+            blitze.update()
+            blitze.draw(screen1)
+            for blitz in blitze:
+               am.hitbox_check_blitz(main_charakter, blitz, screen1)
 
     # Zufälligen Spawn-Intervall setzen
     spawn_interval = random.randint(500,50000)  # Zufälliger Wert zwischen 500 und 50000 Sekunden in Millisekunden
@@ -676,8 +682,7 @@ while running:
         death_sound.play()
         #pygame.mixer.music.stop()
         fade(screen1, WHITE, 3.5, fade_out=True, text="Game Over", font=font, text_color=BLACK)
-
-        running = False
+        am.restart_game()
 
 
 

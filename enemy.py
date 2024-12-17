@@ -87,4 +87,3 @@ class Enemy(pygame.sprite.Sprite):
         """Zeichnet den Gegner und seine Gesundheitsanzeige"""
         self.draw_healthbar()  # Zeichne die Gesundheitsanzeige
         self.surface.blit(self.image, self.rect)
-        

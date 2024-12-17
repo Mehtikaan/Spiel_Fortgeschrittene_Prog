@@ -1,28 +1,14 @@
+
 import pygame
 import animationen as am
 import configparser as cp
 import config_einstellungen as bib
 import os
 import math
-
-# Konfiguration laden oder erstellen
-config = cp.ConfigParser()
-if not config.read("config_game.ini"):
-    print("Erstelle Konfigurationsdatei...")
-    bib.erstelle_config_datei()  # Stelle sicher, dass die Funktion existiert
-
-config.read("config_game.ini")  # Konfigurationsdatei lesen
-
-# Werte aus der Konfiguration laden und konvertieren
-try:
-    HEIGHT = int(config.get("Fenster", "height"))
-    WIDTH = int(config.get("Fenster", "width"))
-    FPS = int(config.get("FPS", "fps"))
-    POSITION = int(config.get("Fenster", "position"))
-except Exception as e:
-    print("Fehler beim Laden der Konfigurationswerte:", e)
-    pygame.quit()
-    exit()
+HEIGHT= 700
+WIDTH = 1400
+POSITION = 250
+FPS=60
 
 # Meteoriten-Klasse: Verwaltet einzelne Meteoriten
 class Meteoriten(pygame.sprite.Sprite):
@@ -216,34 +202,35 @@ class Endboss(pygame.sprite.Sprite):
     def enable_shooting(self):
         """Methode, um den Schuss wieder zu ermöglichen, z.B. nach einer Verzögerung oder einer Bedingung."""
         self.can_shoot = True
+
 class Blitzen(pygame.sprite.Sprite):
     def __init__(self, x, y, gamefolder, surface):
         super().__init__()
         self.gamefolder = gamefolder
         self.x = x
-        self.y = y
+        self.y = y  # Y-Position wird beim Initialisieren gesetzt
         self.surface = surface
         self.images = []  # Liste für die Bilder
         self.index = 0
         
         # Lade die Explosion-Bilder und füge sie der Liste hinzu
         for i in range(5):  # 5 Bilder für die Animation
-            # Lade das Bild
             image = pygame.image.load(os.path.join(self.gamefolder, "_image", f"Explosion_{i}.png")).convert_alpha()
-            
-            # Skaliere das Bild auf die gewünschten Dimensionen
-            image = pygame.transform.scale(image, (self.x, HEIGHT-200))  # Hier die gewünschte Größe setzen
-            
-            # Füge das Bild zur Liste hinzu
-            self.images.append(image)  # Hier korrigiert: append() statt append[]
+            print(f"Image size: {image.get_width()} x {image.get_height()}")  # Debug-Ausgabe
+            image = pygame.transform.scale(image, (100, HEIGHT + 250))  # Breite x Höhe
+            print(f"Scaled image size: {image.get_width()} x {image.get_height()}")  # Debug-Ausgabe
+            self.images.append(image)
         
         # Setze das erste Bild als initiales Bild
         self.image = self.images[self.index]
         self.rect = self.image.get_rect()
-        self.rect.center = (self.x, self.y)  # Stelle sicher, dass die Position korrekt ist
+        self.rect.center = (self.x, self.y)  # Startposition: Oben im Bildschirmbereich
 
         self.animation_speed = 5  # Geschwindigkeit der Bildwechsel (Verzögerung)
         self.timer = 0  # Timer, um die Bilder zu wechseln
+
+        # Definiere die Hitbox des Blitzes
+        self.hitbox = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height)  # Standardhitbox ist das rect
 
     def update(self):
         """Update die Animation der Explosion"""
@@ -261,17 +248,23 @@ class Blitzen(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()  # Aktualisiere das Rechteck
             self.rect.center = (self.x, self.y)  # Position beibehalten
 
+            # Update die Hitbox
+            self.hitbox = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height)
+
     def draw(self):
         """Zeichne das aktuelle Bild auf die Surface"""
+        self.update()  # Update die Animation
         self.surface.blit(self.image, self.rect)  # Zeichne das Bild an der Position des Rects
 
+        # Debug-Ausgabe der Position
+        print(f"Blitz Position: x={self.rect.centerx}, y={self.rect.centery}")
 
+        # Zeichne ein Viereck um die Hitbox (Rot und eine Linienstärke von 1)
+        pygame.draw.rect(self.surface, (255, 0, 0), self.hitbox, 1)  # Das Viereck wird rot und 1 Pixel dick gezeichnet
 
-
-
-
-
-
+    def get_hitbox(self):
+        """Gibt die Hitbox zurück für Kollisionserkennung"""
+        return self.hitbox
 
 
 

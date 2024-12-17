@@ -249,3 +249,32 @@ def hitbox_check_enmy_bullet(wer, mitwem, surface):
     # Zeichne die Hitboxen zur Visualisierung
     pygame.draw.rect(surface, (255, 0, 0), playerhitbox, 2)  # Spielerhitbox (rot)
     pygame.draw.rect(surface, (0, 0, 255), enemyhitbox, 2)   # Gegnerhitbox (blau)
+
+def hitbox_check_blitz(wer, blitzen, surface):
+    global last_damage_time, damage_cooldown, last_damage_sound_time, damage_sound_cooldown
+
+    # Erstelle die Hitbox des Charakters (wer)
+    playerhitbox = pygame.Rect(wer.bewegung.x_pos, wer.springen.y_pos, 75, 75)  # Beispielhafte Hitbox des Charakters
+
+    # Hole die Hitbox des Blitzes
+    blitzhitbox = blitzen.get_hitbox()
+
+    # Überprüfe, ob die Hitboxen kollidieren
+    if playerhitbox.colliderect(blitzhitbox):
+        current_time = time.time()
+
+        # Überprüfe, ob genug Zeit seit dem letzten Schaden vergangen ist
+        if current_time - last_damage_time > damage_cooldown:
+            wer.health_points -= 40  # Schaden zufügen (z.B. 40 Lebenspunkte)
+            last_damage_time = current_time  # Aktualisiere den Zeitstempel des letzten Schadens
+
+            # Überprüfe, ob genug Zeit seit dem letzten Schaden-Sound vergangen ist
+            if current_time - last_damage_sound_time > damage_sound_cooldown:
+                damage_sound.play()  # Schaden-Sound abspielen
+                last_damage_sound_time = current_time  # Aktualisiere den Zeitstempel des letzten Sounds
+
+            print(f"Schaden zugefügt! Neue Lebenspunkte: {wer.health_points}")
+
+    # Zeichne die Hitboxen zur Visualisierung auf der Oberfläche
+    pygame.draw.rect(surface, (255, 0, 0), playerhitbox, 2)  # Zeichnet die Hitbox des Spielers (rot)
+    pygame.draw.rect(surface, (0, 0, 255), blitzhitbox, 2)   # Zeichnet die Hitbox des Blitzes (blau)
