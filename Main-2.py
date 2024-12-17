@@ -68,6 +68,8 @@ death_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','death_soun
 death_sound.set_volume(0.15)
 krauss_attack = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','you_got_it.wav'))
 krauss_attack.set_volume(0.15)
+portal_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','portal.wav'))
+portal_sound.set_volume(0.15)
 
 
 
@@ -423,6 +425,7 @@ def fade(screen, color, duration=float, fade_out=True, text=None, font=None, tex
   
     fade_surface = pygame.Surface((WIDTH, HEIGHT))
     fade_surface.fill(color)
+    portal_sound.play()
 
     # Schrittweite basierend auf der Dauer und der FPS
     step = int(255 / (FPS * duration))
