@@ -14,8 +14,8 @@ from power_Up_health import Health_reg, Powerups
 from traps import Trap
 from animationen import show_pause_menu
 from endboss import Endboss,Meteoriten,Blitzen
-from animationen import show_pause_menu
 from endboss import Endboss,Meteoriten,Blitzen
+import image as img
 
 
 # Konfiguration laden oder erstellen
@@ -74,114 +74,7 @@ welcome_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','welcome.
 welcome_sound.set_volume(0.15)
 
 
-#Bilder für level changer
-enemy_sprites_level_0 = {
-    #Gegner
-    "zombie_walk1": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk1.png")).convert_alpha(),
-    "zombie_walk2": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk2.png")).convert_alpha(),
-    "zombie_walk3": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk3.png")).convert_alpha(),
-    "zombie_walk4": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk4.png")).convert_alpha(),
-    "zombie_walk5": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk5.png")).convert_alpha(),
-    "zombie_walk6": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk6.png")).convert_alpha(),
-    "zombie_walk7": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk7.png")).convert_alpha(),
-    "zombie_walk8": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk8.png")).convert_alpha(),
-    "zombie_walk9": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk9.png")).convert_alpha(),
-    "zombie_walk10": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk10.png")).convert_alpha(),
 
-    #Waffe
-
-}
-enemy_sprites_level_1 = {
-    #Gegner
-    "cowboy_run1": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run1.png")).convert_alpha(),
-    "cowboy_run2": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run2.png")).convert_alpha(),
-    "cowboy_run3": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run3.png")).convert_alpha(),
-    "cowboy_run4": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run4.png")).convert_alpha(),
-    "cowboy_run5": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run5.png")).convert_alpha(),
-    "cowboy_run6": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run6.png")).convert_alpha(),
-    "cowboy_run7": pygame.image.load(os.path.join(game_folder, "_image","cowboy_run7.png")).convert_alpha(),
-    #Map Hintergrund
-
-
-}
-
-enemy_sprites_level_2 = {
-    #Gegner
-    "robot_walk1": pygame.image.load(os.path.join(game_folder, "_image","robot_walk1.png")).convert_alpha(),
-    "robot_walk2": pygame.image.load(os.path.join(game_folder, "_image","robot_walk2.png")).convert_alpha(),
-    "robot_walk3": pygame.image.load(os.path.join(game_folder, "_image","robot_walk3.png")).convert_alpha(),
-    "robot_walk4": pygame.image.load(os.path.join(game_folder, "_image","robot_walk4.png")).convert_alpha(),
-    "robot_walk5": pygame.image.load(os.path.join(game_folder, "_image","robot_walk5.png")).convert_alpha(),
-    "robot_walk6": pygame.image.load(os.path.join(game_folder, "_image","robot_walk6.png")).convert_alpha(),
-    #Map Hintergrund
-
-
-}
-enemy_sprites_level_3 = {
-    #Gegner
-    "knight_walk1": pygame.image.load(os.path.join(game_folder, "_image","knight_walk1.png")).convert_alpha(),
-    "knight_walk2": pygame.image.load(os.path.join(game_folder, "_image","knight_walk2.png")).convert_alpha(),
-    "knight_walk3": pygame.image.load(os.path.join(game_folder, "_image","knight_walk3.png")).convert_alpha(),
-    "knight_walk4": pygame.image.load(os.path.join(game_folder, "_image","knight_walk4.png")).convert_alpha(),
-    "knight_walk5": pygame.image.load(os.path.join(game_folder, "_image","knight_walk5.png")).convert_alpha(),
-    "knight_walk6": pygame.image.load(os.path.join(game_folder, "_image","knight_walk6.png")).convert_alpha(),
-    "knight_walk7": pygame.image.load(os.path.join(game_folder, "_image","knight_walk7.png")).convert_alpha(),
-    #Map Hintergrund
-}
-
-enemy_sprites_level_4 = {
-    #Gegner
-    "santa_walk1": pygame.image.load(os.path.join(game_folder, "_image","santa_walk1.png")).convert_alpha(),
-    "santa_walk2": pygame.image.load(os.path.join(game_folder, "_image","santa_walk2.png")).convert_alpha(),
-    "santa_walk3": pygame.image.load(os.path.join(game_folder, "_image","santa_walk3.png")).convert_alpha(),
-    "santa_walk4": pygame.image.load(os.path.join(game_folder, "_image","santa_walk4.png")).convert_alpha(),
-    "santa_walk5": pygame.image.load(os.path.join(game_folder, "_image","santa_walk5.png")).convert_alpha(),
-    "santa_walk6": pygame.image.load(os.path.join(game_folder, "_image","santa_walk6.png")).convert_alpha(),
-    "santa_walk7": pygame.image.load(os.path.join(game_folder, "_image","santa_walk7.png")).convert_alpha(),
-    "santa_walk8": pygame.image.load(os.path.join(game_folder, "_image","santa_walk8.png")).convert_alpha(),
-    "santa_walk9": pygame.image.load(os.path.join(game_folder, "_image","santa_walk9.png")).convert_alpha(),
-    "santa_walk10": pygame.image.load(os.path.join(game_folder, "_image","santa_walk10.png")).convert_alpha(),
-    "santa_walk11": pygame.image.load(os.path.join(game_folder, "_image","santa_walk11.png")).convert_alpha(),
-    #Map Hintergrund
-}
-
-enemy_sprites_level_5 = {
-    #Gegner
-    "pumpkin_walk1": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk1.png")).convert_alpha(),
-    "pumpkin_walk2": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk2.png")).convert_alpha(),
-    "pumpkin_walk3": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk3.png")).convert_alpha(),
-    "pumpkin_walk4": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk4.png")).convert_alpha(),
-    "pumpkin_walk5": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk5.png")).convert_alpha(),
-    "pumpkin_walk6": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk6.png")).convert_alpha(),
-    "pumpkin_walk7": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk7.png")).convert_alpha(),
-    "pumpkin_walk8": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk8.png")).convert_alpha(),
-    "pumpkin_walk9": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk9.png")).convert_alpha(),
-    "pumpkin_walk10": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk10.png")).convert_alpha(),
-    #Map Hintergrund
-}
-
-enemy_sprites_level_6 = {
-    #Gegner
-    "courli1": pygame.image.load(os.path.join(game_folder, "_image","courli1.png")).convert_alpha(),
-    "courli2": pygame.image.load(os.path.join(game_folder, "_image","courli2.png")).convert_alpha(),
-    "courli3": pygame.image.load(os.path.join(game_folder, "_image","courli3.png")).convert_alpha(),
-    "courli4": pygame.image.load(os.path.join(game_folder, "_image","courli4.png")).convert_alpha(),
-
-    #Map Hintergrund
-}
-
-enemy_sprites_level_endboss = {
-    #Gegner
-    "endboss1": pygame.image.load(os.path.join(game_folder, "_image","endboss1.png")).convert_alpha(),
-    "endboss2": pygame.image.load(os.path.join(game_folder, "_image","endboss2.png")).convert_alpha(),
-    "endboss3": pygame.image.load(os.path.join(game_folder, "_image","endboss3.png")).convert_alpha(),
-    "endboss4": pygame.image.load(os.path.join(game_folder, "_image","endboss4.png")).convert_alpha(),
-    "endboss5": pygame.image.load(os.path.join(game_folder, "_image","endboss5.png")).convert_alpha(),
-    "endboss6": pygame.image.load(os.path.join(game_folder, "_image","endboss6.png")).convert_alpha(),
- 
-
-    #Map Hintergrund
-}
 
 
 original_charakter = {}
@@ -361,31 +254,31 @@ all_zombies = pygame.sprite.Group()
 # Funktion zum Erstellen von Gegnern
 def create_enemy():
     if score < 1000:
-        sprite_set = enemy_sprites_level_0  # Zombies bis Score 1000
+        sprite_set = img.enemy_sprites_level_0  # Zombies bis Score 1000
         anim_name = "zombie_walk"
 
     elif score <2000:
-        sprite_set = enemy_sprites_level_1  # Cowboys ab Score 1000
+        sprite_set = img.enemy_sprites_level_1  # Cowboys ab Score 1000
         anim_name = "cowboy_run"
 
     elif score < 3000:
-        sprite_set = enemy_sprites_level_2
+        sprite_set = img.enemy_sprites_level_2
         anim_name = "robot_walk"
 
     elif score < 4000:
-        sprite_set = enemy_sprites_level_3
+        sprite_set = img.enemy_sprites_level_3
         anim_name = "knight_walk"
 
     elif score < 5000:
-        sprite_set = enemy_sprites_level_4
+        sprite_set = img.enemy_sprites_level_4
         anim_name = "santa_walk"
 
     elif score < 6000:
-        sprite_set = enemy_sprites_level_5
+        sprite_set = img.enemy_sprites_level_5
         anim_name = "pumpkin_walk"
 
     elif score < 7000:
-        sprite_set = enemy_sprites_level_6
+        sprite_set = img.enemy_sprites_level_6
         anim_name = "courli"
 
     
@@ -402,7 +295,7 @@ def create_enemy():
 
 
 
-endboss = Endboss(x=WIDTH-200, y=HEIGHT-400, surface=screen1, sprite_charakter=enemy_sprites_level_endboss, anim_name="endboss", hp=100, gamefolder=game_folder)
+endboss = Endboss(x=WIDTH-200, y=HEIGHT-400, surface=screen1, sprite_charakter=img.enemy_sprites_level_endboss, anim_name="endboss", hp=100, gamefolder=game_folder)
 blitz = Blitzen(350, 1, game_folder, screen1)
 blitze=pygame.sprite.Group()
 
@@ -757,6 +650,3 @@ while running:
 am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play",game_folder=game_folder)
 main_game()  # Hauptspiel starten
 pygame.quit()
-
-
-
