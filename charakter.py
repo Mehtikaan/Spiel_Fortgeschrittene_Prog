@@ -228,7 +228,7 @@ class Schießen:
             # Kugel erzeugen und zur Gruppe hinzufügen
             bullet = Bullet(self.bewegung.x_pos + 80, self.springen.y_pos + 40, new_image)
             self.bullets.add(bullet)
-            self.shoot_cooldown = 10  # Cooldown aktivieren, um Schüsse zu verzögern
+            self.shoot_cooldown = 40  # Cooldown aktivieren, um Schüsse zu verzögern
 
     def update(self):
         """Aktualisiert die Kugeln und den Cooldown"""
@@ -249,7 +249,7 @@ class Bullet(pygame.sprite.Sprite):
         self.image.set_colorkey((255, 255, 255))  # Weiß als transparent festlegen
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)  # Position von der Waffe nehmen
-        self.speed = 7  # Geschwindigkeit der Kugel
+        self.speed = 13  # Geschwindigkeit der Kugel
         self.new_image = new_image
 
     def update(self):

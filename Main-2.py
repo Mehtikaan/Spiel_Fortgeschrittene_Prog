@@ -12,11 +12,9 @@ from endboss import Endboss,Meteoriten,Blitzen
 from power_Up_health import Health_reg, Powerups
 from traps import Trap
 from animationen import show_pause_menu
-from endboss import Endboss,Meteoriten,Blitzen
-from endboss import Endboss,Meteoriten,Blitzen
 import image as img
 import sound as snd
-import sequenz as sqn
+import sequence as sqn
 
 HEIGHT= 700
 WIDTH = 1400
@@ -29,6 +27,8 @@ pygame.display.set_caption("exam.ension() Run")
 clock = pygame.time.Clock()
 screen1 = pygame.display.set_mode((WIDTH, HEIGHT))
 game_folder = os.path.dirname(__file__)
+pygame.mixer.music.set_volume(0.3)  # Lautstärke auf 50% einstellen
+
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -36,6 +36,8 @@ RED = (240, 0, 0)
 GREEN = (0, 240, 0)
 GOLD = (255, 215, 0)
 BLUE = (150, 0, 160)
+font = pygame.font.Font(None, 56)  # Standard-Schriftart, Größe 56
+
 
 # Sound abspielen und Kanal speichern
 start_music_channel = snd.start_music.play()
@@ -61,8 +63,6 @@ trap_image = img.trap_image
 
 # Score initialisieren
 score = 0.0
-# Schriftart für den Score
-font = pygame.font.Font(None, 56)  # Standard-Schriftart, Größe 56
 
 #Sprite Gruppen
 herzen_group=pygame.sprite.Group()
@@ -80,8 +80,17 @@ am.sprite_image_loader(game_folder=game_folder, folder_name="_image", image_max_
 #Klassen
 main_charakter = Charakter(
     x_pos=0, y_pos=HEIGHT - 195, sprite_charakter=sprite_charakter, fps=FPS,
-    tempo_x=2, scale_tempo_x=1.01, health_points=200, score_points=0, surface=screen1
-)
+    tempo_x=2, scale_tempo_x=1.01, health_points=200, score_points=0, surface=screen1)
+am.main_charakter = main_charakter
+
+trap = Trap(x=1600, y=HEIGHT - 142, surface=screen1, sprite_image=trap_image, scale=(60, 30), speed=7)
+all_traps.add(trap)
+
+endboss = Endboss(x=WIDTH-200, y=HEIGHT-400, surface=screen1, sprite_charakter=img.enemy_sprites_level_endboss, anim_name="endboss", hp=100, gamefolder=game_folder)
+
+blitz = Blitzen(350, 1, game_folder, screen1)
+
+waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegung,surface=screen1,springen=main_charakter.springen)
 
 
 # Startbildschirm anzeigen
@@ -89,13 +98,6 @@ am.show_start_screen(screen1=screen1, clock=clock, start_background=start_backgr
 sequence = sqn.sequence
 sqn.show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT, game_folder)
 
-
-
-# Hindernis-Gruppe erstellen
-trap = Trap(
-    x=1600, y=HEIGHT - 142, surface=screen1, sprite_image=trap_image, scale=(60, 30), speed=7
-)
-all_traps.add(trap)
 
 
 # Funktion zum Erstellen von Gegnern
@@ -144,17 +146,8 @@ if score <1000:
     create_enemy()
 else:
     pass
-
-
-
-endboss = Endboss(x=WIDTH-200, y=HEIGHT-400, surface=screen1, sprite_charakter=img.enemy_sprites_level_endboss, anim_name="endboss", hp=100, gamefolder=game_folder)
-blitz = Blitzen(350, 1, game_folder, screen1)
-
-
-
-
-waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegung,surface=screen1,springen=main_charakter.springen)
 last_spawn_time = pygame.time.get_ticks()
+
 
 
 #Level Wechsler
@@ -170,7 +163,6 @@ level_music = {
     6: os.path.join(game_folder, '_sounds',"courli_music.wav")
 }
 
-pygame.mixer.music.set_volume(0.3)  # Lautstärke auf 50% einstellen
 
 def level_changer():
    global platform_image, background, current_level, level_music, start_music_channel, trap_image
@@ -270,6 +262,7 @@ def main_game():
     current_level = 0
     #pygame.mixer.music.play(-1)  # Spielmusik starten
 jump_power_up = Powerups(screen1, game_folder, power_up_image="play.png",power_up_type='jump' ,charakter=main_charakter)
+
 
 def game_manager():
     # Überprüfe, ob das aktuelle Herz im Spiel weniger als oder gleich 40 HP ist
