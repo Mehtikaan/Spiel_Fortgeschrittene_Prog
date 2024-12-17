@@ -569,7 +569,8 @@ def game_manager():
         power_up_group.add(jump_power_up)
         
 
-
+def bossfight_manager():
+    pass
 
 
 running = True
@@ -655,6 +656,10 @@ while running:
                 am.hitbox_check_enmy(main_charakter,herz,screen1,eventtyp="heilen")
                 herzen_group.empty()
                 herz.kill()
+    if endboss.meteoriten_target_group:
+        for meteor in endboss.meteoriten_target_group:
+            if am.hitbox_check_enmy(main_charakter,meteor,screen1,eventtyp="schaden"):
+                am.hitbox_check_enmy(main_charakter,meteor,screen1,eventtyp="schaden")
 
     
     # Zufälligen Spawn-Intervall setzen

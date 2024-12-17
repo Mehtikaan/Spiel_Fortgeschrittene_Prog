@@ -242,7 +242,7 @@ def hitbox_check_enmy(wer, mitwem, surface,eventtyp):
             return False
     else:
         # Wenn keine Kollision vorliegt, aktualisiere die Bewegung des Spielers
-        pass
+        return False
 
     
     # Zeichne die Hitboxen zur Visualisierung
@@ -265,7 +265,8 @@ def hitbox_check_enmy_bullet(wer, mitwem, surface):
         print("Kollision zwischen", wer, "und", mitwem)
         # Hier kannst du die Kollision behandeln (z.B. Schaden zufügen, Gegner zerstören)
         return True
-
+    else:
+        return False
     # Zeichne die Hitboxen zur Visualisierung
     pygame.draw.rect(surface, (255, 0, 0), playerhitbox, 2)  # Spielerhitbox (rot)
     pygame.draw.rect(surface, (0, 0, 255), enemyhitbox, 2)   # Gegnerhitbox (blau)
