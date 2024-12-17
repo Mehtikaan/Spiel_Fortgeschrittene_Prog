@@ -264,7 +264,12 @@ main_charakter = Charakter(
 am.main_charakter = main_charakter
 
 sequence = [
-    "Es war ein langer Tag, und der Code scheint endlos zu sein.",
+    "Was passiert hier?",
+    "Und was ist das für eine Musik?",
+    "Morgen früh muss ich das Spiel vorstellen...",
+    "Sonst lässt Krauss mich durchfallen...",
+    "Wo bin ich??",
+
 ]
 
 def show_sequence(screen, clock, sequence, font, width, height):
@@ -299,7 +304,7 @@ def show_sequence(screen, clock, sequence, font, width, height):
             clock.tick(30)  # 30 FPS
 
 # Startbildschirm anzeigen, bevor das Spiel beginnt
-start_background = pygame.image.load(os.path.join(game_folder, '_image', "exam_bild.png")).convert()
+start_background = pygame.image.load(os.path.join(game_folder, '_image', "exam_start.png")).convert()
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
 # Bild für die Falle laden
@@ -309,7 +314,7 @@ trap_image = pygame.image.load(os.path.join(game_folder, '_image', "skeleton.png
 all_traps = pygame.sprite.Group()
 
 trap = Trap(
-    x=1600, y=HEIGHT - 158, surface=screen1, sprite_image=trap_image, scale=(75, 45), speed=7
+    x=1600, y=HEIGHT - 142, surface=screen1, sprite_image=trap_image, scale=(60, 30), speed=7
 )
 all_traps.add(trap)
 
