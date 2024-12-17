@@ -15,6 +15,7 @@ clock = pygame.time.Clock()
 
 
 
+
 if not config.read("config_game.ini"):
     print("Erstelle Konfigurationsdatei...")
     bib.erstelle_config_datei()
@@ -190,6 +191,8 @@ game_folder = os.path.dirname(__file__)
 
 damage_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','schmerzen.wav'))
 damage_sound.set_volume(0.15)
+laughing= pygame.mixer.Sound(os.path.join(game_folder, '_sounds','laughing.wav'))
+laughing.set_volume(0.15)
 
 # Variable, um den Zeitpunkt der letzten Soundwiedergabe zu speichern
 last_damage_sound_time = 0  # Startwert ist 0
@@ -230,10 +233,10 @@ def hitbox_check_enmy(wer, mitwem, surface,eventtyp):
             if current_time - last_damage_time > damage_cooldown:
                 main_charakter.health_points += 40
                 last_damage_time = current_time  # Aktualisiere die Zeit des letzten Schadens
-
+                laughing.play()
                 # Überprüfe, ob genug Zeit seit dem letzten Sound vergangen ist
                 if current_time - last_damage_sound_time > damage_sound_cooldown:
-                    damage_sound.play()
+                    
                     last_damage_sound_time = current_time  # Aktualisiere die Zeit der letzten Wiedergabe
                     mitwem.kill()
                 return True
@@ -328,3 +331,4 @@ def hitbox_check_blitz(wer, blitzen, surface):
     # Zeichne die Hitboxen zur Visualisierung auf der Oberfläche
     pygame.draw.rect(surface, (255, 0, 0), playerhitbox, 2)  # Zeichnet die Hitbox des Spielers (rot)
     pygame.draw.rect(surface, (0, 0, 255), blitzhitbox, 2)   # Zeichnet die Hitbox des Blitzes (blau)
+
