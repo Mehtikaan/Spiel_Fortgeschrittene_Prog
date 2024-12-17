@@ -5,8 +5,14 @@ import configparser as cp
 import charakter as ck
 import time
 pygame.mixer.init()
-config = cp.ConfigParser()
 import sys
+
+HEIGHT= 700
+WIDTH = 1400
+POSITION = 250
+FPS=60
+
+
 
 WHITE = (255, 255, 255)
 GRAY = (50, 50, 50)
@@ -14,22 +20,6 @@ BLACK = (0, 0, 0)
 clock = pygame.time.Clock()
 
 
-
-
-if not config.read("config_game.ini"):
-    print("Erstelle Konfigurationsdatei...")
-    bib.erstelle_config_datei()
-
-config.read("config_game.ini")
-try:
-    HEIGHT = int(config.get("Fenster", "height"))
-    WIDTH = int(config.get("Fenster", "width"))
-    FPS = int(config.get("FPS", "fps"))
-except Exception as e:
-    print("Fehler beim Laden der Konfigurationswerte:", e)
-    pygame.quit()
-    exit()
-    
 
 main_charakter = None
 

@@ -15,6 +15,7 @@ from animationen import show_pause_menu
 import image as img
 import sound as snd
 import sequence as sqn
+import game_logic as gl
 
 HEIGHT= 700
 WIDTH = 1400
@@ -43,6 +44,8 @@ font = pygame.font.Font(None, 56)  # Standard-Schriftart, Größe 56
 start_music_channel = snd.start_music.play()
 start_music_channel = pygame.mixer.Channel(0)  # Reserviere Kanal 0
 start_music_channel.play(snd.start_music)
+level_music = gl.level_music
+
 
 background = img.background
 background_width = img.background_width
@@ -100,156 +103,14 @@ sqn.show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT, game_folder)
 
 
 
-# Funktion zum Erstellen von Gegnern
-def create_enemy():
-    if score < 1000:
-        sprite_set = img.enemy_sprites_level_0  # Zombies bis Score 1000
-        anim_name = "zombie_walk"
-
-    elif score <2000:
-        sprite_set = img.enemy_sprites_level_1  # Cowboys ab Score 1000
-        anim_name = "cowboy_run"
-
-    elif score < 3000:
-        sprite_set = img.enemy_sprites_level_2
-        anim_name = "robot_walk"
-
-    elif score < 4000:
-        sprite_set = img.enemy_sprites_level_3
-        anim_name = "knight_walk"
-
-    elif score < 5000:
-        sprite_set = img.enemy_sprites_level_4
-        anim_name = "santa_walk"
-
-    elif score < 6000:
-        sprite_set = img.enemy_sprites_level_5
-        anim_name = "pumpkin_walk"
-
-    elif score < 7000:
-        sprite_set = img.enemy_sprites_level_6
-        anim_name = "courli"
-
-    
-    enemy = Enemy(
-        x=WIDTH + 100,
-        y=HEIGHT - 192,
-        surface=screen1,
-        sprite_charakter=sprite_set,
-        anim_name=anim_name,
-        hp=5,
-    )
-    all_zombies.add(enemy)
 
 # Neuen Zombie beim Start des Spiels erstellen
 if score <1000:
-    create_enemy()
+    gl.create_enemy(score, all_zombies, screen1)
 else:
     pass
 last_spawn_time = pygame.time.get_ticks()
 
-
-
-#Level Wechsler
-current_level = 0
-
-level_music = {
-   # 0: "zombie_music.wav",
-    1: os.path.join(game_folder, '_sounds',"cowboy_music.wav"),
-    2: os.path.join(game_folder, '_sounds',"robot_music.wav"),
-    3: os.path.join(game_folder, '_sounds',"knight_music.wav"),
-    4: os.path.join(game_folder, '_sounds',"wind-blowing-sfx-12809.mp3"),
-    5: os.path.join(game_folder, '_sounds',"pumpkin_music.wav"),
-    6: os.path.join(game_folder, '_sounds',"courli_music.wav")
-}
-
-
-def level_changer():
-   global platform_image, background, current_level, level_music, start_music_channel, trap_image
-   level_texts = {
-       1: "Wieso sehe ich nichts mehr ?!! Was passiert hier...?",
-       2: "Puh war das heiß, ich verstehe nicht wo ich bin.",
-       3: "Nicht schon wieder!!",
-       4: "Frohe Weihnachten! Jetzt kommen die Santa-Gegner.",
-       5: "Das Kürbislevel! Nichts für schwache Nerven.",
-       6: "Warte mal..."    
-    }
-
-
-   if score >= 1000.0 and current_level == 0:
-       if start_music_channel:  # Prüfen, ob Kanal existiert
-        print("Stopping music on channel:", start_music_channel)
-        start_music_channel.stop()
-        start_music_channel = None
-       else:
-           print("start_music_channel does not exist or is None!")
-
-   if score >= 1000 and current_level < 1:
-       current_level = 1
-       sqn.transition_sequence() 
-       platform_image = img.platform_image_level_1
-       background = img.background_level_1
-       pygame.mixer.music.load(level_music[1])  # Lade Level-1-Musik
-       pygame.mixer.music.play(-1)  # Endlosschleife
-       sqn.fade(screen1, BLACK, 1, fade_out=True, text=level_texts[1], font=font)
-       for enemy in all_zombies:
-           enemy.kill()
-
-
-   elif score >= 2000 and current_level < 2 :
-      current_level = 2
-      sqn.transition_sequence() 
-      platform_image = img.platform_image_level_2
-      background = img.background_level_2
-      pygame.mixer.music.load(level_music[2])  # Lade Level-2-Musik
-      pygame.mixer.music.play(-1)
-      sqn.fade(screen1, BLACK, 1, fade_out=True, text=level_texts[2], font=font)
-      for enemy in all_zombies:
-           enemy.kill()
-
-   elif score >= 3000 and current_level < 3:
-       current_level = 3
-       sqn.transition_sequence() 
-       platform_image = img.platform_image_level_3
-       background = img.background_level_3
-       pygame.mixer.music.load(level_music[3])  # Lade Level-3-Musik
-       pygame.mixer.music.play(-1)
-       sqn.fade(screen1, BLACK, 1, fade_out=True, text=level_texts[3], font=font)
-       for enemy in all_zombies:
-           enemy.kill()
-           
-   elif score >= 4000 and current_level < 4:
-       current_level = 4
-       sqn.transition_sequence() 
-       platform_image = img.platform_image_level_4
-       background = img.background_level_4
-       pygame.mixer.music.load(level_music[4])  # Lade Level-4-Musik
-       pygame.mixer.music.play(-1)
-       sqn.fade(screen1, BLACK, 1, fade_out=True, text=level_texts[4], font=font)  # Zeichne alle Sprites
-       for enemy in all_zombies:
-           enemy.kill()
-             
-   elif score >= 5000 and current_level < 5:
-       current_level = 5
-       sqn.transition_sequence() 
-       platform_image = img.platform_image_level_5
-       background = img.background_level_5
-       pygame.mixer.music.load(level_music[5])  # Lade Level-5-Musik
-       pygame.mixer.music.play(-1)
-       sqn.fade(screen1, BLACK, 1, fade_out=True, text=level_texts[5], font=font)
-       for enemy in all_zombies:
-           enemy.kill()
-    
-   elif score >= 6000 and current_level < 6:
-       current_level = 6
-       sqn.transition_sequence() 
-       platform_image = img.platform_image_level_6
-       background = img.background_level_6
-       pygame.mixer.music.load(level_music[6])  # Lade Level-6-Musik
-       pygame.mixer.music.play(-1)
-       sqn.fade(screen1, BLACK, 1, fade_out=True, text=level_texts[6], font=font)
-       for enemy in all_zombies:
-           enemy.kill()
 
 
 def main_game():
@@ -261,6 +122,7 @@ def main_game():
     all_zombies.empty()  # Alle Zombies entfernen
     current_level = 0
     #pygame.mixer.music.play(-1)  # Spielmusik starten
+
 jump_power_up = Powerups(screen1, game_folder, power_up_image="play.png",power_up_type='jump' ,charakter=main_charakter)
 
 
@@ -325,7 +187,7 @@ while running:
     if abs(backround_scroll) > background_width:
         backround_scroll = 0
     for i in range(backround_tiles):
-        screen1.blit(background, (backround_scroll + i * background_width, 0))
+        screen1.blit(img.background, (backround_scroll + i * background_width, 0))
 
 
         # Platform scrollen
@@ -334,12 +196,12 @@ while running:
         platform_scroll = 0
     # Plattformen zeichnen
     for i in range(platform_tiles):
-        screen1.blit(platform_image, (platform_scroll + i * platform_width, platform_y))
+        screen1.blit(img.platform_image, (platform_scroll + i * platform_width, platform_y))
 
 
 
     # Score aktualisieren
-    score += 1  # Score um 1 pro Frame erhöhen
+    score += 4  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
@@ -394,7 +256,7 @@ while running:
     spawn_interval = random.randint(500,50000)  # Zufälliger Wert zwischen 500 und 50000 Sekunden in Millisekunden
 
     if pygame.time.get_ticks() - last_spawn_time > spawn_interval:
-        create_enemy()  # Zombie nur hier erzeugen
+        gl.create_enemy(score=score, all_zombies = all_zombies, surface = screen1)  # Zombie nur hier erzeugen
         last_spawn_time = pygame.time.get_ticks()
 
    
@@ -422,8 +284,7 @@ while running:
                 if zombie.hp==0:
                     zombie.kill()
 
-
-    level_changer()
+    gl.level_changer(score=score, all_zombies=all_zombies, surface=screen1)
     # Prüfen, ob Lebenspunkte <= 0 sind
     if main_charakter.health_points <= 0:
         snd.death_sound.play()
