@@ -1,6 +1,6 @@
 import pygame
 
-class FloatingObstacle(pygame.sprite.Sprite):
+class Trap(pygame.sprite.Sprite):
     def __init__(self, x, y, surface, sprite_image, scale=(50, 50), speed=3):
         """
         Ein Hindernis, das von rechts nach links schwebt.
