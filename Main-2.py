@@ -16,28 +16,20 @@ from animationen import show_pause_menu
 from endboss import Endboss,Meteoriten,Blitzen
 from endboss import Endboss,Meteoriten,Blitzen
 import image as img
+import sound as snd
 
 
-# Konfiguration laden oder erstellen
-config = cp.ConfigParser()
-if not config.read("config_game.ini"):
-    print("Erstelle Konfigurationsdatei...")
-    bib.erstelle_config_datei()
-
-config.read("config_game.ini")
-
-try:
-    HEIGHT = int(config.get("Fenster", "height"))
-    WIDTH = int(config.get("Fenster", "width"))
-    FPS = int(config.get("FPS", "fps"))
-except Exception as e:
-    print("Fehler beim Laden der Konfigurationswerte:", e)
-    pygame.quit()
-    exit()
+HEIGHT= 700
+WIDTH = 1400
+POSITION = 250
+FPS=60
 
 pygame.init()
-
-pygame.mixer.init() #Sound Nutzung importieren
+pygame.mixer.init() 
+pygame.display.set_caption("exam.ension() Run") 
+clock = pygame.time.Clock()
+screen1 = pygame.display.set_mode((WIDTH, HEIGHT))
+game_folder = os.path.dirname(__file__)
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -46,94 +38,21 @@ GREEN = (0, 240, 0)
 GOLD = (255, 215, 0)
 BLUE = (150, 0, 160)
 
-
-screen1 = pygame.display.set_mode((WIDTH, HEIGHT))
-
-pygame.display.set_caption("exam.ension() Run") # Überschrift
-
-clock = pygame.time.Clock()
-
-# Hintergrund laden
-game_folder = os.path.dirname(__file__)
-background = pygame.image.load(os.path.join(game_folder, '_image', "zombie_map.png")).convert()
-background = pygame.transform.scale(background, (WIDTH, HEIGHT))
-background_width = background.get_width()
-
-# Sound
-kunai_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', "kunai.wav"))
-kunai_sound.set_volume(0.15)
-jump_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', "grunting.wav"))
-jump_sound.set_volume(0.15)
-death_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','death_sound.wav'))
-death_sound.set_volume(0.15)
-krauss_attack = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','you_got_it.wav'))
-krauss_attack.set_volume(0.15)
-portal_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','portal.wav'))
-portal_sound.set_volume(0.15)
-welcome_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','welcome.wav'))
-welcome_sound.set_volume(0.15)
+background = img.background
+background_width = img.background_width
 
 
-
-
-
-original_charakter = {}
-
-
+#original_charakter = {}
 
 # Plattform-Rechteck für Kollisionserkennung
 platform_y = HEIGHT - 127
 platform_rect = pygame.Rect(0,platform_y, 1400, 150)
 
 #platform = pygame.Rect( 0, HEIGHT-127 ,1400, 150)           #y, x, width, height
-platform_width = 1400
-platform_height = 150
-platform_image = pygame.image.load(os.path.join(game_folder, "_image", "stone_tile.png")).convert_alpha()
-platform_image = pygame.transform.scale(platform_image, (platform_width, platform_height))
+platform_width = img.platform_width
+platform_height = img.platform_height
+platform_image = img.platform_image
 
-
-
-background_level_0 = pygame.image.load(os.path.join(game_folder, '_image', "zombie_map.png")).convert()
-background_level_0 = pygame.transform.scale(background_level_0, (WIDTH, HEIGHT))
-
-background_level_1 = pygame.image.load(os.path.join(game_folder, '_image', "desert.png")).convert()
-background_level_1 = pygame.transform.scale(background_level_1, (WIDTH, HEIGHT))
-
-background_level_2 = pygame.image.load(os.path.join(game_folder, '_image', "robot_map.png")).convert()
-background_level_2 = pygame.transform.scale(background_level_2, (WIDTH, HEIGHT))
-
-background_level_3 = pygame.image.load(os.path.join(game_folder, '_image', "knight_map.png")).convert()
-background_level_3 = pygame.transform.scale(background_level_3, (WIDTH, HEIGHT))
-
-background_level_4 = pygame.image.load(os.path.join(game_folder, '_image', "santa_map.png")).convert()
-background_level_4 = pygame.transform.scale(background_level_4, (WIDTH, HEIGHT))
-
-background_level_5 = pygame.image.load(os.path.join(game_folder, '_image', "pumpkin_map.png")).convert()
-background_level_5 = pygame.transform.scale(background_level_5, (WIDTH, HEIGHT))
-
-background_level_6 = pygame.image.load(os.path.join(game_folder, '_image', "dino_map.png")).convert()
-background_level_6 = pygame.transform.scale(background_level_6, (WIDTH, HEIGHT))
-
-platform_image_level_0 = pygame.image.load(os.path.join(game_folder, "_image", "grave_tile.png")).convert_alpha()
-platform_image_level0 = pygame.transform.scale(platform_image_level_0, (1400, 150))
-
-platform_image_level_1 = pygame.image.load(os.path.join(game_folder, "_image", "sand_tile.png")).convert_alpha()
-platform_image_level_1 = pygame.transform.scale(platform_image_level_1, (1400, 150))
-
-platform_image_level_2 = pygame.image.load(os.path.join(game_folder, "_image", "robot_tile.png")).convert_alpha()
-platform_image_level_2 = pygame.transform.scale(platform_image_level_2, (1400, 150))
-
-platform_image_level_3 = pygame.image.load(os.path.join(game_folder, "_image", "stone_tile.png")).convert_alpha()
-platform_image_level_3 = pygame.transform.scale(platform_image_level_3, (1400, 150))
-
-platform_image_level_4 = pygame.image.load(os.path.join(game_folder, "_image", "santa_tile.png")).convert_alpha()
-platform_image_level_4 = pygame.transform.scale(platform_image_level_4, (1400, 150))
-
-platform_image_level_5 = pygame.image.load(os.path.join(game_folder, "_image", "grave_tile.png")).convert_alpha()
-platform_image_level_5 = pygame.transform.scale(platform_image_level_5, (1400, 150))
-
-platform_image_level_6 = pygame.image.load(os.path.join(game_folder, "_image", "dino_tile.png")).convert_alpha()
-platform_image_level_6 = pygame.transform.scale(platform_image_level_6, (1400, 150))
 
 
 back_scroll = 0.0
@@ -235,13 +154,13 @@ trap = Trap(
 )
 all_traps.add(trap)
 
-start_music = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', 'zombie_music.wav'))
-start_music.set_volume(0.15)
+# start_music = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', 'zombie_music.wav'))
+# start_music.set_volume(0.15)
 
 # Sound abspielen und Kanal speichern
-start_music_channel = start_music.play()
+start_music_channel = snd.start_music.play()
 start_music_channel = pygame.mixer.Channel(0)  # Reserviere Kanal 0
-start_music_channel.play(start_music)
+start_music_channel.play(snd.start_music)
 
 # Startbildschirm anzeigen
 am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play",game_folder=game_folder)
@@ -319,7 +238,6 @@ def fade(screen, color, duration=float, fade_out=True, text=None, font=None, tex
   
     fade_surface = pygame.Surface((WIDTH, HEIGHT))
     fade_surface.fill(color)
-    portal_sound.play()
 
     # Schrittweite basierend auf der Dauer und der FPS
     step = int(255 / (FPS * duration))
@@ -395,8 +313,8 @@ def level_changer():
    if score >= 1000 and current_level < 1:
        current_level = 1
        transition_sequence() 
-       platform_image = platform_image_level_1
-       background = background_level_1
+       platform_image = img.platform_image_level_1
+       background = img.background_level_1
        pygame.mixer.music.load(level_music[1])  # Lade Level-1-Musik
        pygame.mixer.music.play(-1)  # Endlosschleife
        fade(screen1, BLACK, 1, fade_out=True, text=level_texts[1], font=font)
@@ -407,8 +325,8 @@ def level_changer():
    elif score >= 2000 and current_level < 2 :
       current_level = 2
       transition_sequence() 
-      platform_image = platform_image_level_2
-      background = background_level_2
+      platform_image = img.platform_image_level_2
+      background = img.background_level_2
       pygame.mixer.music.load(level_music[2])  # Lade Level-2-Musik
       pygame.mixer.music.play(-1)
       fade(screen1, BLACK, 1, fade_out=True, text=level_texts[2], font=font)
@@ -418,8 +336,8 @@ def level_changer():
    elif score >= 3000 and current_level < 3:
        current_level = 3
        transition_sequence() 
-       platform_image = platform_image_level_3
-       background = background_level_3
+       platform_image = img.platform_image_level_3
+       background = img.background_level_3
        pygame.mixer.music.load(level_music[3])  # Lade Level-3-Musik
        pygame.mixer.music.play(-1)
        fade(screen1, BLACK, 1, fade_out=True, text=level_texts[3], font=font)
@@ -429,8 +347,8 @@ def level_changer():
    elif score >= 4000 and current_level < 4:
        current_level = 4
        transition_sequence() 
-       platform_image = platform_image_level_4
-       background = background_level_4
+       platform_image = img.platform_image_level_4
+       background = img.background_level_4
        pygame.mixer.music.load(level_music[4])  # Lade Level-4-Musik
        pygame.mixer.music.play(-1)
        fade(screen1, BLACK, 1, fade_out=True, text=level_texts[4], font=font)  # Zeichne alle Sprites
@@ -440,8 +358,8 @@ def level_changer():
    elif score >= 5000 and current_level < 5:
        current_level = 5
        transition_sequence() 
-       platform_image = platform_image_level_5
-       background = background_level_5
+       platform_image = img.platform_image_level_5
+       background = img.background_level_5
        pygame.mixer.music.load(level_music[5])  # Lade Level-5-Musik
        pygame.mixer.music.play(-1)
        fade(screen1, BLACK, 1, fade_out=True, text=level_texts[5], font=font)
@@ -451,8 +369,8 @@ def level_changer():
    elif score >= 6000 and current_level < 6:
        current_level = 6
        transition_sequence() 
-       platform_image = platform_image_level_6
-       background = background_level_6
+       platform_image = img.platform_image_level_6
+       background = img.background_level_6
        pygame.mixer.music.load(level_music[6])  # Lade Level-6-Musik
        pygame.mixer.music.play(-1)
        fade(screen1, BLACK, 1, fade_out=True, text=level_texts[6], font=font)
@@ -482,7 +400,7 @@ def game_manager():
         herzen_group.draw(screen1)
 
     # Überprüfe, ob die Bedingungen für den Blitz erfüllt sind
-    if score >= 500 and main_charakter.health_points > 60:
+    if score >= 2200 and main_charakter.health_points > 60:
         if len(blitze) < 1:  # Wenn noch kein Blitz existiert
             blitz = Blitzen(350, 1, game_folder, screen1)
             blitze.add(blitz)  # Blitz der Gruppe hinzufügen
@@ -511,10 +429,10 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 main_charakter.springen.start_sprung()
-                jump_sound.play()
+                snd.jump_sound.play()
             if event.key == pygame.K_f:  # Schießen
                 waffe.schiessen.shoot(waffe.rect)
-                kunai_sound.play()
+                snd.kunai_sound.play()
             if event.key == pygame.K_ESCAPE:
                 show_pause_menu(screen1= screen1, font= font)
             if event.key == pygame.K_ESCAPE:
@@ -566,7 +484,7 @@ while running:
 
     main_charakter.zeichnen()
 
-    game_manager()
+    #game_manager()
 
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
@@ -577,7 +495,7 @@ while running:
             endboss.draw()
             endboss.shoot()
     if score==6500:
-        welcome_sound.play()
+        snd.welcome_sound.play()
 
     if blitze:
         for blitz in blitze:
@@ -594,7 +512,7 @@ while running:
         for meteor in endboss.meteoriten_target_group:
             if am.hitbox_check_enmy(main_charakter,meteor,screen1,eventtyp="schaden"):
                 am.hitbox_check_enmy(main_charakter,meteor,screen1,eventtyp="schaden")
-                krauss_attack.play()
+                snd.krauss_attack.play()
 
     
     # Zufälligen Spawn-Intervall setzen
@@ -635,7 +553,7 @@ while running:
     level_changer()
     # Prüfen, ob Lebenspunkte <= 0 sind
     if main_charakter.health_points <= 0:
-        death_sound.play()
+        snd.death_sound.play()
         #pygame.mixer.music.stop()
         fade(screen1, WHITE, 3.5, fade_out=True, text="Game Over", font=font, text_color=BLACK)
         am.restart_game()
