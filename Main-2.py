@@ -96,7 +96,7 @@ waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegun
 
 
 # Startbildschirm anzeigen
-am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play",game_folder=game_folder)
+am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,game_folder=game_folder)
 sequence = sqn.sequence
 sqn.show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT, game_folder)
 
@@ -360,6 +360,6 @@ while running:
 
     clock.tick(FPS)
 
-am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play",game_folder=game_folder)
+am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,game_folder=game_folder)
 main_game()  # Hauptspiel starten
 pygame.quit()

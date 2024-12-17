@@ -71,12 +71,12 @@ def sprite_image_loader(game_folder:str, folder_name:str, image_max_num:int, ima
 
 import pygame
 import os
-def show_start_screen(screen1, start_background, clock, game_folder, name):
+def show_start_screen(screen1, start_background, clock, game_folder):
     # Button-Position und Größe
-    button_rect = pygame.Rect(WIDTH // 2 - 75, HEIGHT-500 , 150, 50)  
+    button_rect = pygame.Rect(WIDTH // 2 - 75, HEIGHT-500 , 175, 175)  
     # Laden des Button-Bildes
-    button_image = pygame.image.load(os.path.join(game_folder, "_image", f"{name}.png")).convert_alpha()
-    button_image = pygame.transform.scale(button_image, (120, 120))  # Skalieren, um der Größe des Rects zu entsprechen
+    button_image = pygame.image.load(os.path.join(game_folder, "_image", "start.png")).convert_alpha()
+    button_image = pygame.transform.scale(button_image, (175, 175))  # Skalieren, um der Größe des Rects zu entsprechen
 
     running = True
     while running:
