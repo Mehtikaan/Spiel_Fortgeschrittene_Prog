@@ -16,6 +16,7 @@ from animationen import show_pause_menu
 from endboss import Endboss,Meteoriten,Blitzen
 from animationen import show_pause_menu
 from endboss import Endboss,Meteoriten,Blitzen
+import time
 
 
 # Konfiguration laden oder erstellen
@@ -264,10 +265,33 @@ main_charakter = Charakter(
 am.main_charakter = main_charakter
 
 sequence = [
-    "Es war ein langer Tag, und der Code scheint endlos zu sein.",
+    "Was passiert hier?",
+    "Und was ist das für eine Musik?",
+    "Morgen früh muss ich das Spiel vorstellen...",
+    "Sonst lässt Krauss mich durchfallen...",
+    "Wo bin ich??",
+
 ]
 
-def show_sequence(screen, clock, sequence, font, width, height):
+def show_sequence(screen, clock, sequence, font, width, height, game_folder):
+    image_path = os.path.join(game_folder, '_image', "comic.png")
+    comic = pygame.image.load(image_path).convert()
+    comic = pygame.transform.scale(comic, (width, height))  # An Bildschirmgröße anpassen
+
+    # Bild anzeigen
+    screen.blit(comic, (0, 0))
+    pygame.display.update()
+    
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # ENTER gedrückt
+                running = False
+
     for text in sequence:
         # Text umbrechen, damit er nicht über den Bildschirm hinausgeht
         lines = wrap_text(text, font, width - 40)  # Padding von 40 für den Rand
@@ -299,7 +323,7 @@ def show_sequence(screen, clock, sequence, font, width, height):
             clock.tick(30)  # 30 FPS
 
 # Startbildschirm anzeigen, bevor das Spiel beginnt
-start_background = pygame.image.load(os.path.join(game_folder, '_image', "exam_bild.png")).convert()
+start_background = pygame.image.load(os.path.join(game_folder, '_image', "exam_start.png")).convert()
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
 # Bild für die Falle laden
@@ -309,7 +333,7 @@ trap_image = pygame.image.load(os.path.join(game_folder, '_image', "skeleton.png
 all_traps = pygame.sprite.Group()
 
 trap = Trap(
-    x=1600, y=HEIGHT - 158, surface=screen1, sprite_image=trap_image, scale=(75, 45), speed=7
+    x=1600, y=HEIGHT - 142, surface=screen1, sprite_image=trap_image, scale=(60, 30), speed=7
 )
 all_traps.add(trap)
 
@@ -324,7 +348,7 @@ start_music_channel.play(start_music)
 # Startbildschirm anzeigen
 am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play",game_folder=game_folder)
 
-show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT)
+show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT, game_folder)
 
 # Zombie-Gruppe erstellen
 all_zombies = pygame.sprite.Group()
