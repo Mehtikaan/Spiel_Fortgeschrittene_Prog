@@ -16,7 +16,6 @@ from animationen import show_pause_menu
 from endboss import Endboss,Meteoriten,Blitzen
 from animationen import show_pause_menu
 from endboss import Endboss,Meteoriten,Blitzen
-import time
 
 
 # Konfiguration laden oder erstellen
@@ -265,33 +264,10 @@ main_charakter = Charakter(
 am.main_charakter = main_charakter
 
 sequence = [
-    "Was passiert hier?",
-    "Und was ist das für eine Musik?",
-    "Morgen früh muss ich das Spiel vorstellen...",
-    "Sonst lässt Krauss mich durchfallen...",
-    "Wo bin ich??",
-
+    "Es war ein langer Tag, und der Code scheint endlos zu sein.",
 ]
 
-def show_sequence(screen, clock, sequence, font, width, height, game_folder):
-    image_path = os.path.join(game_folder, '_image', "comic.png")
-    comic = pygame.image.load(image_path).convert()
-    comic = pygame.transform.scale(comic, (width, height))  # An Bildschirmgröße anpassen
-
-    # Bild anzeigen
-    screen.blit(comic, (0, 0))
-    pygame.display.update()
-    
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # ENTER gedrückt
-                running = False
-
+def show_sequence(screen, clock, sequence, font, width, height):
     for text in sequence:
         # Text umbrechen, damit er nicht über den Bildschirm hinausgeht
         lines = wrap_text(text, font, width - 40)  # Padding von 40 für den Rand
@@ -333,7 +309,7 @@ trap_image = pygame.image.load(os.path.join(game_folder, '_image', "skeleton.png
 all_traps = pygame.sprite.Group()
 
 trap = Trap(
-    x=1600, y=HEIGHT - 142, surface=screen1, sprite_image=trap_image, scale=(60, 30), speed=7
+    x=1600, y=HEIGHT - 158, surface=screen1, sprite_image=trap_image, scale=(75, 45), speed=7
 )
 all_traps.add(trap)
 
@@ -348,7 +324,7 @@ start_music_channel.play(start_music)
 # Startbildschirm anzeigen
 am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,name="play",game_folder=game_folder)
 
-show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT, game_folder)
+show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT)
 
 # Zombie-Gruppe erstellen
 all_zombies = pygame.sprite.Group()
@@ -416,7 +392,7 @@ waffe = Waffe(sprite_charakter=sprite_charakter, bewegung=main_charakter.bewegun
 last_spawn_time = pygame.time.get_ticks()
 
 #Levelwechsel Übergang
-bossfight=False
+
 def fade(screen, color, duration=float, fade_out=True, text=None, font=None, text_color=WHITE):
   
     fade_surface = pygame.Surface((WIDTH, HEIGHT))
@@ -571,9 +547,7 @@ def main_game():
     #pygame.mixer.music.play(-1)  # Spielmusik starten
 jump_power_up = Powerups(screen1, game_folder, power_up_image="play.png",power_up_type='jump' ,charakter=main_charakter)
 power_up_group=pygame.sprite.Group()
-def game_manager(bossfight):
-    if score>=6500:
-        bossfight=True
+def game_manager():
     # Überprüfe, ob das aktuelle Herz im Spiel weniger als oder gleich 40 HP ist
     if main_charakter.health_points <= 40:
         if len(herzen_group) <= 1:  # Es sind keine Herzen in der Gruppe
@@ -584,7 +558,7 @@ def game_manager(bossfight):
         herzen_group.draw(screen1)
 
     # Überprüfe, ob die Bedingungen für den Blitz erfüllt sind
-    if bossfight and main_charakter.health_points > 60:
+    if score >= 500 and main_charakter.health_points > 60:
         if len(blitze) < 1:  # Wenn noch kein Blitz existiert
             blitz = Blitzen(350, 1, game_folder, screen1)
             blitze.add(blitz)  # Blitz der Gruppe hinzufügen
@@ -599,7 +573,7 @@ def game_manager(bossfight):
         blitze.empty()  # Leert die Blitz-Gruppe
 
     # Wenn die Bedingungen für den Endboss erfüllt sind (Score > 600 und Lebenspunkte <= 60)
-    if bossfight and main_charakter.health_points <= 60:
+    if score > 600 and main_charakter.health_points <= 60:
         for blitz in blitze:
             blitz.kill()  # Entferne den Blitz
         blitze.empty()  # Leere die Gruppe
@@ -670,7 +644,7 @@ while running:
 
     main_charakter.zeichnen()
 
-    game_manager(bossfight=bossfight)
+    game_manager()
 
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
@@ -679,7 +653,9 @@ while running:
             endboss.update()
             endboss.draw()
             endboss.shoot()
-
+            welcome_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','welcome.wav'))
+            welcome_sound.set_volume(0.15)
+            welcome_sound.play()
     if blitze:
         for blitz in blitze:
             am.hitbox_check_blitz(main_charakter, blitz, screen1)
