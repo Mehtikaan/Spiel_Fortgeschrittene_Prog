@@ -253,7 +253,6 @@ class Blitzen(pygame.sprite.Sprite):
 
     def draw(self):
         """Zeichne das aktuelle Bild auf die Surface"""
-        self.update()  # Update die Animation
         self.surface.blit(self.image, self.rect)  # Zeichne das Bild an der Position des Rects
 
         # Debug-Ausgabe der Position
