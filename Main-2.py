@@ -40,32 +40,31 @@ BLUE = (150, 0, 160)
 
 background = img.background
 background_width = img.background_width
+backround_scroll = 0.0
+backround_tiles = math.ceil(WIDTH / background_width) + 1
+
 
 
 #original_charakter = {}
 
 # Plattform-Rechteck für Kollisionserkennung
 platform_y = HEIGHT - 127
-platform_rect = pygame.Rect(0,platform_y, 1400, 150)
-
-#platform = pygame.Rect( 0, HEIGHT-127 ,1400, 150)           #y, x, width, height
+platform_rect = pygame.Rect(0,platform_y, 1400, 150)  #y, x, width, height
 platform_width = img.platform_width
 platform_height = img.platform_height
 platform_image = img.platform_image
+platform_scroll = 0.0
+platform_tiles = math.ceil(WIDTH / platform_width) + 1
 
 
 
-back_scroll = 0.0
-p_scroll = 0.0
-
-back_tiles = math.ceil(WIDTH / background_width) + 1
-p_tiles = math.ceil(WIDTH / platform_width) + 1
 
 # Score initialisieren
 score = 6000
-
 # Schriftart für den Score
 font = pygame.font.Font(None, 56)  # Standard-Schriftart, Größe 56
+
+
 
 # Sprites laden
 original_charakter = {}
@@ -443,23 +442,23 @@ while running:
     for zombie in all_zombies:
         zombie.update()
         zombie.draw()
+ 
+
     # Hintergrund scrollen
-    back_scroll -= 0.6
-    if abs(back_scroll) > background_width:
-        back_scroll = 0
-    waffe.schiessen.draw(screen1)
-    waffe.schiessen.update()
-    for i in range(back_tiles):
-        screen1.blit(background, (back_scroll + i * background_width, 0))
+    backround_scroll -= 0.6
+    if abs(backround_scroll) > background_width:
+        backround_scroll = 0
+    for i in range(backround_tiles):
+        screen1.blit(background, (backround_scroll + i * background_width, 0))
 
 
         # Platform scrollen
-    p_scroll -= 7.5
-    if abs(p_scroll) > platform_width:
-        p_scroll = 0
+    platform_scroll -= 7.5
+    if abs(platform_scroll) > platform_width:
+        platform_scroll = 0
     # Plattformen zeichnen
-    for i in range(p_tiles):
-        screen1.blit(platform_image, (p_scroll + i * platform_width, platform_y))
+    for i in range(platform_tiles):
+        screen1.blit(platform_image, (platform_scroll + i * platform_width, platform_y))
 
 
 
