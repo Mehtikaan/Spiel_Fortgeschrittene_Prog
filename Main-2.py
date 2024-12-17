@@ -60,14 +60,15 @@ background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
 
 # Sound
-kunai_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', "kunai.mp3"))
+kunai_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', "kunai.wav"))
 kunai_sound.set_volume(0.15)
 jump_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', "grunting.wav"))
 jump_sound.set_volume(0.15)
 death_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','death_sound.wav'))
 death_sound.set_volume(0.15)
-welcome_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','welcome.wav'))
-welcome_sound.set_volume(0.15)
+krauss_attack = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','you_got_it.wav'))
+krauss_attack.set_volume(0.15)
+
 
 
 #Bilder für level changer
@@ -259,14 +260,19 @@ am.sprite_image_loader(game_folder=game_folder, folder_name="_image", image_max_
 print(sprite_charakter)
 
 main_charakter = Charakter(
-    x_pos=0, y_pos=HEIGHT - 200, sprite_charakter=sprite_charakter, fps=FPS,
+    x_pos=0, y_pos=HEIGHT - 195, sprite_charakter=sprite_charakter, fps=FPS,
     tempo_x=2, scale_tempo_x=1.01, health_points=200, score_points=0, surface=screen1
 )
 
 am.main_charakter = main_charakter
 
 sequence = [
-    "Es war ein langer Tag, und der Code scheint endlos zu sein.",
+    "Was passiert hier?",
+    "Und was ist das für eine Musik?",
+    "Morgen früh muss ich das Spiel vorstellen...",
+    "Sonst lässt Krauss mich durchfallen...",
+    "Wo bin ich??",
+
 ]
 
 def show_sequence(screen, clock, sequence, font, width, height):
@@ -311,7 +317,7 @@ trap_image = pygame.image.load(os.path.join(game_folder, '_image', "skeleton.png
 all_traps = pygame.sprite.Group()
 
 trap = Trap(
-    x=1600, y=HEIGHT - 158, surface=screen1, sprite_image=trap_image, scale=(75, 45), speed=7
+    x=1600, y=HEIGHT - 142, surface=screen1, sprite_image=trap_image, scale=(60, 30), speed=7
 )
 all_traps.add(trap)
 
@@ -364,7 +370,7 @@ def create_enemy():
     
     enemy = Enemy(
         x=WIDTH + 100,
-        y=HEIGHT - 200,
+        y=HEIGHT - 192,
         surface=screen1,
         sprite_charakter=sprite_set,
         anim_name=anim_name,
@@ -450,8 +456,6 @@ level_music = {
 }
 
 pygame.mixer.music.set_volume(0.3)  # Lautstärke auf 50% einstellen
-welcome_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','welcome.wav'))
-welcome_sound.set_volume(0.15)
 
 def level_changer():
    global platform_image, background, current_level, level_music, start_music_channel, trap_image
@@ -551,38 +555,30 @@ def main_game():
     #pygame.mixer.music.play(-1)  # Spielmusik starten
 jump_power_up = Powerups(screen1, game_folder, power_up_image="play.png",power_up_type='jump' ,charakter=main_charakter)
 power_up_group=pygame.sprite.Group()
+
 def game_manager():
     # Überprüfe, ob das aktuelle Herz im Spiel weniger als oder gleich 40 HP ist
     if main_charakter.health_points <= 40:
+        # Überprüfe, ob bereits ein Herz in der Gruppe ist, um nur eins gleichzeitig anzuzeigen
         if len(herzen_group) <= 1:  # Es sind keine Herzen in der Gruppe
+            # Erstelle ein neues Health_reg Objekt, das vom rechten Rand kommt
             herz = Health_reg(screen1, game_folder, charakter=main_charakter)
             herz.rect.x = WIDTH + 10  # Das Herz startet vom rechten Rand des Fensters
             herzen_group.add(herz)
         herzen_group.update()
         herzen_group.draw(screen1)
+            # Füge das Herz der Gruppe hinzu
+        
+    
+    # Wenn der Punktestand ein Vielfaches von 1000 erreicht
+    if score % 1000 == 0:
+        # Erstelle das Power-Up (z.B. Jump Power-Up)
+        jump_power_up = Powerups(screen1, game_folder, power_up_image="play.png",power_up_type='jump' ,charakter=main_charakter)
+        power_up_group.add(jump_power_up)
+        
 
-    # Überprüfe, ob die Bedingungen für den Blitz erfüllt sind
-    if score >= 500 and main_charakter.health_points > 60:
-        if len(blitze) < 1:  # Wenn noch kein Blitz existiert
-            blitz = Blitzen(350, 1, game_folder, screen1)
-            blitze.add(blitz)  # Blitz der Gruppe hinzufügen
-        blitze.update()  # Update der Blitze
-        blitze.draw(screen1)  # Blitze auf dem Bildschirm anzeigen
-
-    # Wenn der Charakter unter 100 HP fällt, entferne den Blitz
-    if main_charakter.health_points < 100:
-        print(f"Health points are below 100: {main_charakter.health_points}")
-        for blitz in blitze:
-            blitz.kill()  # Entfernt den Blitz aus der Gruppe
-        blitze.empty()  # Leert die Blitz-Gruppe
-
-    # Wenn die Bedingungen für den Endboss erfüllt sind (Score > 600 und Lebenspunkte <= 60)
-    if score > 600 and main_charakter.health_points <= 60:
-        for blitz in blitze:
-            blitz.kill()  # Entferne den Blitz
-        blitze.empty()  # Leere die Gruppe
-        endboss.shoot()  # Endboss schießt
-
+def bossfight_manager():
+    pass
 
 
 running = True
@@ -653,12 +649,10 @@ while running:
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
 
-    if score>6500:
+    if score>500:
             endboss.update()
             endboss.draw()
             endboss.shoot()
-    if score==6500:
-        welcome_sound.play()
 
     if blitze:
         for blitz in blitze:
@@ -670,10 +664,12 @@ while running:
                 am.hitbox_check_enmy(main_charakter,herz,screen1,eventtyp="heilen")
                 herzen_group.empty()
                 herz.kill()
+
     if endboss.meteoriten_target_group:
         for meteor in endboss.meteoriten_target_group:
             if am.hitbox_check_enmy(main_charakter,meteor,screen1,eventtyp="schaden"):
                 am.hitbox_check_enmy(main_charakter,meteor,screen1,eventtyp="schaden")
+                krauss_attack.play()
 
     
     # Zufälligen Spawn-Intervall setzen
@@ -718,6 +714,9 @@ while running:
         #pygame.mixer.music.stop()
         fade(screen1, WHITE, 3.5, fade_out=True, text="Game Over", font=font, text_color=BLACK)
         am.restart_game()
+        am.restart_game()
+
+
 
     pygame.display.update()
 
