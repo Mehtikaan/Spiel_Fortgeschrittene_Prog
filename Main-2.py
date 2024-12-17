@@ -450,6 +450,8 @@ level_music = {
 }
 
 pygame.mixer.music.set_volume(0.3)  # Lautstärke auf 50% einstellen
+welcome_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','welcome.wav'))
+welcome_sound.set_volume(0.15)
 
 def level_changer():
    global platform_image, background, current_level, level_music, start_music_channel, trap_image
@@ -651,13 +653,13 @@ while running:
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
 
-    if score>500:
+    if score>6500:
             endboss.update()
             endboss.draw()
             endboss.shoot()
-            welcome_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','welcome.wav'))
-            welcome_sound.set_volume(0.15)
-            welcome_sound.play()
+    if score==6500:
+        welcome_sound.play()
+
     if blitze:
         for blitz in blitze:
             am.hitbox_check_blitz(main_charakter, blitz, screen1)
