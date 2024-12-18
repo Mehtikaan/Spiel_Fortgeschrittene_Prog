@@ -171,6 +171,7 @@ def level_changer():
         snd.portal_sound.play()
         change_level(1)
 
+
 def change_level(level):
     sqn.transition_sequence()
     img.platform_image = getattr(img, f"platform_image_level_{level}")
@@ -179,7 +180,6 @@ def change_level(level):
     pygame.mixer.music.play(-1)
     sqn.fade(screen1, BLACK, 1, fade_out=True, text=level_texts[level], font=font)
     all_zombies.empty()
-
 
 
 
