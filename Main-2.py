@@ -43,7 +43,6 @@ am.versuch_erhöhen()
 versuche=am.lese_versuche()
 am.speichere_versuche(versuche=versuche)
 
-sequence = sqn.sequence1
 
 start_music_channel = snd.start_music.play()
 start_music_channel = pygame.mixer.Channel(0) 
@@ -232,7 +231,7 @@ if score>6500:
                 shot_timer=current_time
 
 
-
+sequence = sqn.sequence1
 running = True
 while running:
     for event in pygame.event.get():
@@ -265,7 +264,7 @@ while running:
     for i in range(platform_tiles):
         screen1.blit(img.platform_image, (platform_scroll + i * platform_width, platform_y))
 
-    score += 0.6 # Score um 1 pro Frame erhöhen
+    score += 2 # Score um 1 pro Frame erhöhen
 
     score_text = font.render(f"{int(score):05d} m", True, WHITE)
     text_rect = score_text.get_rect(topright=(WIDTH - 60, 50))
@@ -350,7 +349,7 @@ while running:
         sqn.fade(screen1, WHITE, 3.5, fade_out=True, text=f"Game Over - {versuche} Versuch", font=font, text_color=BLACK)
         am.restart_game()
 
-    if score == 9000:
+    if score == 8000:
         sqn.fade(screen1, BLACK, 1, fade_out=True, text='', font=font) 
         sqn.ending_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT )
         am.restart_game()

@@ -97,13 +97,13 @@ def show_sequence(screen, clock, sequence, font, width, height, game_folder):
 
 
 sequence1 = [
-    "Hab ich Ihn besiegt?",
-    "Ne, moment...",
-    "ahh ich verstehe ...",
+    "Puhh...",
+    "Habe ich Ihn besiegt??",
+    "Ne, moment mal...",
+    "Ahh ich verstehe ...",
     "Krauss kann ich hier nicht besiegen",
-    "Erstmal muss ich Prog2 bestehen",
+    "Dafür muss ich erstmal Prog2 bestehen",
     "ICH SCHAFFE DAS!",
-    "Ähmm, aber wieso ist mein Bett jetzt nass?!",
 ]
 
 def ending_sequence(screen, clock, sequence1, font, width, height):
