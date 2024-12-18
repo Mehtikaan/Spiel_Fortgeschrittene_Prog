@@ -14,6 +14,7 @@ pygame.display.init()
 pygame.display.set_mode((WIDTH, HEIGHT))
 
 game_folder = os.path.dirname(__file__)
+icon = pygame.image.load(os.path.join(game_folder, "_image","ninja.png"))
 
 
 # Hintergrund laden
