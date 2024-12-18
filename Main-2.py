@@ -126,10 +126,10 @@ level_music = {
 level_texts = {
        1: "Puh, war das knapp!",
        2: "Das Outfit gefällt mir!",
-       3: "Keiner kann mir was...",
+       3: "Was hat es mit den blauen Flammen auf sich?",
        4: "Ich frage, mich wohin es als nächstes geht...",
-       5: "Was ein komischer Typ...",
-       6: "Ich habe ein komisches Gefühl..."    
+       5: "Puh, war das kalt...",
+       6: "Das kommt mir alles so bekannt vor..."    
     }
 
 pygame.mixer.music.set_volume(0.15)  # Lautstärke einstellen
@@ -264,7 +264,7 @@ while running:
     for i in range(platform_tiles):
         screen1.blit(img.platform_image, (platform_scroll + i * platform_width, platform_y))
 
-    score += 2 # Score um 1 pro Frame erhöhen
+    score += 0.6 # Score um 1 pro Frame erhöhen
 
     score_text = font.render(f"{int(score):05d} m", True, WHITE)
     text_rect = score_text.get_rect(topright=(WIDTH - 60, 50))
@@ -349,7 +349,7 @@ while running:
         sqn.fade(screen1, WHITE, 3.5, fade_out=True, text=f"Game Over - {versuche} Versuch", font=font, text_color=BLACK)
         am.restart_game()
 
-    if score == 8000:
+    if score >= 8000.0:
         sqn.fade(screen1, BLACK, 1, fade_out=True, text='', font=font) 
         sqn.ending_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT )
         am.restart_game()

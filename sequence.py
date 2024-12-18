@@ -40,12 +40,12 @@ def wrap_text(text, font, max_width):
 sequence = [
     "Was passiert hier?",
     "Und was ist das für eine Musik?",
-    "Ich muss vor der Vorstellung an der FH sein...",
-    "Sonst lässt Krauss mich wieder durchfallen...",
-    "Aber wo bin ich??",
-    "---",
+    "Ich darf meinen Vortrag nicht verschlafen...",
+    "sonst lässt Krauss mich wieder durchfallen...",
+    "aber wo bin ich hier??",
+    "------",
     "Steuerung:",
-    "Space = Jump,  F = Shoot,  Esc = Pause",
+    "Space = Springen,  F = Schuss,  Esc = Pause",
 ]
 
 
