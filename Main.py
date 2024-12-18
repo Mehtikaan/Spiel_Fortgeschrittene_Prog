@@ -1,3 +1,3 @@
-import game as game
+import Main as Main
 
-game.start()
+Main.start()
