@@ -310,6 +310,8 @@ while running:
                 endboss.enable_shooting()
                 endboss.shoot()
                 shot_timer=current_time
+    if score == 6500:
+         snd.welcome_sound.play()
 
     if blitze_group:
         for blitz in blitze_group:

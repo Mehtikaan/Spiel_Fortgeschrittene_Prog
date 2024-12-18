@@ -114,8 +114,6 @@ class Endboss(pygame.sprite.Sprite):
         )
         self.rect = self.image.get_rect()
         self.rect.midtop = (x, y)
-
-        snd.welcome_sound.play()
         self.meteor_image = pygame.image.load(os.path.join(self.gamefolder, "_image", "iceball.png")).convert_alpha()
 
         # Meteoriten, die den Endboss umkreisen
