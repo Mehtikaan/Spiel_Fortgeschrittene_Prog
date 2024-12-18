@@ -7,17 +7,14 @@ WIDTH = 1400
 POSITION = 250
 FPS=60
 
-# Pygame initialisieren
+
 pygame.init()
 pygame.display.init()
-# Ein Display erstellen (kann minimal sein)
 pygame.display.set_mode((WIDTH, HEIGHT))
 
 game_folder = os.path.dirname(__file__)
 icon = pygame.image.load(os.path.join(game_folder, "_image","ninja.png"))
 
-
-# Hintergrund laden
 background = pygame.image.load(os.path.join(game_folder, '_image', "zombie_map.png")).convert()
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_width = background.get_width()
@@ -26,7 +23,6 @@ start_background = pygame.image.load(os.path.join(game_folder, '_image', "exam_s
 start_background = pygame.transform.scale(start_background, (WIDTH, HEIGHT))
 
 
-#Bilder für level changer
 enemy_sprites_level_0 = {
     
     "zombie_walk1": pygame.image.load(os.path.join(game_folder, "_image","zombie_walk1.png")).convert_alpha(),
@@ -79,6 +75,7 @@ enemy_sprites_level_3 = {
     "knight_walk7": pygame.image.load(os.path.join(game_folder, "_image","knight_walk7.png")).convert_alpha(),
 }
 
+
 enemy_sprites_level_4 = {
     "santa_walk1": pygame.image.load(os.path.join(game_folder, "_image","santa_walk1.png")).convert_alpha(),
     "santa_walk2": pygame.image.load(os.path.join(game_folder, "_image","santa_walk2.png")).convert_alpha(),
@@ -93,6 +90,7 @@ enemy_sprites_level_4 = {
     "santa_walk11": pygame.image.load(os.path.join(game_folder, "_image","santa_walk11.png")).convert_alpha(),
 }
 
+
 enemy_sprites_level_5 = {
     "pumpkin_walk1": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk1.png")).convert_alpha(),
     "pumpkin_walk2": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk2.png")).convert_alpha(),
@@ -106,6 +104,7 @@ enemy_sprites_level_5 = {
     "pumpkin_walk10": pygame.image.load(os.path.join(game_folder, "_image","pumpkin_walk10.png")).convert_alpha(),
 }
 
+
 enemy_sprites_level_6 = {
     "courli1": pygame.image.load(os.path.join(game_folder, "_image","courli1.png")).convert_alpha(),
     "courli2": pygame.image.load(os.path.join(game_folder, "_image","courli2.png")).convert_alpha(),
@@ -113,6 +112,7 @@ enemy_sprites_level_6 = {
     "courli4": pygame.image.load(os.path.join(game_folder, "_image","courli4.png")).convert_alpha(),
 
 }
+
 
 enemy_sprites_level_endboss = {
     
@@ -123,7 +123,6 @@ enemy_sprites_level_endboss = {
     "endboss5": pygame.image.load(os.path.join(game_folder, "_image","endboss5.png")).convert_alpha(),
     "endboss6": pygame.image.load(os.path.join(game_folder, "_image","endboss6.png")).convert_alpha(),
  
-
 }
 
 
@@ -148,9 +147,6 @@ background_level_5 = pygame.transform.scale(background_level_5, (WIDTH, HEIGHT))
 background_level_6 = pygame.image.load(os.path.join(game_folder, '_image', "courli_map.png")).convert()
 background_level_6 = pygame.transform.scale(background_level_6, (WIDTH, HEIGHT))
 
-
-# platform_image_level_0 = pygame.image.load(os.path.join(game_folder, "_image", "grave_tile.png")).convert_alpha()
-# platform_image_level0 = pygame.transform.scale(platform_image_level_0, (1400, 150))
 
 platform_width = 1400
 platform_height = 150

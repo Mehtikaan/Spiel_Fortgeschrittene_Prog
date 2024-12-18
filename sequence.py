@@ -13,10 +13,8 @@ BLACK = (0, 0, 0)
 
 clock = pygame.time.Clock()
 screen1 = pygame.display.set_mode((WIDTH, HEIGHT))
-font = pygame.font.Font(None, 56)  # Standard-Schriftart, Größe 56
-
+font = pygame.font.Font(None, 56) 
 score = 0.0
-
 
 def wrap_text(text, font, max_width):
     """
@@ -42,9 +40,9 @@ def wrap_text(text, font, max_width):
 sequence = [
     "Was passiert hier?",
     "Und was ist das für eine Musik?",
-    "Morgen früh muss ich das Spiel vorstellen...",
-    "Sonst lässt Krauss mich durchfallen...",
-    "Wo bin ich??",
+    "Ich muss vor der Vorstellung an der FH sein...",
+    "Sonst lässt Krauss mich wieder durchfallen...",
+    "Aber wo bin ich??",
     "---",
     "Steuerung:",
     "Space = Jump,  F = Shoot,  Esc = Pause",
@@ -54,9 +52,8 @@ sequence = [
 def show_sequence(screen, clock, sequence, font, width, height, game_folder):
     image_path = os.path.join(game_folder, '_image', "comic.png")
     comic = pygame.image.load(image_path).convert()
-    comic = pygame.transform.scale(comic, (width, height))  # An Bildschirmgröße anpassen
+    comic = pygame.transform.scale(comic, (width, height))  
 
-    # Bild anzeigen
     screen.blit(comic, (0, 0))
     pygame.display.update()
     
@@ -67,22 +64,21 @@ def show_sequence(screen, clock, sequence, font, width, height, game_folder):
                 pygame.quit()
                 exit()
 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # ENTER gedrückt
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN: 
                 running = False
                 
     for text in sequence:
-        # Text umbrechen, damit er nicht über den Bildschirm hinausgeht
-        lines = wrap_text(text, font, width - 40)  # Padding von 40 für den Rand
+        lines = wrap_text(text, font, width - 40)  
 
         # Text rendern und positionieren
-        screen.fill((0, 0, 0))  # Bildschirm schwarz füllen
+        screen.fill((0, 0, 0)) 
         y_offset = height // 2 - (len(lines) * 20) // 2  # Vertikale Position, damit der Text mittig ist
 
         # Jede Zeile des Texts rendern und anzeigen
         for line in lines:
-            text_surface = font.render(line, True, (255, 255, 255))  # Weißer Text
+            text_surface = font.render(line, True, (255, 255, 255))  
             text_rect = text_surface.get_rect(center=(width // 2, y_offset))
-            screen.blit(text_surface, text_rect)  # Text anzeigen
+            screen.blit(text_surface, text_rect) 
             y_offset += 30  # Nächste Zeile nach unten verschieben
 
         running = True
@@ -95,36 +91,33 @@ def show_sequence(screen, clock, sequence, font, width, height, game_folder):
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # Mit ENTER zur nächsten Szene
                     running = False
 
-
             pygame.display.update()
 
-            clock.tick(30)  # 30 FPS
+            clock.tick(60)  
 
 
 sequence1 = [
     "Hab ich Ihn besiegt?",
-    "Ne, warte mal?",
-    "jetzt verstehe ich...",
-    "Krauss unbesiegbar im Coden",
-    "Ähmm, wieso ist mein Bett jetzt nass?!",
+    "Ne, moment...",
+    "ahh ich verstehe ...",
+    "Krauss kann ich hier nicht besiegen",
+    "Erstmal muss ich Prog2 bestehen",
+    "ICH SCHAFFE DAS!",
+    "Ähmm, aber wieso ist mein Bett jetzt nass?!",
 ]
-
 
 def ending_sequence(screen, clock, sequence1, font, width, height):
     for text in sequence1:
         # Text umbrechen, damit er nicht über den Bildschirm hinausgeht
-        lines = wrap_text(text, font, width - 40)  # Padding von 40 für den Rand
+        lines = wrap_text(text, font, width - 40) 
 
-        # Text rendern und positionieren
-        screen.fill((0, 0, 0))  # Bildschirm schwarz füllen
-        y_offset = height // 2 - (len(lines) * 20) // 2  # Vertikale Position, damit der Text mittig ist
-
-        # Jede Zeile des Texts rendern und anzeigen
+        screen.fill((0, 0, 0)) 
+        y_offset = height // 2 - (len(lines) * 20) // 2 
         for line in lines:
-            text_surface = font.render(line, True, (255, 255, 255))  # Weißer Text
+            text_surface = font.render(line, True, (255, 255, 255)) 
             text_rect = text_surface.get_rect(center=(width // 2, y_offset))
-            screen.blit(text_surface, text_rect)  # Text anzeigen
-            y_offset += 30  # Nächste Zeile nach unten verschieben
+            screen.blit(text_surface, text_rect)
+            y_offset += 30 
 
         running = True
         while running:
@@ -133,14 +126,15 @@ def ending_sequence(screen, clock, sequence1, font, width, height):
                     pygame.quit()
                     exit()
 
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # Mit ENTER zur nächsten Szene
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN: 
                     running = False
 
 
             pygame.display.update()
 
-            clock.tick(30)  # 30 FPS
+            clock.tick(60) 
 
+#Teilweise ChatGPT
 def fade(screen, color, duration=float, fade_out=True, text=None, font=None, text_color=WHITE):
   
     fade_surface = pygame.Surface((WIDTH, HEIGHT))
@@ -161,7 +155,7 @@ def fade(screen, color, duration=float, fade_out=True, text=None, font=None, tex
             
             # Text wird mit jedem Schritt immer sichtbarer, je mehr der Hintergrund eingeblendet wird
             screen.blit(fade_surface, (0, 0))
-            screen.blit(rendered_text, text_rect) ###############hier vllt
+            screen.blit(rendered_text, text_rect) 
 
         else:
             screen.blit(fade_surface, (0, 0))
@@ -172,7 +166,7 @@ def fade(screen, color, duration=float, fade_out=True, text=None, font=None, tex
 def transition_sequence():
     global score
     # Score pausieren
-    current_score = score  # Aktuellen Score speichern
+    current_score = score 
     fade(screen1, BLACK, 0.1, fade_out=True)  # Bildschirm ausblenden (1 Sekunde)
     
     pygame.time.delay(2000)  # 2 Sekunden pausieren

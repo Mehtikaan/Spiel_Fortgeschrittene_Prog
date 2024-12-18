@@ -277,7 +277,7 @@ while running:
 
 
     # Score aktualisieren
-    score += 4 # Score um 1 pro Frame erhöhen
+    score += 1 # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
@@ -371,8 +371,8 @@ while running:
         sqn.fade(screen1, WHITE, 3.5, fade_out=True, text=f"Game Over - {versuche} Versuch", font=font, text_color=BLACK)
         am.restart_game()
 
-    if score == 8000:
-        sqn.fade(screen1, BLACK, 1, fade_out=True, text='', font=font) #text am ende anpassen
+    if score == 9000:
+        sqn.fade(screen1, BLACK, 1, fade_out=True, text='', font=font) 
         sqn.ending_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT )
         am.restart_game()
        

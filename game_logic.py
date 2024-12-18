@@ -13,21 +13,21 @@ FPS=60
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-font = pygame.font.Font(None, 56)  # Standard-Schriftart, Größe 56
+font = pygame.font.Font(None, 56)
 
 game_folder = os.path.dirname(__file__)
 
 start_music_channel = snd.start_music.play()
-start_music_channel = pygame.mixer.Channel(0)  # Reserviere Kanal 0
+start_music_channel = pygame.mixer.Channel(0)  
 start_music_channel.play(snd.start_music)
 
 def create_enemy(score, all_zombies, surface):
     if score < 1000:
-        sprite_set = img.enemy_sprites_level_0  # Zombies bis Score 1000
+        sprite_set = img.enemy_sprites_level_0  
         anim_name = "zombie_walk"
 
     elif score <2000:
-        sprite_set = img.enemy_sprites_level_1  # Cowboys ab Score 1000
+        sprite_set = img.enemy_sprites_level_1 
         anim_name = "cowboy_run"
 
     elif score < 3000:
