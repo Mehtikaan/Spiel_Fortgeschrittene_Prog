@@ -242,6 +242,7 @@ class Schießen:
             # Cooldown nach 15 Schüssen aktivieren
             if self.shots_fired >= self.max_shots:
                 self.cooldown_active = True
+                snd.cooldown_sound.play()
                 self.cooldown_timer = pygame.time.get_ticks()  # Startzeitpunkt des Cooldowns speichern
 
     def update(self):

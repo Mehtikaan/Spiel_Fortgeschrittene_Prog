@@ -132,7 +132,7 @@ level_texts = {
        6: "Warte mal, mir kommt das alles so vertraut vor..."    
     }
 
-pygame.mixer.music.set_volume(0.3)  # Lautstärke auf 50% einstellen
+pygame.mixer.music.set_volume(0.15)  # Lautstärke auf 50% einstellen
 
 def level_changer():
     global platform_image, background, current_level, level_music, start_music_channel, trap_image
