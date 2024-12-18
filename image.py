@@ -174,4 +174,4 @@ platform_image_level_5 = pygame.transform.scale(platform_image_level_5, (1400, 1
 platform_image_level_6 = pygame.image.load(os.path.join(game_folder, "_image", "dino_tile.png")).convert_alpha()
 platform_image_level_6 = pygame.transform.scale(platform_image_level_6, (1400, 150))
 
-trap_image = pygame.image.load(os.path.join(game_folder, '_image', "skeleton.png")).convert_alpha()
+trap_image = pygame.image.load(os.path.join(game_folder, '_image', "flame.png")).convert_alpha()

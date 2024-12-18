@@ -89,6 +89,7 @@ sequence = [
     "Morgen früh muss ich das Spiel vorstellen...",
     "Sonst lässt Krauss mich durchfallen...",
     "Wo bin ich??",
+    "---",
     "Steuerung:",
     "Space = Jump,  F = Shoot,  Esc = Pause",
 ]

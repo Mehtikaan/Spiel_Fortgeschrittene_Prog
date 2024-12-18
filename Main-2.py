@@ -85,7 +85,7 @@ main_charakter = Charakter(
     tempo_x=2, scale_tempo_x=1.01, health_points=200, score_points=0, surface=screen1)
 am.main_charakter = main_charakter
 
-trap = Trap(x=1600, y=HEIGHT - 142, surface=screen1, sprite_image=trap_image, scale=(60, 30), speed=7)
+trap = Trap(x=1600, y=HEIGHT - 185, surface=screen1, sprite_image=trap_image, scale=(80, 80), speed=8)
 all_traps.add(trap)
 
 endboss = Endboss(x=WIDTH-200, y=HEIGHT-400, surface=screen1, sprite_charakter=img.enemy_sprites_level_endboss, anim_name="endboss", hp=100, gamefolder=game_folder)
@@ -118,7 +118,7 @@ level_music = {
     1: os.path.join(game_folder, '_sounds',"cowboy_music.wav"),
     2: os.path.join(game_folder, '_sounds',"robot_music.wav"),
     3: os.path.join(game_folder, '_sounds',"knight_music.wav"),
-    4: os.path.join(game_folder, '_sounds',"wind-blowing-sfx-12809.mp3"),
+    4: os.path.join(game_folder, '_sounds',"santa_music.wav"),
     5: os.path.join(game_folder, '_sounds',"pumpkin_music.wav"),
     6: os.path.join(game_folder, '_sounds',"courli_music.wav")
 }
@@ -268,7 +268,7 @@ while running:
 
 
     # Score aktualisieren
-    score += 6  # Score um 1 pro Frame erhöhen
+    score += 2  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
