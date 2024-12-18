@@ -3,7 +3,7 @@ import animationen as am
 import configparser as cp
 import config_einstellungen as bib
 import os
-
+import sound as snd 
 # Konfiguration laden oder erstellen
 config = cp.ConfigParser()
 if not config.read("config_game.ini"):
@@ -221,10 +221,10 @@ class Schießen:
         self.bewegung = bewegung
         self.springen = springen
         self.shots_fired = 0
-        self.max_shots = 15  # Maximale Anzahl der Schüsse vor dem Cooldown
+        self.max_shots = 10  # Maximale Anzahl der Schüsse vor dem Cooldown
         self.cooldown_active = False
         self.cooldown_timer = 0
-        self.cooldown_duration = 5000  # 5 Sekunden Cooldown
+        self.cooldown_duration = 4000  # 4 Sekunden Cooldown
 
     def shoot(self, waffen_rect, new_image="kunai.png"):
         """Feuert eine Kugel ab, wenn der Cooldown abgelaufen ist"""
@@ -232,6 +232,7 @@ class Schießen:
             print(f"Schießen von Position: {waffen_rect.centerx}, {waffen_rect.centery}")  # Debugging-Ausgabe
             # Kugel erzeugen und zur Gruppe hinzufügen
             bullet = Bullet(self.bewegung.x_pos + 80, self.springen.y_pos + 40, new_image)
+            snd.kunai_sound.play()
             self.bullets.add(bullet)
 
             self.shoot_cooldown = 40  # Zeitverzögerung zwischen Schüssen aktivieren

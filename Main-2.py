@@ -236,7 +236,7 @@ while running:
                 snd.jump_sound.play()
             if event.key == pygame.K_f:  # Schießen
                 waffe.schiessen.shoot(waffe.rect)
-                snd.kunai_sound.play()
+                #snd.kunai_sound.play()
             if event.key == pygame.K_ESCAPE:
                 show_pause_menu(screen1= screen1, font= font)
             if event.key == pygame.K_ESCAPE:
@@ -268,7 +268,7 @@ while running:
 
 
     # Score aktualisieren
-    score += 1  # Score um 1 pro Frame erhöhen
+    score += 4 # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
