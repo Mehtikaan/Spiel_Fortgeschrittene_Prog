@@ -36,14 +36,18 @@ RED = (240, 0, 0)
 GREEN = (0, 240, 0)
 GOLD = (255, 215, 0)
 BLUE = (150, 0, 160)
-font = pygame.font.Font(None, 56)  # Standard-Schriftart, Größe 56
+font = pygame.font.Font(None, 56) 
 
+#Versuche
+am.versuch_erhöhen()
+versuche=am.lese_versuche()
+am.speichere_versuche(versuche=versuche)
 
-# Sound abspielen und Kanal speichern
+sequence = sqn.sequence1
+
 start_music_channel = snd.start_music.play()
-start_music_channel = pygame.mixer.Channel(0)  # Reserviere Kanal 0
+start_music_channel = pygame.mixer.Channel(0) 
 start_music_channel.play(snd.start_music)
-
 
 background = img.background
 background_width = img.background_width
@@ -52,7 +56,7 @@ backround_tiles = math.ceil(WIDTH / background_width) + 1
 start_background  = img.start_background
 
 platform_y = HEIGHT - 127
-platform_rect = pygame.Rect(0,platform_y, 1400, 150)  #y, x, width, height
+platform_rect = pygame.Rect(0,platform_y, 1400, 150) 
 platform_width = img.platform_width
 platform_height = img.platform_height
 platform_image = img.platform_image
@@ -101,7 +105,6 @@ sqn.show_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT, game_folder)
 
 
 
-
 # Neuen Zombie beim Start des Spiels erstellen
 if score <1000:
     gl.create_enemy(score, all_zombies, screen1)
@@ -113,7 +116,6 @@ last_spawn_time = pygame.time.get_ticks()
 current_level = 0
 
 level_music = {
-   # 0: "zombie_music.wav",
     1: os.path.join(game_folder, '_sounds',"cowboy_music.wav"),
     2: os.path.join(game_folder, '_sounds',"robot_music.wav"),
     3: os.path.join(game_folder, '_sounds',"knight_music.wav"),
@@ -123,15 +125,15 @@ level_music = {
 }
 
 level_texts = {
-       1: "Bin ich eine Ninja, gegen Zombies??",
-       2: "Seit wann gibt es Cowboys in der Wüste?",
-       3: "Ich glaube ich träume nur...",
-       4: "Was macht der Typ denn hier?",
-       5: "Wann hat das alles ein Ende?!",
-       6: "Warte mal, mir kommt das alles so vertraut vor..."    
+       1: "Puh, war das knapp!",
+       2: "Das Outfit gefällt mir!",
+       3: "Keiner kann mir was...",
+       4: "Ich frage, mich wohin es als nächstes geht...",
+       5: "Was ein komischer Typ...",
+       6: "Ich habe ein komisches Gefühl..."    
     }
 
-pygame.mixer.music.set_volume(0.15)  # Lautstärke auf 50% einstellen
+pygame.mixer.music.set_volume(0.15)  # Lautstärke einstellen
 
 def level_changer():
     global platform_image, background, current_level, level_music, start_music_channel, trap_image
@@ -181,7 +183,6 @@ def change_level(level):
     all_zombies.empty()
 
 
-
 def main_game():
     """Die Hauptspiel-Schleife."""
     global score, main_charakter, all_zombies, current_level
@@ -198,7 +199,7 @@ jump_power_up = Powerups(screen1, game_folder, power_up_image="play.png",power_u
 def game_manager():
     # Überprüfe, ob das aktuelle Herz im Spiel weniger als oder gleich 40 HP ist
     if main_charakter.health_points <= 50:
-        if len(herzen_group) <= 1:  # Es sind keine Herzen in der Gruppe
+        if len(herzen_group) <= 1:  
             herz = Health_reg(screen1, game_folder, charakter=main_charakter)
             herz.rect.x = WIDTH + 10  # Das Herz startet vom rechten Rand des Fensters
             herzen_group.add(herz)
@@ -210,15 +211,14 @@ def game_manager():
         if len(blitze_group) < 1:  # Wenn noch kein Blitz existiert
             blitz = Blitzen(350, 1, game_folder, screen1)
             blitze_group.add(blitz)  # Blitz der Gruppe hinzufügen
-        blitze_group.update()  # Update der Blitze
-        blitze_group.draw(screen1)  # Blitze auf dem Bildschirm anzeigen
+        blitze_group.update() 
+        blitze_group.draw(screen1) 
 
-    # Wenn die Bedingungen für den Endboss erfüllt sind (Score > 600 und Lebenspunkte <= 60)
     if score > 6500 and main_charakter.health_points < 80:
         for blitz in blitze_group:
-            blitz.kill()  # Entferne den Blitz
-        blitze_group.empty()  # Leere die Gruppe
-        endboss.shoot()  # Endboss schießt
+            blitz.kill() 
+        blitze_group.empty()  
+        endboss.shoot() 
 
 shot_timer=pygame.time.get_ticks()
 
@@ -231,12 +231,7 @@ if score>6500:
                 endboss.shoot()
                 shot_timer=current_time
 
-#Versuche
-am.versuch_erhöhen()
-versuche=am.lese_versuche()
-am.speichere_versuche(versuche=versuche)
 
-sequence = sqn.sequence1
 
 running = True
 while running:
@@ -251,12 +246,9 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 show_pause_menu(screen1= screen1, font= font)
         
-
-
     for zombie in all_zombies:
         zombie.update()
         zombie.draw()
- 
 
     # Hintergrund scrollen
     backround_scroll -= 0.6
@@ -264,7 +256,6 @@ while running:
         backround_scroll = 0
     for i in range(backround_tiles):
         screen1.blit(img.background, (backround_scroll + i * background_width, 0))
-
 
         # Platform scrollen
     platform_scroll -= 7.5
@@ -274,12 +265,7 @@ while running:
     for i in range(platform_tiles):
         screen1.blit(img.platform_image, (platform_scroll + i * platform_width, platform_y))
 
-
-
-    # Score aktualisieren
-    score += 1 # Score um 1 pro Frame erhöhen
-
-    # Score rendern und anzeigen
+    score += 0.6 # Score um 1 pro Frame erhöhen
 
     score_text = font.render(f"{int(score):05d} m", True, WHITE)
     text_rect = score_text.get_rect(topright=(WIDTH - 60, 50))
@@ -288,7 +274,6 @@ while running:
     # Zombies und Charakter aktualisieren
     all_zombies.update()
 
-     # Hindernisse aktualisieren und zeichnen
     all_traps.update()
     for obstacle in all_traps:
         obstacle.draw()
@@ -296,11 +281,8 @@ while running:
     main_charakter.update()
     main_charakter.draw()
 
-    game_manager()
-
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
-
    
     if score>6500:
             endboss.update()
@@ -331,7 +313,6 @@ while running:
                 snd.krauss_attack.play()
 
     
-    # Zufälligen Spawn-Intervall setzen
     spawn_interval = random.randint(500,50000)  # Zufälliger Wert zwischen 500 und 50000 Sekunden in Millisekunden
 
     if pygame.time.get_ticks() - last_spawn_time > spawn_interval:
@@ -339,13 +320,11 @@ while running:
         last_spawn_time = pygame.time.get_ticks()
 
    
- # Alle Zombies zeichnen
     all_zombies.draw(screen1)
-    # Kugeln aktualisieren und zeichnen
-    waffe.schiessen.update()  # Aktualisiere Kugeln
-    waffe.schiessen.draw(screen1)  # Zeichne Kugeln
+
+    waffe.schiessen.update()
+    waffe.schiessen.draw(screen1) 
     for zombie in all_zombies:
-        # Kollision mit dem Spieler (wer) und Zombie (mitwem)
         if  am.hitbox_check_enemy(wer=main_charakter, mitwem=zombie, surface=screen1,eventtyp="schaden"):
             am.hitbox_check_enemy(wer=main_charakter, mitwem=zombie, surface=screen1,eventtyp="schaden")
             main_charakter.bar.red_rect()
@@ -364,10 +343,10 @@ while running:
                     zombie.kill()
 
     level_changer()
-    # Prüfen, ob Lebenspunkte <= 0 sind
+    game_manager()
+
     if main_charakter.health_points <= 0:
         snd.death_sound.play()
-        #pygame.mixer.music.stop()
         sqn.fade(screen1, WHITE, 3.5, fade_out=True, text=f"Game Over - {versuche} Versuch", font=font, text_color=BLACK)
         am.restart_game()
 
