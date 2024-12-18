@@ -118,6 +118,7 @@ class Springen:
         """Startet das Springen"""
         if not self.jumping:
             self.jumping = True
+            snd.jump_sound.play()
             self.y_velocity = self.jumping_height
 
     def update(self, x_pos):

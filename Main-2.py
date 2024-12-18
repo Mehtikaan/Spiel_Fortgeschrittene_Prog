@@ -233,15 +233,11 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 main_charakter.springen.start_sprung()
-                snd.jump_sound.play()
             if event.key == pygame.K_f:  # Schießen
                 waffe.schiessen.shoot(waffe.rect)
-                #snd.kunai_sound.play()
             if event.key == pygame.K_ESCAPE:
                 show_pause_menu(screen1= screen1, font= font)
-            if event.key == pygame.K_ESCAPE:
-                show_pause_menu(screen1= screen1, font= font)
-               
+        
 
 
     for zombie in all_zombies:
