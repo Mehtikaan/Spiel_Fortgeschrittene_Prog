@@ -171,7 +171,6 @@ def level_changer():
         snd.portal_sound.play()
         change_level(1)
 
-
 def change_level(level):
     sqn.transition_sequence()
     img.platform_image = getattr(img, f"platform_image_level_{level}")
