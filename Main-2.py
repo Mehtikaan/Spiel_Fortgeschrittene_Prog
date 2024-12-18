@@ -199,7 +199,7 @@ jump_power_up = Powerups(screen1, game_folder, power_up_image="play.png",power_u
 
 def game_manager():
     # Überprüfe, ob das aktuelle Herz im Spiel weniger als oder gleich 40 HP ist
-    if main_charakter.health_points <= 40:
+    if main_charakter.health_points <= 50:
         if len(herzen_group) <= 1:  # Es sind keine Herzen in der Gruppe
             herz = Health_reg(screen1, game_folder, charakter=main_charakter)
             herz.rect.x = WIDTH + 10  # Das Herz startet vom rechten Rand des Fensters
@@ -208,27 +208,37 @@ def game_manager():
         herzen_group.draw(screen1)
 
     # Überprüfe, ob die Bedingungen für den Blitz erfüllt sind
-    if score >= 2200 and main_charakter.health_points > 60:
+    if score >= 6500 and main_charakter.health_points >= 80:
         if len(blitze_group) < 1:  # Wenn noch kein Blitz existiert
             blitz = Blitzen(350, 1, game_folder, screen1)
             blitze_group.add(blitz)  # Blitz der Gruppe hinzufügen
         blitze_group.update()  # Update der Blitze
         blitze_group.draw(screen1)  # Blitze auf dem Bildschirm anzeigen
 
-    # Wenn der Charakter unter 100 HP fällt, entferne den Blitz
-    if main_charakter.health_points < 100:
-        print(f"Health points are below 100: {main_charakter.health_points}")
-        for blitz in blitze_group:
-            blitz.kill()  # Entfernt den Blitz aus der Gruppe
-        blitze_group.empty()  # Leert die Blitz-Gruppe
-
     # Wenn die Bedingungen für den Endboss erfüllt sind (Score > 600 und Lebenspunkte <= 60)
-    if score > 600 and main_charakter.health_points <= 60:
+    if score > 6500 and main_charakter.health_points < 80:
         for blitz in blitze_group:
             blitz.kill()  # Entferne den Blitz
         blitze_group.empty()  # Leere die Gruppe
         endboss.shoot()  # Endboss schießt
 
+shot_timer=pygame.time.get_ticks()
+
+if score>6500:
+            endboss.update()
+            endboss.draw()
+            current_time=pygame.time.get_ticks()
+            if current_time-shot_timer>1000:
+                endboss.enable_shooting()
+                endboss.shoot()
+                shot_timer=current_time
+
+#Versuche
+am.versuch_erhöhen()
+versuche=am.lese_versuche()
+am.speichere_versuche(versuche=versuche)
+
+sequence = sqn.sequence1
 
 running = True
 while running:
@@ -269,7 +279,7 @@ while running:
 
 
     # Score aktualisieren
-    score += 1 # Score um 1 pro Frame erhöhen
+    score += 3 # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
@@ -286,10 +296,9 @@ while running:
         obstacle.draw()
 
     main_charakter.update()
-
     main_charakter.zeichnen()
 
-    #game_manager()
+    game_manager()
 
     # Neuen Zombie mit einer gewissen Wahrscheinlichkeit erzeugen
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
@@ -298,9 +307,11 @@ while running:
     if score>6500:
             endboss.update()
             endboss.draw()
-            endboss.shoot()
-    if score==6500:
-        snd.welcome_sound.play()
+            current_time=pygame.time.get_ticks()
+            if current_time-shot_timer>1000:
+                endboss.enable_shooting()
+                endboss.shoot()
+                shot_timer=current_time
 
     if blitze_group:
         for blitz in blitze_group:
@@ -357,12 +368,11 @@ while running:
     if main_charakter.health_points <= 0:
         snd.death_sound.play()
         #pygame.mixer.music.stop()
-        sqn.fade(screen1, WHITE, 3.5, fade_out=True, text="Game Over", font=font, text_color=BLACK)
+        sqn.fade(screen1, WHITE, 3.5, fade_out=True, text=f"Game Over - {versuche} Versuch", font=font, text_color=BLACK)
         am.restart_game()
-       
 
-    if score == 9000:
-        sqn.fade(screen1, BLACK, 1, fade_out=True, text='I di bi tisi', font=font) #text am ende anpassen
+    if score == 8000:
+        sqn.fade(screen1, BLACK, 1, fade_out=True, text='', font=font) #text am ende anpassen
         sqn.ending_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT )
         am.restart_game()
        

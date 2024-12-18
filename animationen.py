@@ -6,6 +6,7 @@ import charakter as ck
 import time
 pygame.mixer.init()
 import sys
+import json
 
 HEIGHT= 700
 WIDTH = 1400
@@ -115,10 +116,6 @@ def draw_blurred_background(screen1):
 
 
 'chattttt'
-def restart_game():
-    """Startet das Spiel durch erneuten Aufruf der Python-Datei."""
-    python = sys.executable
-    os.execl(python, python, *sys.argv)
 def restart_game():
     """Startet das Spiel durch erneuten Aufruf der Python-Datei."""
     python = sys.executable
@@ -276,7 +273,7 @@ def hitbox_check_blitz(wer, blitzen, surface):
 
         # Überprüfe, ob genug Zeit seit dem letzten Schaden vergangen ist
         if current_time - last_damage_time > damage_cooldown:
-            wer.health_points -= 40  # Schaden zufügen (z.B. 40 Lebenspunkte)
+            wer.health_points -= 20  # Schaden zufügen (z.B. 40 Lebenspunkte)
             last_damage_time = current_time  # Aktualisiere den Zeitstempel des letzten Schadens
 
             # Überprüfe, ob genug Zeit seit dem letzten Schaden-Sound vergangen ist
@@ -286,7 +283,28 @@ def hitbox_check_blitz(wer, blitzen, surface):
 
             print(f"Schaden zugefügt! Neue Lebenspunkte: {wer.health_points}")
 
-    # Zeichne die Hitboxen zur Visualisierung auf der Oberfläche
-    pygame.draw.rect(surface, (255, 0, 0), playerhitbox, 2)  # Zeichnet die Hitbox des Spielers (rot)
-    pygame.draw.rect(surface, (0, 0, 255), blitzhitbox, 2)   # Zeichnet die Hitbox des Blitzes (blau)
 
+
+filename = 'versuche.json'
+
+def lese_versuche():
+    if os.path.exists(filename):
+        with open(filename, 'r') as file:
+            data = json.load(file)
+            return data.get('versuche', 0)
+    return 0
+
+def speichere_versuche(versuche):
+    data = {'versuche': versuche}
+    with open(filename, 'w') as file:
+        json.dump(data, file)
+
+def versuch_erhöhen():
+    versuche = lese_versuche()
+    versuche += 1  # Erhöhe die Anzahl der Versuche
+    speichere_versuche(versuche)
+    print(f"Anzahl der Versuche: {versuche}")       
+
+def zeige_versuche():
+    versuche = lese_versuche()
+    print(f"Aktuelle Anzahl der Versuche: {versuche}")

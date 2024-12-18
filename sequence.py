@@ -17,47 +17,47 @@ font = pygame.font.Font(None, 56)  # Standard-Schriftart, Größe 56
 
 score = 0.0
 
-def show_intro_sequence(screen, clock):
-    game_folder = os.path.dirname(__file__)
-    sequence = [
-    (os.path.join(game_folder, "_image", "scene1.png"), "Es war ein langer Tag, und der Code scheint endlos."),
-    (os.path.join(game_folder, "_image", "scene2.png"), "Du sitzt an deinem Schreibtisch, die Müdigkeit übermannt dich..."),
-    (os.path.join(game_folder, "_image", "scene3.png"), "Plötzlich wachst du auf, aber nicht in deinem Zimmer."),
-    (os.path.join(game_folder, "_image", "scene4.png"), "Chaos herrscht: fliegende Compiler-Fehler, endlose Schleifen, blinkende Variablen."),
-    (os.path.join(game_folder, "_image", "scene5.png"), "Eine Stimme dröhnt: 'Willkommen in deinem Traum... oder Albtraum.'"),
-    (os.path.join(game_folder, "_image", "scene6.png"), "Bestehe die Prüfungen oder bleib gefangen!"),
-    (os.path.join(game_folder, "_image", "scene7.png"), "Nur ein Weg führt dich zurück in die Realität: Kämpfe und überliste den Bug!")
-]
+# def show_intro_sequence(screen, clock):
+#     game_folder = os.path.dirname(__file__)
+#     sequence = [
+#     (os.path.join(game_folder, "_image", "scene1.png"), "Es war ein langer Tag, und der Code scheint endlos."),
+#     (os.path.join(game_folder, "_image", "scene2.png"), "Du sitzt an deinem Schreibtisch, die Müdigkeit übermannt dich..."),
+#     (os.path.join(game_folder, "_image", "scene3.png"), "Plötzlich wachst du auf, aber nicht in deinem Zimmer."),
+#     (os.path.join(game_folder, "_image", "scene4.png"), "Chaos herrscht: fliegende Compiler-Fehler, endlose Schleifen, blinkende Variablen."),
+#     (os.path.join(game_folder, "_image", "scene5.png"), "Eine Stimme dröhnt: 'Willkommen in deinem Traum... oder Albtraum.'"),
+#     (os.path.join(game_folder, "_image", "scene6.png"), "Bestehe die Prüfungen oder bleib gefangen!"),
+#     (os.path.join(game_folder, "_image", "scene7.png"), "Nur ein Weg führt dich zurück in die Realität: Kämpfe und überliste den Bug!")
+# ]
 
     
-    for image_path, text in sequence:
-        # Bild laden und skalieren
-        image = pygame.image.load(image_path).convert()
-        image = pygame.transform.scale(image, (WIDTH, HEIGHT))  # Bild auf die Bildschirmgröße anpassen
+#     for image_path, text in sequence:
+#         # Bild laden und skalieren
+#         image = pygame.image.load(image_path).convert()
+#         image = pygame.transform.scale(image, (WIDTH, HEIGHT))  # Bild auf die Bildschirmgröße anpassen
 
-        # Text rendern
-        text_surface = font.render(text, True, (255, 255, 255))  # Weiße Schriftfarbe
-        text_rect = text_surface.get_rect(center=(WIDTH // 2, HEIGHT - 50))  # Text knapp über dem unteren Rand
+#         # Text rendern
+#         text_surface = font.render(text, True, (255, 255, 255))  # Weiße Schriftfarbe
+#         text_rect = text_surface.get_rect(center=(WIDTH // 2, HEIGHT - 50))  # Text knapp über dem unteren Rand
 
-        # Sequenz anzeigen und auf ENTER warten
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()
+#         # Sequenz anzeigen und auf ENTER warten
+#         running = True
+#         while running:
+#             for event in pygame.event.get():
+#                 if event.type == pygame.QUIT:
+#                     pygame.quit()
+#                     exit()
 
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # Mit ENTER zur nächsten Szene
-                    running = False
+#                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # Mit ENTER zur nächsten Szene
+#                     running = False
 
-            # Bildschirm leeren und Hintergrundbild anzeigen
-            screen.fill((0, 0, 0))  # Hintergrund schwarz
-            screen.blit(image, (0, 0))  # Bild auf den Bildschirm legen
-            screen.blit(text_surface, text_rect)  # Text anzeigen
+#             # Bildschirm leeren und Hintergrundbild anzeigen
+#             screen.fill((0, 0, 0))  # Hintergrund schwarz
+#             screen.blit(image, (0, 0))  # Bild auf den Bildschirm legen
+#             screen.blit(text_surface, text_rect)  # Text anzeigen
 
-            pygame.display.update()
+#             pygame.display.update()
 
-            clock.tick(30)  # 30 FPS
+#             clock.tick(30)  # 30 FPS
 
 
 
@@ -146,10 +146,11 @@ def show_sequence(screen, clock, sequence, font, width, height, game_folder):
 
 
 sequence1 = [
-    "Ach , das war nur ein Traum",
-    "ohh, wie spät ist es?",
-    "zum Glück ers 8 Uhr",
-    "Ich muss jetzt schnell zur FH ud das Spiel vorstellen",
+    "Hab ich Ihn besiegt?",
+    "Ne, warte mal?",
+    "jetzt verstehe ich...",
+    "Krauss unbesiegbar im Coden",
+    "Ähmm, wieso ist mein Bett jetzt nass?!",
 ]
 
 

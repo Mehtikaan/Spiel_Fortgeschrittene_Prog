@@ -4,6 +4,7 @@ import image as img
 from enemy import Enemy
 import sequence as sqn
 import sound as snd 
+import random
 
 HEIGHT= 700
 WIDTH = 1400
@@ -62,3 +63,4 @@ def create_enemy(score, all_zombies, surface):
         hp=5,
     )
     all_zombies.add(enemy)
+
