@@ -143,7 +143,10 @@ def level_changer():
             snd.start_music.stop()
     
     # Level-Wechsel mit elif-Kette
-    if score >= 6000 and current_level < 6:
+    if score == 9000 and current_level == 6:
+        sqn.fade(screen1, BLACK, duration=float, fade_out=True, text=None, font=None, text_color=WHITE)
+        
+    elif score >= 6000 and current_level < 6:
         current_level = 6
         snd.portal_sound.play()
         change_level(6)

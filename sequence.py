@@ -185,3 +185,5 @@ def transition_sequence():
     
     fade(screen1, BLACK, 0.2, fade_out=False)  # Bildschirm einblenden
     score = current_score  # Score zurücksetzen (während der Pause bleibt er gleich)
+
+
