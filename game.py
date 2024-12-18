@@ -1,4 +1,4 @@
-def start():   
+
     import pygame
     import os
     import math
