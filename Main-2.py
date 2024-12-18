@@ -225,6 +225,7 @@ def game_manager():
         blitze_group.empty()  # Leere die Gruppe
         endboss.shoot()  # Endboss schießt
 
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -290,11 +291,11 @@ while running:
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
 
    
-    if score>6500:
+    if score>500:
             endboss.update()
             endboss.draw()
             endboss.shoot()
-    if score==6500:
+    if score==500:
         snd.welcome_sound.play()
 
     if blitze_group:

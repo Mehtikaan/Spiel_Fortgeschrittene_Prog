@@ -13,7 +13,7 @@ death_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','death_soun
 death_sound.set_volume(0.15)
 krauss_attack = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','laughing.wav'))
 krauss_attack.set_volume(0.4)
-welcome_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','krauss_spawn.wav'))
+welcome_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','fanfare.wav'))
 welcome_sound.set_volume(0.7)
 start_music = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', 'zombie_music.wav'))
 start_music.set_volume(0.15)
