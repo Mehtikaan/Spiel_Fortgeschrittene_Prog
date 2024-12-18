@@ -220,25 +220,47 @@ class Schießen:
         self.bullets = pygame.sprite.Group()
         self.bewegung = bewegung
         self.springen = springen
+        self.shots_fired = 0
+        self.max_shots = 15  # Maximale Anzahl der Schüsse vor dem Cooldown
+        self.cooldown_active = False
+        self.cooldown_timer = 0
+        self.cooldown_duration = 5000  # 5 Sekunden Cooldown
 
     def shoot(self, waffen_rect, new_image="kunai.png"):
         """Feuert eine Kugel ab, wenn der Cooldown abgelaufen ist"""
-        if self.shoot_cooldown == 0:
+        if not self.cooldown_active and self.shoot_cooldown == 0:
             print(f"Schießen von Position: {waffen_rect.centerx}, {waffen_rect.centery}")  # Debugging-Ausgabe
             # Kugel erzeugen und zur Gruppe hinzufügen
             bullet = Bullet(self.bewegung.x_pos + 80, self.springen.y_pos + 40, new_image)
             self.bullets.add(bullet)
-            self.shoot_cooldown = 40  # Cooldown aktivieren, um Schüsse zu verzögern
+
+            self.shoot_cooldown = 40  # Zeitverzögerung zwischen Schüssen aktivieren
+            self.shots_fired += 1  # Anzahl der abgefeuerten Schüsse erhöhen
+
+            # Cooldown nach 15 Schüssen aktivieren
+            if self.shots_fired >= self.max_shots:
+                self.cooldown_active = True
+                self.cooldown_timer = pygame.time.get_ticks()  # Startzeitpunkt des Cooldowns speichern
 
     def update(self):
         """Aktualisiert die Kugeln und den Cooldown"""
         self.bullets.update()  # Kugeln aktualisieren (Bewegung)
+
+        # Cooldown zwischen Schüssen verringern
         if self.shoot_cooldown > 0:
-            self.shoot_cooldown -= 5  # Cooldown verringern
+            self.shoot_cooldown -= 5
+
+        # Verwalte den Cooldown nach maximalen Schüssen
+        if self.cooldown_active:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.cooldown_timer >= self.cooldown_duration:
+                self.cooldown_active = False  # Cooldown deaktivieren
+                self.shots_fired = 0  # Schusszähler zurücksetzen
 
     def draw(self, surface):
         """Zeichnet alle Kugeln auf dem Bildschirm"""
-        self.bullets.draw(surface)  # Kugeln zeichnen
+        self.bullets.draw(surface)
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, new_image):
         super().__init__()
