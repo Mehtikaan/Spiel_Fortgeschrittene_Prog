@@ -277,7 +277,7 @@ while running:
 
 
     # Score aktualisieren
-    score += 6 # Score um 1 pro Frame erhöhen
+    score += 4 # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
