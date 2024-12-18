@@ -144,7 +144,7 @@ background_level_4 = pygame.transform.scale(background_level_4, (WIDTH, HEIGHT))
 background_level_5 = pygame.image.load(os.path.join(game_folder, '_image', "pumpkin_map.png")).convert()
 background_level_5 = pygame.transform.scale(background_level_5, (WIDTH, HEIGHT))
 
-background_level_6 = pygame.image.load(os.path.join(game_folder, '_image', "dino_map.png")).convert()
+background_level_6 = pygame.image.load(os.path.join(game_folder, '_image', "courli_map.png")).convert()
 background_level_6 = pygame.transform.scale(background_level_6, (WIDTH, HEIGHT))
 
 

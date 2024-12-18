@@ -49,7 +49,10 @@ def create_enemy(score, all_zombies, surface):
         sprite_set = img.enemy_sprites_level_6
         anim_name = "courli"
 
-    
+    elif score < 8000:
+        sprite_set = img.enemy_sprites_level_6
+        anim_name = "courli"
+
     enemy = Enemy(
         x=WIDTH + 100,
         y=HEIGHT - 192,

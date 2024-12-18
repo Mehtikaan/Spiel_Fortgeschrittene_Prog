@@ -17,3 +17,5 @@ welcome_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds','welcome.
 welcome_sound.set_volume(0.15)
 start_music = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', 'zombie_music.wav'))
 start_music.set_volume(0.15)
+portal_sound = pygame.mixer.Sound(os.path.join(game_folder, '_sounds', 'portal.wav'))
+portal_sound.set_volume(0.15)

@@ -50,7 +50,7 @@ class Powerups(pygame.sprite.Sprite):
         self.gamefolder = gamefolder
         self.charakter=charakter
         self.power_up_type = power_up_type  # Typ des Power-ups (z.B. 'jump', 'speed')
-        self.image = pygame.image.load(os.path.join(gamefolder, '_image', power_up_image)).convert_alpha()
+        self.image = pygame.image.load(os.path.join(gamefolder, '_image', "pixel_heart.png")).convert_alpha()
         self.image = pygame.transform.scale(self.image, (50, 50))  # Größe des Power-ups
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH + 10, HEIGHT - 200)  # Startposition

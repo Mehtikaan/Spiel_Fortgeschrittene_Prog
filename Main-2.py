@@ -136,31 +136,36 @@ pygame.mixer.music.set_volume(0.3)  # Lautstärke auf 50% einstellen
 
 def level_changer():
     global platform_image, background, current_level, level_music, start_music_channel, trap_image
-    
+
     # Musik-Stop nur einmal beim ersten Level
     if score >= 1000.0 and current_level == 0:
-        if start_music_channel:
-            start_music_channel.stop()
-            start_music_channel = None
+          if start_music_channel and start_music_channel.get_busy():
+            snd.start_music.stop()
     
     # Level-Wechsel mit elif-Kette
     if score >= 6000 and current_level < 6:
         current_level = 6
+        snd.portal_sound.play()
         change_level(6)
     elif score >= 5000 and current_level < 5:
         current_level = 5
+        snd.portal_sound.play()
         change_level(5)
     elif score >= 4000 and current_level < 4:
         current_level = 4
+        snd.portal_sound.play()
         change_level(4)
     elif score >= 3000 and current_level < 3:
         current_level = 3
+        snd.portal_sound.play()
         change_level(3) 
     elif score >= 2000 and current_level < 2:
         current_level = 2
+        snd.portal_sound.play()
         change_level(2)
     elif score >= 1000 and current_level < 1:
         current_level = 1
+        snd.portal_sound.play()
         change_level(1)
 
 def change_level(level):
@@ -180,10 +185,10 @@ def main_game():
     global score, main_charakter, all_zombies, current_level
     # Setze alle Werte zurück
     score = 0
-    #main_charakter.reset()  # Methode, die den Charakter zurücksetzt
+    main_charakter.reset()  # Methode, die den Charakter zurücksetzt
     all_zombies.empty()  # Alle Zombies entfernen
     current_level = 0
-    #pygame.mixer.music.play(-1)  # Spielmusik starten
+    pygame.mixer.music.play(-1)  # Spielmusik starten
 
 jump_power_up = Powerups(screen1, game_folder, power_up_image="play.png",power_up_type='jump' ,charakter=main_charakter)
 
@@ -263,7 +268,7 @@ while running:
 
 
     # Score aktualisieren
-    score += 4  # Score um 1 pro Frame erhöhen
+    score += 6  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
