@@ -114,7 +114,6 @@ def ending_sequence(screen, clock, sequence1, font, width, height):
     for text in sequence1:
         # Text umbrechen, damit er nicht über den Bildschirm hinausgeht
         lines = wrap_text(text, font, width - 40)  # Padding von 40 für den Rand
-        snd.end_music.play
 
         # Text rendern und positionieren
         screen.fill((0, 0, 0))  # Bildschirm schwarz füllen

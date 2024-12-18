@@ -1,27 +1,13 @@
 import pygame
 import animationen as am
 import configparser as cp
-import config_einstellungen as bib
 import os
 import sound as snd 
-# Konfiguration laden oder erstellen
-config = cp.ConfigParser()
-if not config.read("config_game.ini"):
-    print("Erstelle Konfigurationsdatei...")
-    bib.erstelle_config_datei()  # Stelle sicher, dass die Funktion existiert
 
-config.read("config_game.ini")  # Konfigurationsdatei lesen
-
-# Werte aus der Konfiguration laden und konvertieren
-try:
-    HEIGHT = int(config.get("Fenster", "height"))
-    WIDTH = int(config.get("Fenster", "width"))
-    FPS = int(config.get("FPS", "fps"))
-    POSITION = int(config.get("Fenster", "position"))
-except Exception as e:
-    print("Fehler beim Laden der Konfigurationswerte:", e)
-    pygame.quit()
-    exit()
+HEIGHT= 700
+WIDTH = 1400
+POSITION = 250
+FPS=60
 
 class Charakter:
     def __init__(self, x_pos, y_pos, sprite_charakter, fps, tempo_x, scale_tempo_x, health_points, score_points, surface):

@@ -2,7 +2,6 @@ import pygame
 import os
 import math
 import configparser as cp
-import config_einstellungen as bib
 from charakter import Charakter, Waffe,Bullet
 import animationen as am
 from enemy import Enemy  # Importiere die Enmy-Klasse
@@ -144,7 +143,7 @@ def level_changer():
     
     # Level-Wechsel mit elif-Kette
     if score >= 9000 and current_level == 6:
-        sqn.ending_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT, game_folder)
+        sqn.ending_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT)
         main_game()
     
     elif score >= 6000 and current_level < 6:
@@ -279,7 +278,7 @@ while running:
 
 
     # Score aktualisieren
-    score += 1 # Score um 1 pro Frame erhöhen
+    score += 6 # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 

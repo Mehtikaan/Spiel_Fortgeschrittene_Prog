@@ -1,26 +1,8 @@
 import pygame
 import animationen as am  # Ich nehme an, dass 'am.animation_update' korrekt definiert ist
 import configparser as cp
-import config_einstellungen as bib
 
-# Konfiguration laden oder erstellen
-config = cp.ConfigParser()
-if not config.read("config_game.ini"):
-    print("Erstelle Konfigurationsdatei...")
-    bib.erstelle_config_datei()  # Stelle sicher, dass die Funktion existiert
 
-config.read("config_game.ini")  # Konfigurationsdatei lesen
-
-# Werte aus der Konfiguration laden und konvertieren
-try:
-    HEIGHT = int(config.get("Fenster", "height"))
-    WIDTH = int(config.get("Fenster", "width"))
-    FPS = int(config.get("FPS", "fps"))
-    POSITION = int(config.get("Fenster", "position"))
-except Exception as e:
-    print("Fehler beim Laden der Konfigurationswerte:", e)
-    pygame.quit()
-    exit()
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, surface, sprite_charakter, anim_name, hp, scale=(75, 75)):

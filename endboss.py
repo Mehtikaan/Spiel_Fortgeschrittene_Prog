@@ -1,7 +1,6 @@
 import pygame
 import animationen as am
 import configparser as cp
-import config_einstellungen as bib
 import os
 import math
 HEIGHT= 700

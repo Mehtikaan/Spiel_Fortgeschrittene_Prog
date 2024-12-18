@@ -1,6 +1,5 @@
 import os
 import pygame
-import config_einstellungen as bib
 import configparser as cp
 import charakter as ck
 import time
