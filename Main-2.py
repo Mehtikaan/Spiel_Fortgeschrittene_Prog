@@ -146,7 +146,7 @@ def level_changer():
     if score >= 9000 and current_level == 6:
         sqn.ending_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT, game_folder)
         main_game()
-
+    
     elif score >= 6000 and current_level < 6:
         current_level = 6
         snd.portal_sound.play()
@@ -279,7 +279,7 @@ while running:
 
 
     # Score aktualisieren
-    score += 3 # Score um 1 pro Frame erhöhen
+    score += 1 # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
