@@ -1,6 +1,5 @@
 import pygame
 import animationen as am
-import configparser as cp
 import os
 import sound as snd 
 
@@ -9,15 +8,20 @@ WIDTH = 1400
 POSITION = 250
 FPS=60
 
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (240, 0, 0)
+GREEN = (0, 240, 0)
+
 class Charakter:
     def __init__(self, x_pos, y_pos, sprite_charakter, fps, tempo_x, scale_tempo_x, health_points, score_points, surface):
         self.surface = surface
-        self.bewegung = Bewegung(x_pos, tempo_x, scale_tempo_x, sprite_charakter, fps)
-        self.springen = Springen(y_pos, sprite_charakter, surface)
+        self.bewegung = Bewegung(x_pos, tempo_x, scale_tempo_x, sprite_charakter, fps) 
+        self.springen = Springen(y_pos, sprite_charakter, surface) 
         
         # Mehrere Waffen instanziieren mit unterschiedlichen y_offset
         self.waffen =  [
-            Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=20, y_offset=5),  # Oben
+            Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=20, y_offset=5),  
             Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=60, y_offset=50),
             Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=30, y_offset=30),
             Waffe(self.bewegung, self.springen, sprite_charakter, surface, x_offset=100, y_offset=30),
@@ -26,9 +30,9 @@ class Charakter:
         self.bar = Health_points(self, self.health_points, surface=surface)
         self.score_points = score_points
 
+    #Aktualisiert den Charakter: Bewegung, Animation, Schüsse und Springen
     def update(self):
-        """Aktualisiert den Charakter: Bewegung, Animation, Schüsse und Springen"""
-        for waffe in self.waffen:
+        for waffe in self.waffen: #Jede einzelne Waffe updaten
             waffe.update(self.springen.y_pos)
         self.bewegung.update()
         jumping_sprite, self.springen.y_pos = self.springen.update(self.bewegung.x_pos)
@@ -36,16 +40,15 @@ class Charakter:
             self.bewegung.image = jumping_sprite  # Aktualisiert die Position der Waffe
         self.bar.update()
 
-    def zeichnen(self):
-        """Zeichnet den Charakter auf dem Bildschirm"""
-        self.bewegung.zeichnen(self.surface, self.springen.y_pos)
+    def draw(self):
+        self.bewegung.draw(self.surface, self.springen.y_pos)
         for waffe in self.waffen:  # Jede Waffe wird gezeichnet
-            waffe.zeichnen(self.surface)
+            waffe.draw(self.surface)
 
     def shoot(self):
-        """Schießt eine Kugel ab"""
         for waffe in self.waffen:
-            waffe.shoot()  # Jede Waffe kann schießen
+            waffe.shoot()  # Jede Waffe kann schieße
+            
 class Bewegung:
     def __init__(self, x_pos, tempo_x, scale_tempo_x, sprite_charakter, fps):
         self.x_pos = x_pos
@@ -61,12 +64,10 @@ class Bewegung:
         self.has_reached_position = False  # Status, ob Zielposition erreicht wurde
 
     def update(self):
-        """Aktualisiert die Bewegung und die Animation des Charakters"""
         self.animation_update_laufen()
 
+    # Aktualisiere die Lauf-Animation unabhängig von der Bewegung
     def animation_update_laufen(self):
-        """Aktualisiert die Lauf-Animation und die Bewegung des Charakters"""
-        # Aktualisiere die Lauf-Animation unabhängig von der Bewegung
         self.image, self.timer, self.act_frame = am.animation_update(
             timer=self.timer,
             max_ticks=self.max_ticks_anim,
@@ -86,8 +87,7 @@ class Bewegung:
                 self.has_reached_position = True
         return self.x_pos
 
-    def zeichnen(self, surface, y_pos):
-        """Zeichnet den Charakter an der aktuellen Position"""
+    def draw(self, surface, y_pos):
         surface.blit(self.image, (self.x_pos, y_pos))
 
 class Springen:
@@ -101,14 +101,13 @@ class Springen:
         self.jumping = False
 
     def start_sprung(self):
-        """Startet das Springen"""
         if not self.jumping:
             self.jumping = True
             snd.jump_sound.play()
             self.y_velocity = self.jumping_height
-
+    
+    #Verarbeitet das Springen und aktualisiert die Y-Position des Charakters
     def update(self, x_pos):
-        """Verarbeitet das Springen und aktualisiert die Y-Position des Charakters"""
         if self.jumping:
             self.y_pos -= self.y_velocity * 0.5
             self.y_velocity -= self.gravity
@@ -119,11 +118,6 @@ class Springen:
             return self.sprite_charakter.get("ninja_jump", self.sprite_charakter["ninja_run1"]), self.y_pos
         return None, self.y_pos
 
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (240, 0, 0)
-GREEN = (0, 240, 0)
-GOLD = (255, 215, 0)
 
 class Health_points:
     def __init__(self, charakter, health_points, surface):
@@ -131,10 +125,11 @@ class Health_points:
         self.health_points = health_points
         self.surface = surface
 
+    #Zeichnet drei Rechtecke für die Health Anzeige
     def red_rect(self):
-        pygame.draw.rect(self.surface, RED, (100, 30, 200, 30))
-        pygame.draw.rect(self.surface, GREEN, (100, 30, self.charakter.health_points, 30))
-        pygame.draw.rect(self.surface, BLACK, (100, 30, 202, 30), 2)
+        pygame.draw.rect(self.surface, RED, (100, 40, 200, 30))
+        pygame.draw.rect(self.surface, GREEN, (100, 40, self.charakter.health_points, 30))
+        pygame.draw.rect(self.surface, BLACK, (100, 40, 202, 30), 2)
         return
 
     def update(self):
@@ -154,28 +149,15 @@ class Waffe:
         self.new_image = new_image
 
         game_folder = os.path.dirname(__file__)
-        # Lade das Bild einmal basierend auf new_image
+      
         self.image = pygame.image.load(os.path.join(game_folder, '_image', new_image)).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (50, 20))  # Größe anpassen
+        self.image = pygame.transform.scale(self.image, (50, 20))  
         self.rect = self.image.get_rect()
 
-        # Übergabe der Bewegung und Springen Instanzen an die Schießen Klasse
         self.schiessen = Schießen(sprite_charakter, surface=surface, bewegung=self.bewegung, springen=self.springen)
 
-    def change_image(self, new_image):
-            """Ändert das Bild der Waffe, wenn der Score hoch genug ist"""
-            # Verhindern, dass das Bild bei jedem Frame gewechselt wird
-            if new_image != self.new_image:  # Nur ändern, wenn das Bild nicht schon gesetzt wurde
-                print(f"Bild für Waffe ändern: {new_image}")  # Debugging-Ausgabe
-                game_folder = os.path.dirname(__file__)
-                # Lade nur dann ein neues Bild, wenn es sich wirklich ändert
-                self.image = pygame.image.load(os.path.join(game_folder, '_image', new_image)).convert_alpha()
-                self.image = pygame.transform.scale(self.image, (50, 20))  # Größe anpassen
-                self.rect = self.image.get_rect()
-                self.new_image = new_image  # Bildname aktualisieren
-
+    #Mit ChatGPT
     def update(self, y_pos):
-        """Aktualisiert die Position der Waffe basierend auf der Bewegung des Charakters"""
         # Langsame Veränderung der Y-Position der Waffe (nach oben und unten)
         if self.slow_time % 5 == 0:  # Alle 5 Frames eine kleine Veränderung
             if self.time <= 3:
@@ -195,8 +177,7 @@ class Waffe:
             y_pos + self.y_offset  # Unterschiedliche Position durch y_offset
         )
 
-    def zeichnen(self, surface):
-        """Zeichnet die Waffe auf dem Bildschirm"""
+    def draw(self, surface):
         surface.blit(self.image, self.rect.topleft)
 
 class Schießen:
@@ -208,7 +189,7 @@ class Schießen:
         self.bewegung = bewegung
         self.springen = springen
         self.shots_fired = 0
-        self.max_shots = 10  # Maximale Anzahl der Schüsse vor dem Cooldown
+        self.max_shots = 10  
         self.cooldown_active = False
         self.cooldown_timer = 0
         self.cooldown_duration = 4000  # 4 Sekunden Cooldown
@@ -216,24 +197,20 @@ class Schießen:
     def shoot(self, waffen_rect, new_image="kunai.png"):
         """Feuert eine Kugel ab, wenn der Cooldown abgelaufen ist"""
         if not self.cooldown_active and self.shoot_cooldown == 0:
-            print(f"Schießen von Position: {waffen_rect.centerx}, {waffen_rect.centery}")  # Debugging-Ausgabe
             # Kugel erzeugen und zur Gruppe hinzufügen
             bullet = Bullet(self.bewegung.x_pos + 80, self.springen.y_pos + 40, new_image)
             snd.kunai_sound.play()
             self.bullets.add(bullet)
-
-            self.shoot_cooldown = 40  # Zeitverzögerung zwischen Schüssen aktivieren
             self.shots_fired += 1  # Anzahl der abgefeuerten Schüsse erhöhen
 
-            # Cooldown nach 15 Schüssen aktivieren
+            # Cooldown nach 10 Schüssen aktivieren
             if self.shots_fired >= self.max_shots:
                 self.cooldown_active = True
                 snd.cooldown_sound.play()
                 self.cooldown_timer = pygame.time.get_ticks()  # Startzeitpunkt des Cooldowns speichern
 
     def update(self):
-        """Aktualisiert die Kugeln und den Cooldown"""
-        self.bullets.update()  # Kugeln aktualisieren (Bewegung)
+        self.bullets.update()  
 
         # Cooldown zwischen Schüssen verringern
         if self.shoot_cooldown > 0:
@@ -247,7 +224,6 @@ class Schießen:
                 self.shots_fired = 0  # Schusszähler zurücksetzen
 
     def draw(self, surface):
-        """Zeichnet alle Kugeln auf dem Bildschirm"""
         self.bullets.draw(surface)
 
 class Bullet(pygame.sprite.Sprite):
@@ -256,20 +232,20 @@ class Bullet(pygame.sprite.Sprite):
 
         game_folder = os.path.dirname(__file__)
         self.image = pygame.image.load(os.path.join(game_folder, '_image', new_image)).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (60, 40))  # Größe der Kugel anpassen
+        self.image = pygame.transform.scale(self.image, (60, 40)) 
         self.image.set_colorkey((255, 255, 255))  # Weiß als transparent festlegen
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)  # Position von der Waffe nehmen
-        self.speed = 13  # Geschwindigkeit der Kugel
+        self.rect.center = (x, y) 
+        self.speed = 13  
         self.new_image = new_image
 
+    #Bewegt die Kugel nach rechts und entfernt sie, wenn sie den Bildschirm verlässt
     def update(self):
-        """Bewegt die Kugel nach rechts und entfernt sie, wenn sie den Bildschirm verlässt"""
         self.rect.x += self.speed
 
-        if self.rect.x > pygame.display.get_surface().get_width():  # Wenn die Kugel den Bildschirm verlässt
-            self.kill()  # Entfernt die Kugel
+        # Wenn die Kugel den Bildschirm verlässt
+        if self.rect.x > pygame.display.get_surface().get_width():  
+            self.kill() 
 
     def draw(self, surface):
-        """Zeichnet die Kugel auf dem Bildschirm"""
         surface.blit(self.image, self.rect.center)

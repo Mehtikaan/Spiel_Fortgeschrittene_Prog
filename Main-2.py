@@ -294,7 +294,7 @@ while running:
         obstacle.draw()
 
     main_charakter.update()
-    main_charakter.zeichnen()
+    main_charakter.draw()
 
     game_manager()
 
@@ -317,15 +317,15 @@ while running:
     if herzen_group:
         herzen_group.draw(screen1)
         for herz in herzen_group:
-            if am.hitbox_check_enmy(main_charakter,herz,screen1,eventtyp="heilen"):
-                am.hitbox_check_enmy(main_charakter,herz,screen1,eventtyp="heilen")
+            if am.hitbox_check_enemy(main_charakter,herz,screen1,eventtyp="heilen"):
+                am.hitbox_check_enemy(main_charakter,herz,screen1,eventtyp="heilen")
                 herzen_group.empty()
                 herz.kill()
 
     if endboss.meteoriten_target_group:
         for meteor in endboss.meteoriten_target_group:
-            if am.hitbox_check_enmy(main_charakter,meteor,screen1,eventtyp="schaden"):
-                am.hitbox_check_enmy(main_charakter,meteor,screen1,eventtyp="schaden")
+            if am.hitbox_check_enemy(main_charakter,meteor,screen1,eventtyp="schaden"):
+                am.hitbox_check_enemy(main_charakter,meteor,screen1,eventtyp="schaden")
                 snd.krauss_attack.play()
 
     
@@ -344,8 +344,8 @@ while running:
     waffe.schiessen.draw(screen1)  # Zeichne Kugeln
     for zombie in all_zombies:
         # Kollision mit dem Spieler (wer) und Zombie (mitwem)
-        if  am.hitbox_check_enmy(wer=main_charakter, mitwem=zombie, surface=screen1,eventtyp="schaden"):
-            am.hitbox_check_enmy(wer=main_charakter, mitwem=zombie, surface=screen1,eventtyp="schaden")
+        if  am.hitbox_check_enemy(wer=main_charakter, mitwem=zombie, surface=screen1,eventtyp="schaden"):
+            am.hitbox_check_enemy(wer=main_charakter, mitwem=zombie, surface=screen1,eventtyp="schaden")
             main_charakter.bar.red_rect()
             zombie_stirb=all_zombies.sprites()[0]
             zombie_stirb.kill()
@@ -354,7 +354,7 @@ while running:
     # Kollision zwischen Kugeln und Zombies überprüfen
     for bullet in waffe.schiessen.bullets:
         for zombie in all_zombies:
-            if am.hitbox_check_enmy_bullet(wer=bullet, mitwem=zombie, surface=screen1):
+            if am.hitbox_check_enemy_bullet(wer=bullet, mitwem=zombie, surface=screen1):
                 zombie.hp-=1
                 bullet.kill()
                 zombie.draw()
