@@ -4,7 +4,7 @@ import math
 import configparser as cp
 from charakter import Charakter, Waffe,Bullet
 import animationen as am
-from enemy import Enemy  # Importiere die Enmy-Klasse
+from enemy import Enemy
 import pygame.font
 import random
 from endboss import Endboss,Meteoriten,Blitzen
