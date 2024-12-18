@@ -124,12 +124,12 @@ level_music = {
 }
 
 level_texts = {
-       1: "Wieso sehe ich nichts mehr ?!! Was passiert hier...?",
-       2: "Puh war das heiß, ich verstehe nicht wo ich bin.",
-       3: "Nicht schon wieder!!",
-       4: "Frohe Weihnachten! Jetzt kommen die Santa-Gegner.",
-       5: "Das Kürbislevel! Nichts für schwache Nerven.",
-       6: "Warte mal..."    
+       1: "Bin ich eine Ninja, gegen Zombies??",
+       2: "Seit wann gibt es Cowboys in der Wüste?",
+       3: "Ich glaube ich träume nur...",
+       4: "Was macht der Typ denn hier?",
+       5: "Wann hat das alles ein Ende?!",
+       6: "Warte mal, mir kommt das alles so vertraut vor..."    
     }
 
 pygame.mixer.music.set_volume(0.3)  # Lautstärke auf 50% einstellen
@@ -268,7 +268,7 @@ while running:
 
 
     # Score aktualisieren
-    score += 2  # Score um 1 pro Frame erhöhen
+    score += 1  # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
