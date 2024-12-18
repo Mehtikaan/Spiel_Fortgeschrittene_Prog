@@ -145,7 +145,44 @@ def show_sequence(screen, clock, sequence, font, width, height, game_folder):
             clock.tick(30)  # 30 FPS
 
 
+sequence1 = [
+    "Ach , das war nur ein Traum",
+    "ohh, wie spät ist es?",
+    "zum Glück ers 8 Uhr",
+    "Ich muss jetzt schnell zur FH ud das Spiel vorstellen",
+]
 
+
+def ending_sequence(screen, clock, sequence1, font, width, height):
+    for text in sequence1:
+        # Text umbrechen, damit er nicht über den Bildschirm hinausgeht
+        lines = wrap_text(text, font, width - 40)  # Padding von 40 für den Rand
+
+        # Text rendern und positionieren
+        screen.fill((0, 0, 0))  # Bildschirm schwarz füllen
+        y_offset = height // 2 - (len(lines) * 20) // 2  # Vertikale Position, damit der Text mittig ist
+
+        # Jede Zeile des Texts rendern und anzeigen
+        for line in lines:
+            text_surface = font.render(line, True, (255, 255, 255))  # Weißer Text
+            text_rect = text_surface.get_rect(center=(width // 2, y_offset))
+            screen.blit(text_surface, text_rect)  # Text anzeigen
+            y_offset += 30  # Nächste Zeile nach unten verschieben
+
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # Mit ENTER zur nächsten Szene
+                    running = False
+
+
+            pygame.display.update()
+
+            clock.tick(30)  # 30 FPS
 
 def fade(screen, color, duration=float, fade_out=True, text=None, font=None, text_color=WHITE):
   

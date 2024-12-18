@@ -143,9 +143,10 @@ def level_changer():
             snd.start_music.stop()
     
     # Level-Wechsel mit elif-Kette
-    if score == 9000 and current_level == 6:
-        sqn.fade(screen1, BLACK, duration=float, fade_out=True, text=None, font=None, text_color=WHITE)
-        
+    if score >= 9000 and current_level == 6:
+        sqn.ending_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT, game_folder)
+        main_game()
+
     elif score >= 6000 and current_level < 6:
         current_level = 6
         snd.portal_sound.play()
@@ -188,7 +189,7 @@ def main_game():
     global score, main_charakter, all_zombies, current_level
     # Setze alle Werte zurück
     score = 0
-    main_charakter.reset()  # Methode, die den Charakter zurücksetzt
+    #main_charakter.reset()  # Methode, die den Charakter zurücksetzt
     all_zombies.empty()  # Alle Zombies entfernen
     current_level = 0
     pygame.mixer.music.play(-1)  # Spielmusik starten
@@ -268,7 +269,7 @@ while running:
 
 
     # Score aktualisieren
-    score += 4 # Score um 1 pro Frame erhöhen
+    score += 1 # Score um 1 pro Frame erhöhen
 
     # Score rendern und anzeigen
 
@@ -294,11 +295,11 @@ while running:
     elapsed_time = pygame.time.get_ticks() // 1000  # Spielzeit in Sekunden
 
    
-    if score>500:
+    if score>6500:
             endboss.update()
             endboss.draw()
             endboss.shoot()
-    if score==500:
+    if score==6500:
         snd.welcome_sound.play()
 
     if blitze_group:
@@ -358,13 +359,19 @@ while running:
         #pygame.mixer.music.stop()
         sqn.fade(screen1, WHITE, 3.5, fade_out=True, text="Game Over", font=font, text_color=BLACK)
         am.restart_game()
+       
+
+    if score == 9000:
+        sqn.fade(screen1, BLACK, 1, fade_out=True, text='I di bi tisi', font=font) #text am ende anpassen
+        sqn.ending_sequence(screen1, clock, sequence, font, WIDTH, HEIGHT )
         am.restart_game()
-
-
+       
+        
     pygame.display.update()
 
     clock.tick(FPS)
 
 am.show_start_screen(screen1=screen1, clock=clock, start_background=start_background,game_folder=game_folder)
 main_game()  # Hauptspiel starten
+
 pygame.quit()

@@ -113,6 +113,8 @@ def draw_blurred_background(screen1):
     pygame.transform.scale(screen1 , (WIDTH // 5, HEIGHT // 5), surface)
     pygame.transform.scale(surface, (WIDTH, HEIGHT), screen1 )
 
+
+'chattttt'
 def restart_game():
     """Startet das Spiel durch erneuten Aufruf der Python-Datei."""
     python = sys.executable
